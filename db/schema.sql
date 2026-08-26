@@ -1,5 +1,11 @@
 -- CREATE DATABASE prestamos;
 
+-- DROP TABLE cash_entries;
+-- DROP TABLE freezes;
+-- DROP TABLE loan_entries;
+-- DROP TABLE loans;
+-- DROP TABLE customers;
+-- DROP TABLE users;
 
 CREATE TABLE IF NOT EXISTS users(
 id             UUID PRIMARY KEY,
@@ -18,7 +24,7 @@ CONSTRAINT fk_users_created_by FOREIGN KEY (created_by) REFERENCES users(id),
 CONSTRAINT fk_users_updated_by FOREIGN KEY (updated_by) REFERENCES users(id)
 );
 
-INSERT INTO users (id, name, lastname, username, password, role)
+INSERT INTO users (id, name, lastname, username, password_hash, role)
 VALUES (gen_random_uuid(), 'ADMIN', 'DEFAULT', 'admin', 'admin123', 1)
 ON CONFLICT (username) DO NOTHING;
 
