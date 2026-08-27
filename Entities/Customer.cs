@@ -1,5 +1,6 @@
 ﻿using LoanSystemAPI.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LoanSystemAPI.Entities
 {
@@ -23,8 +24,8 @@ namespace LoanSystemAPI.Entities
         public Guid? UpdatedBy { get; set; }
         public DateTime UpdatedDate { get; set; }
 
-
-
+        //[ForeignKey(nameof(CreatedBy))]
+        //public User? CreatedUser { get; set; }
 
     }
 }

@@ -1,6 +1,7 @@
 ﻿using LoanSystemAPI.Data;
 using LoanSystemAPI.DTOs;
 using LoanSystemAPI.Entities;
+using LoanSystemAPI.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -30,8 +31,23 @@ namespace LoanSystemAPI.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<CustomerDTO>>> GetCustomers()
+        {
+            try
+            {
+                var customers = await _dbContext.Customers.Where(c => c.Status != CustomerStatus.DELETED).ToListAsync();
+                return Ok(customers);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "ERROR CONSULTING CUSTOMERS");
+                return StatusCode(500, new { message = "Error Consulting Customers" });
+            }
+        }
+
         [HttpPost]
-        public async Task<IActionResult> PostCustomer([FromBody] CustomerDTO customer)
+        public async Task<IActionResult> PostCustomer([FromBody] CustomerRegisterDTO customer)
         {
             var newCustomer = new Customer {
                 Fullname = customer.Fullname,
@@ -50,7 +66,7 @@ namespace LoanSystemAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message, "ERROR CREATING CUSTOMER");
+                _logger.LogError(ex, "ERROR CREATING CUSTOMER");
                 return StatusCode(500, new { message = "Could Not Created The Customer" });
             }
         }

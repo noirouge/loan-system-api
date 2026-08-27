@@ -1,13 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using LoanSystemAPI.Entities;
+using LoanSystemAPI.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace LoanSystemAPI.DTOs
 {
-    public class CustomerDTO
+    public class CustomerDTO:CustomerRegisterDTO
     {
-        [Required]
-        required public string Fullname { get; set; }
-        public string? Code { get; set; }
-        public string? Note { get; set; }
-        public string? Phone { get; set; }
+        public Guid Id { get; set; }
+        public CustomerStatus Status { get; set; }
+        required public Guid CreatedBy { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public Guid? UpdatedBy { get; set; }
+        public DateTime UpdatedDate { get; set; }
     }
 }
