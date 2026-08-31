@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using LoanSystemAPI.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace LoanSystemAPI.Entities
 {
@@ -15,9 +16,9 @@ namespace LoanSystemAPI.Entities
        required public string Username { get; set; }
         [Required]
         required public string PasswordHash { get; set; }
-        
-        public int role { get; set; }
-        public int Status { get; set; }
+
+        public UserRole role { get; set; } = UserRole.WORKER;
+        public UserStatus Status { get; set; } = UserStatus.ACTIVE;
         
         public Guid? CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }

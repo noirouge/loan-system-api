@@ -6,11 +6,8 @@ namespace LoanSystemAPI.DTOs
 {
     public class CustomerDTO:CustomerRegisterDTO
     {
+        [Required]
         public Guid Id { get; set; }
-        public CustomerStatus Status { get; set; }
-        required public Guid CreatedBy { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public Guid? UpdatedBy { get; set; }
-        public DateTime UpdatedDate { get; set; }
+       
     }
 }

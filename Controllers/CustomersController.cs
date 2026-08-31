@@ -36,7 +36,7 @@ namespace LoanSystemAPI.Controllers
         {
             try
             {
-                var customers = await _dbContext.Customers.Where(c => c.Status != CustomerStatus.DELETED).ToListAsync();
+                var customers = await _dbContext.Customers.GroupBy(c => c.CreatedDate).ToListAsync();
                 return Ok(customers);
             }
             catch (Exception ex)
@@ -44,6 +44,22 @@ namespace LoanSystemAPI.Controllers
                 _logger.LogError(ex, "ERROR CONSULTING CUSTOMERS");
                 return StatusCode(500, new { message = "Error Consulting Customers" });
             }
+        }
+
+        [HttpGet("{id:guid}")]
+        public async Task<ActionResult<CustomerDTO>> GetCustomer([FromRoute] Guid id )
+        {
+            try
+            {
+                var customer = await _dbContext.Customers.FirstOrDefaultAsync(c => c.Id == id);
+             
+                if (customer == null) return NotFound(new { message = $"The customer with the id: {id} was not found" });
+                return Ok(customer);
+            }
+            catch (Exception ex) {
+                _logger.LogError( ex, "ERROR FINDING CUSTOMER");
+                return StatusCode(500, new {message = "ERROR FINDING CUSTOMER"});
+            }     
         }
 
         [HttpPost]
@@ -62,7 +78,7 @@ namespace LoanSystemAPI.Controllers
            await _dbContext.Customers.AddAsync(newCustomer);
            await _dbContext.SaveChangesAsync();
 
-                return Created("", new {id = newCustomer.Id});
+                return CreatedAtAction(nameof(GetCustomer), new {id = newCustomer.Id}, newCustomer);
             }
             catch (Exception ex)
             {
@@ -71,6 +87,47 @@ namespace LoanSystemAPI.Controllers
             }
         }
 
+        [HttpPut]
+        public async Task<ActionResult<CustomerDTO>> PutCustomer([FromBody] CustomerDTO customerDTO)
+        {
 
+            try
+            {
+                var customer = await _dbContext.Customers.FirstOrDefaultAsync(c => c.Id == customerDTO.Id);
+                if(customer == null)
+                    return NotFound(new {message = $"The customer to update with id {customerDTO.Id} was not found" });
+                customer.UpdatedBy = _adminId;
+                customer.UpdatedDate = DateTime.UtcNow;
+                customer.Note = customerDTO.Note;
+                customer.Code = customerDTO.Code;
+                customer.Phone = customerDTO.Phone;
+                customer.Fullname = customerDTO.Fullname;
+                await _dbContext.SaveChangesAsync();
+                return Ok(customer);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "ERROR UPDATING CUSTOMER");
+                return StatusCode(500, new { message = "Could Not Updated The Customer" });
+            }
+        }
+
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> DeleteCustomer([FromRoute] Guid id)
+        {
+            try
+            {
+                var customer = await _dbContext.Customers.FirstOrDefaultAsync(c => c.Id == id);
+                if (customer == null)
+                    return NotFound(new { message = $"The customer to delete with id {id} was not found" });
+                customer.Status = CustomerStatus.DELETED;
+                await _dbContext.SaveChangesAsync();
+                return NoContent();
+            }
+            catch (Exception ex) {
+                _logger.LogError(ex, "Error Deleting Customer");
+                return StatusCode(500, new { message = "Error Deleting Customer" });
+            }
+        }
     }
 }

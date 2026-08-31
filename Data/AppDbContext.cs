@@ -1,4 +1,5 @@
 ﻿using LoanSystemAPI.Entities;
+using LoanSystemAPI.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace LoanSystemAPI.Data
@@ -12,7 +13,7 @@ namespace LoanSystemAPI.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
            modelBuilder.Entity<User>().ToTable("users");
-            modelBuilder.Entity<Customer>().ToTable("customers");
+           modelBuilder.Entity<Customer>().ToTable("customers").HasQueryFilter(c => c.Status != CustomerStatus.DELETED);
         }
 
         public DbSet<User> Users { get; set; }
