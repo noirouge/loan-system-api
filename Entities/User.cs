@@ -17,10 +17,11 @@ namespace LoanSystemAPI.Entities
         [Required]
         required public string PasswordHash { get; set; }
 
-        public UserRole role { get; set; } = UserRole.WORKER;
+        public UserRole Role { get; set; } = UserRole.WORKER;
         public UserStatus Status { get; set; } = UserStatus.ACTIVE;
         
-        public Guid? CreatedBy { get; set; }
+        [Required]
+       required public Guid CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public Guid? UpdatedBy { get; set; }
         public DateTime? UpdatedDate {get; set;}

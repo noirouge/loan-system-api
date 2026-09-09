@@ -5,7 +5,7 @@
         CONTRIBUTION = 1,
         WITHDRAWAL = 2,
         DISBURSEMENT = 3,
-        COLLECTION = 4,
+        PAYMENT = 4,
         EXPENSE = 5,
         REVERSAL = 6
     }

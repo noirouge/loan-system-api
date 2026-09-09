@@ -54,6 +54,7 @@ principal			NUMERIC(11,2) NOT NULL,
 term				SMALLINT, --Plazo en meses
 interest_rate		NUMERIC(5,4) NOT NULL,
 loan_date			DATE NOT NULL,
+payment_day         SMALLINT NOT NULL DEFAULT 1,
 status         SMALLINT NOT NULL DEFAULT 1, 
 created_by     UUID NOT NULL,
 created_date   TIMESTAMPTZ NOT NULL DEFAULT NOW(),

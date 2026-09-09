@@ -22,7 +22,7 @@ namespace LoanSystemAPI.Entities
         required public Guid CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
         public Guid? UpdatedBy { get; set; }
-        public DateTime UpdatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
 
         //[ForeignKey(nameof(CreatedBy))]
         //public User? CreatedUser { get; set; }
