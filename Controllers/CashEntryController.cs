@@ -3,6 +3,7 @@ using LoanSystemAPI.DTOs;
 using LoanSystemAPI.Entities;
 using LoanSystemAPI.Enums;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace LoanSystemAPI.Controllers
 {
@@ -128,6 +129,51 @@ namespace LoanSystemAPI.Controllers
                 {
                     _logger.LogError(ex, "CASH ENTRY EXPENSE ERROR");
                     return StatusCode(500, new { message = "ERROR COULD NOT SAVED THE CASH ENTRY EXPENSE" });
+                }
+        }
+
+        [HttpPost("reversal/{id:guid}")]
+        public async Task<IActionResult> PostReversal([FromRoute] Guid id)
+        {
+                try
+                {
+                    var cashEntry = await _dbContext.CashEntries.FirstOrDefaultAsync(c => c.Id == id);
+
+                    if (cashEntry == null)
+                        return NotFound(new { message = $"The cash entry to reverse with id {id} was not found" });
+
+                    if (cashEntry.EntryType != CashEntryType.CONTRIBUTION && cashEntry.EntryType != CashEntryType.WITHDRAWAL && cashEntry.EntryType != CashEntryType.EXPENSE)
+                        return BadRequest(new { message = "Only a contribution, a withdrawal or an expense can be reversed from this endpoint" });
+
+                    if (cashEntry.status == CashEntryStatus.REVERSED)
+                        return BadRequest(new { message = $"The cash entry with id {id} was already reversed" });
+
+                    var reversalEntry = new CashEntry
+                    {
+                        Id = Guid.NewGuid(),
+                        amount = -cashEntry.amount,
+                        ReversesEntryId = cashEntry.Id,
+                        EntryType = CashEntryType.REVERSAL,
+                        Note = $"REVERSAL OF THE CASH ENTRY {cashEntry.Id}",
+                        ValueDate = DateTime.UtcNow,
+                        CreatedBy = _adminId,
+                        CreatedDate = DateTime.UtcNow,
+                        status = CashEntryStatus.APPLIED,
+                    };
+
+                    cashEntry.status = CashEntryStatus.REVERSED;
+                    cashEntry.UpdatedBy = _adminId;
+                    cashEntry.UpdatedDate = DateTime.UtcNow;
+
+                    await _dbContext.CashEntries.AddAsync(reversalEntry);
+                    await _dbContext.SaveChangesAsync();
+
+                    return Created();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "CASH ENTRY REVERSAL ERROR");
+                    return StatusCode(500, new { message = "ERROR COULD NOT SAVED THE CASH ENTRY REVERSAL" });
                 }
         }
 
