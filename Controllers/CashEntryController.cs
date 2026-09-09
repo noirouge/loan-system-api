@@ -92,6 +92,45 @@ namespace LoanSystemAPI.Controllers
                 }
         }
 
+        [HttpPost("expense")]
+        public async Task<ActionResult<CashEntryExpenseDTO>> PostExpense([FromBody] CashEntryExpenseDTO cashEntryDTO)
+        {
+            if (cashEntryDTO.Amount <= 0)
+                return BadRequest(new { message = "The expense amount must be greater than zero" });
+
+            var counterpartyUserId = cashEntryDTO.CounterpartyUserId == Guid.Empty ? null : cashEntryDTO.CounterpartyUserId;
+
+            if (counterpartyUserId == null && string.IsNullOrWhiteSpace(cashEntryDTO.Counterparty))
+                return BadRequest(new { message = "One of the counterparty fields must be filled" });
+
+                try
+                {
+                    var cashEntry = new CashEntry
+                    {
+                        Id = Guid.NewGuid(),
+                        amount = -cashEntryDTO.Amount,
+                        CounterpartyUserId = counterpartyUserId,
+                        Counterparty = cashEntryDTO.Counterparty,
+                        EntryType = CashEntryType.EXPENSE,
+                        Note = cashEntryDTO.Note,
+                        ValueDate = cashEntryDTO.ValueDate,
+                        CreatedBy = _adminId,
+                        CreatedDate = DateTime.UtcNow,
+                        status = CashEntryStatus.APPLIED,
+                    };
+
+                    await _dbContext.CashEntries.AddAsync(cashEntry);
+                    await _dbContext.SaveChangesAsync();
+
+                    return Created();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "CASH ENTRY EXPENSE ERROR");
+                    return StatusCode(500, new { message = "ERROR COULD NOT SAVED THE CASH ENTRY EXPENSE" });
+                }
+        }
+
         
 
     }
