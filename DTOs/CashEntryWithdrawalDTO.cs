@@ -1,9 +1,8 @@
-﻿using LoanSystemAPI.Enums;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace LoanSystemAPI.DTOs
 {
-    public class CashEntryContributionDTO
+    public class CashEntryWithdrawalDTO
     {
         [Required]
         required public decimal Amount { get; set; }
