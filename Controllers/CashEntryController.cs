@@ -177,6 +177,39 @@ namespace LoanSystemAPI.Controllers
                 }
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<CashEntryDTO>>> GetCashEntries()
+        {
+            try
+            {
+                var cashEntries = await _dbContext.CashEntries
+                    .OrderByDescending(c => c.ValueDate)
+                    .ThenByDescending(c => c.CreatedDate)
+                    .Select(c => new CashEntryDTO
+                    {
+                        Id = c.Id,
+                        EntryType = c.EntryType,
+                        Amount = c.amount,
+                        ValueDate = c.ValueDate,
+                        Note = c.Note,
+                        Status = c.status,
+                        CounterpartyUserId = c.CounterpartyUserId,
+                        Counterparty = c.Counterparty,
+                        LoanEntryId = c.LoanEntryId,
+                        ReversesEntryId = c.ReversesEntryId,
+                        CreatedDate = c.CreatedDate,
+                    })
+                    .ToListAsync();
+
+                return Ok(cashEntries);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "ERROR CONSULTING CASH ENTRIES");
+                return StatusCode(500, new { message = "Error Consulting Cash Entries" });
+            }
+        }
+
         
 
     }
