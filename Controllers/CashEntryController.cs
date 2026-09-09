@@ -28,20 +28,15 @@ namespace LoanSystemAPI.Controllers
             }
         }
         [HttpPost("contribution")]
-        public async Task<ActionResult<CashEntryDTO>> PostContribution([FromBody] CashEntryDTO cashEntryDTO)
+        public async Task<ActionResult<CashEntryContributionDTO>> PostContribution([FromBody] CashEntryContributionDTO cashEntryDTO)
         {
-            if (cashEntryDTO.Counterparty.Length == 0 && cashEntryDTO.CounterpartyUserId.ToString().Length == 0)
-                return BadRequest(new {message = "One of the counterparty fields can't be empty"});
-          
-
                 try
                 {
                     var cashEntry = new CashEntry
                     {
                         Id = Guid.NewGuid(),
                         amount = cashEntryDTO.Amount,
-                        Counterparty = cashEntryDTO.Counterparty,
-                        CounterpartyUserId = cashEntryDTO.CounterpartyUserId??null,
+                        CounterpartyUserId = cashEntryDTO.CounterpartyUserId,
                         EntryType = CashEntryType.CONTRIBUTION,
                         Note = cashEntryDTO.Note,
                         ValueDate = cashEntryDTO.ValueDate,
