@@ -30,9 +30,9 @@ refresh_tokens(id, user_id, token_hash, expires_at, revoked_at,
 
 | Columna | Detalle |
 |---|---|
-| `token_hash` | SHA-256 del token (D-021). Si alguien lee la tabla, no puede suplantar sesiones. El token es aleatorio de alta entropía, así que no necesita el costo de un hash de contraseña |
+| `token_hash` | SHA-256 del token (D-021), en hexadecimal (`VARCHAR(64)`) y con índice único, que también sirve para buscarlo. Si alguien lee la tabla, no puede suplantar sesiones. El token es aleatorio de alta entropía, así que no necesita el costo de un hash de contraseña |
 | `revoked_at` | Nulo = vigente. Se llena en logout o al revocar las sesiones de un usuario |
-| `replaced_by` | FK a `refresh_tokens(id)` con `UNIQUE` (D-023). Implementa la rotación |
+| `replaced_by` | FK a `refresh_tokens(id)` con `UNIQUE` (D-023) y `ON DELETE SET NULL`, para que la limpieza de vencidos no choque con la FK. Implementa la rotación |
 | `ip_address` | `VARCHAR(45)` (cabe IPv6). Sin `X-Forwarded-For` por ahora (D-026) |
 
 Sin `status` ni columnas de actualización: `revoked_at` y `expires_at` dicen todo. Índice sobre `user_id` para revocar en bloque.

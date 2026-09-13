@@ -1,5 +1,8 @@
 -- CREATE DATABASE prestamos;
 
+-- DROP TABLE job_runs;
+-- DROP TABLE audit_logs;
+-- DROP TABLE refresh_tokens;
 -- DROP TABLE cash_entries;
 -- DROP TABLE freezes;
 -- DROP TABLE loan_entries;
@@ -142,3 +145,58 @@ CONSTRAINT uq_cash_entries_reverses UNIQUE (reverses_entry_id)
 );
 
 
+CREATE TABLE IF NOT EXISTS refresh_tokens(
+id 						UUID PRIMARY KEY,
+user_id 				UUID NOT NULL,
+token_hash 				VARCHAR(64) NOT NULL, -- SHA-256 EN HEXADECIMAL
+expires_at 				TIMESTAMPTZ NOT NULL,
+revoked_at 				TIMESTAMPTZ,
+replaced_by 			UUID,
+ip_address 				VARCHAR(45),
+created_date   			TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+CONSTRAINT fk_refresh_tokens_user_id FOREIGN KEY (user_id) REFERENCES users(id),
+CONSTRAINT fk_refresh_tokens_replaced_by FOREIGN KEY (replaced_by) REFERENCES refresh_tokens(id) ON DELETE SET NULL,
+CONSTRAINT uq_refresh_tokens_token_hash UNIQUE (token_hash),
+CONSTRAINT uq_refresh_tokens_replaced_by UNIQUE (replaced_by)
+);
+
+CREATE INDEX IF NOT EXISTS ix_refresh_tokens_user_id
+ON refresh_tokens (user_id);
+
+
+CREATE TABLE IF NOT EXISTS audit_logs(
+id 						UUID PRIMARY KEY,
+entity_name				VARCHAR(100),
+entity_id				UUID,
+action					SMALLINT NOT NULL, -- CREATE = 1, UPDATE = 2, DELETE = 3, LOGIN = 4, LOGINFAILED = 5, LOGOUT = 6
+user_id					UUID,
+attempted_user			VARCHAR(100),
+ip_address				VARCHAR(45),
+changes					JSONB,
+created_date   			TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+CONSTRAINT fk_audit_logs_user_id FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE INDEX IF NOT EXISTS ix_audit_logs_entity
+ON audit_logs (entity_name, entity_id);
+
+CREATE INDEX IF NOT EXISTS ix_audit_logs_user_id_created_date
+ON audit_logs (user_id, created_date);
+
+
+CREATE TABLE IF NOT EXISTS job_runs(
+id 						UUID PRIMARY KEY,
+job_name				VARCHAR(100) NOT NULL,
+period					DATE,
+status         			SMALLINT NOT NULL DEFAULT 1, -- RUNNING = 1, SUCCESS = 2, FAILED = 3, PARTIAL = 4
+started_at				TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+finished_at				TIMESTAMPTZ,
+processed				INTEGER NOT NULL DEFAULT 0,
+skipped					INTEGER NOT NULL DEFAULT 0,
+failed					INTEGER NOT NULL DEFAULT 0,
+error_message			TEXT
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS ux_job_runs_success
+ON job_runs (job_name, period)
+WHERE status = 2; -- SUCCESS = 2

@@ -17,7 +17,7 @@ La definición completa está en `db/schema.sql`. Esta nota explica **para qué*
 
 ## Tablas de infraestructura
 
-No participan en el cálculo de saldos ni tienen FK hacia préstamos o asientos. No llevan `status` ni columnas de actualización. Pendientes de crear (#32).
+No participan en el cálculo de saldos ni tienen FK hacia préstamos o asientos. No llevan `status` ni columnas de actualización. Definidas en `db/schema.sql` (#32).
 
 | Tabla | Para qué | Nota |
 |---|---|---|
@@ -47,7 +47,8 @@ Ninguna tarea puede romper esto:
 | `uq_loan_entries_idempotency_key` | Pagos duplicados |
 | `uq_loan_entries_reverses_entry_id`, `uq_cash_entries_reverses` | Invariante 7 |
 | `uq_cash_entries_loan_entry_id` | Un solo movimiento de caja por asiento de préstamo |
-| `ux_job_runs_success ON job_runs (job_name, period) WHERE status = 2` | Un período se completa con éxito una sola vez (pendiente, #32) |
+| `ux_job_runs_success ON job_runs (job_name, period) WHERE status = 2` | Un período se completa con éxito una sola vez |
+| `uq_refresh_tokens_token_hash`, `uq_refresh_tokens_replaced_by` | Búsqueda por hash del token; un token se reemplaza una sola vez (D-023) |
 
 Las restricciones se verifican con pruebas de integración contra PostgreSQL real (#93).
 
@@ -81,5 +82,4 @@ Infraestructura (#33):
 |---|---|
 | #15 | En la base local: `UPDATE users SET role = 2 WHERE username = 'admin'` |
 | #81 | En la base local: recrear `ux_loan_entries_loan_id_and_period` con `entry_type = 2`. `CREATE ... IF NOT EXISTS` no reemplaza el índice viejo, así que volver a correr el script no basta |
-| #32 | Crear `refresh_tokens`, `audit_logs` y `job_runs` con sus índices |
 | #62 | Reemplazar `'admin123'` del admin semilla por su hash |
