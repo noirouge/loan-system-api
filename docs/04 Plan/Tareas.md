@@ -56,7 +56,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 18 | Quitar `updated_by` y `updated_date` de `cash_entries`: SQL, entidad y reversión (modifica #2, #10) | Completada | No | N/A |
 | 19 | La reversión de caja hereda el `value_date` del original (modifica #10) | Pendiente | No | N/A |
 | 20 | Reversión de caja: capturar `23505` en vez de consultar antes (modifica #10) | Pendiente | No | N/A |
-| 21 | Servicio de efectivo disponible (`SUM(amount)` de caja) | Pendiente | No | N/A |
+| 21 | Servicio de efectivo disponible (`SUM(amount)` de caja) | Completada | No | N/A |
 | 22 | Validar efectivo disponible en retiro y gasto (modifica #8, #9) | Pendiente | No | N/A |
 | 23 | Validar monto mayor que cero en el aporte (modifica #6) | Pendiente | No | N/A |
 | 24 | Corregir el `GroupBy(CreatedDate)` de GET clientes, que devuelve grupos en vez de clientes (modifica #4) | Completada | No | N/A |

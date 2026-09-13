@@ -14,6 +14,8 @@ El API recibe los montos **en positivo** y aplica el signo (D-004).
 
 **Efectivo disponible = `SUM(amount)` de todas las entradas**, sin filtrar por status: las reversiones se anulan por signo.
 
+Lo calcula `CashService.GetAvailableCashAsync()`. Toda operación que saca dinero llama antes a `CashService.LockCashAsync()` dentro de una transacción: es un advisory lock de Postgres que hace esperar a la segunda operación simultánea, para que dos retiros no vean el mismo saldo.
+
 ## Semántica de cada tipo
 
 | Tipo | Signo | `counterparty_user_id` | `counterparty` | `loan_entry_id` | Origen |

@@ -20,6 +20,7 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connect
 //SERVICES
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddSingleton<LocalDateService>();
+builder.Services.AddScoped<CashService>();
 
 var app = builder.Build();
 
