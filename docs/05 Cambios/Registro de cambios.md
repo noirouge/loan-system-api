@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-13
 
+- **#23**: `POST api/cash-entries/contribution` rechaza con `400` los montos menores o iguales a cero, igual que el retiro y el gasto (modifica #6).
 - **#19**: la reversión de caja hereda el `value_date` de la entrada original en vez de usar la fecha de hoy, para no mover el saldo de un período ya reportado (D-013, modifica #10).
 - **#33**: nuevos enums `AuditAction` y `JobRunStatus`, con `: short`.
 - **#27**: `Loan.CreatedBy` pasa de `Guid?` a `Guid`, porque `loans.created_by` es `NOT NULL`.

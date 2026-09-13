@@ -31,6 +31,9 @@ namespace LoanSystemAPI.Controllers
         [HttpPost("contribution")]
         public async Task<ActionResult<CashEntryContributionDTO>> PostContribution([FromBody] CashEntryContributionDTO cashEntryDTO)
         {
+            if (cashEntryDTO.Amount <= 0)
+                return BadRequest(new { message = "The contribution amount must be greater than zero" });
+
                 try
                 {
                     var cashEntry = new CashEntry

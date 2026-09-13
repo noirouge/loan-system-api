@@ -35,7 +35,7 @@ Lo calcula `CashService.GetAvailableCashAsync()`. Toda operación que saca diner
 
 | Operación | Validación |
 |---|---|
-| Aporte | Monto > 0 (pendiente, #23) |
+| Aporte | Monto > 0 |
 | Retiro | Monto > 0 · **efectivo disponible suficiente** (pendiente, #22) |
 | Gasto | Monto > 0 · al menos un counterparty (`Guid.Empty` y texto en blanco cuentan como vacío) · **efectivo disponible suficiente** (pendiente, #22) |
 | Desembolso | **Efectivo disponible suficiente** (#39) |
