@@ -15,11 +15,17 @@ namespace LoanSystemAPI.Data
            modelBuilder.Entity<User>().ToTable("users");
            modelBuilder.Entity<Customer>().ToTable("customers").HasQueryFilter(c => c.Status != CustomerStatus.DELETED);
             modelBuilder.Entity<CashEntry>().ToTable("cash_entries");
+            modelBuilder.Entity<RefreshToken>().ToTable("refresh_tokens");
+            modelBuilder.Entity<AuditLog>().ToTable("audit_logs").Property(a => a.Changes).HasColumnType("jsonb");
+            modelBuilder.Entity<JobRun>().ToTable("job_runs");
         }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<CashEntry> CashEntries { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<AuditLog> AuditLogs { get; set; }
+        public DbSet<JobRun> JobRuns { get; set; }
         
     }
 }
