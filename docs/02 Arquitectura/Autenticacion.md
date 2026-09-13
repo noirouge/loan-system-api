@@ -1,0 +1,69 @@
+# Autenticación
+
+Implementación pendiente (Fase 6 en [[Plan del proyecto]]).
+
+> [!warning] Bloqueada por P-04
+> JWT requiere el paquete `Microsoft.AspNetCore.Authentication.JwtBearer`, que no viene en el framework compartido. No se instala sin permiso.
+
+Mientras tanto, los controllers usan `_adminId` desde `appsettings` como usuario actual (D-019).
+
+## Dos tokens
+
+| Token | Duración | Dónde vive | Revocable |
+|---|---|---|---|
+| Access (JWT) | 15 minutos | Solo en el cliente. El servidor lo valida por firma, sin tocar la base | No; por eso es corto |
+| Refresh | 7 días (D-022) | En `refresh_tokens`, **hasheado** | Sí |
+
+## Flujo
+
+1. **Login** emite los dos.
+2. Cuando el access expira, el cliente llama a `api/auth/refresh` con el refresh y recibe un par nuevo.
+3. El usuario no vuelve a ver el login hasta que el refresh caduque o se revoque.
+4. **Logout** llena `revoked_at`.
+
+## `refresh_tokens`
+
+```sql
+refresh_tokens(id, user_id, token_hash, expires_at, revoked_at,
+               replaced_by, ip_address, created_date)
+```
+
+| Columna | Detalle |
+|---|---|
+| `token_hash` | SHA-256 del token (D-021). Si alguien lee la tabla, no puede suplantar sesiones. El token es aleatorio de alta entropía, así que no necesita el costo de un hash de contraseña |
+| `revoked_at` | Nulo = vigente. Se llena en logout o al revocar las sesiones de un usuario |
+| `replaced_by` | FK a `refresh_tokens(id)` con `UNIQUE` (D-023). Implementa la rotación |
+| `ip_address` | `VARCHAR(45)` (cabe IPv6). Sin `X-Forwarded-For` por ahora (D-026) |
+
+Sin `status` ni columnas de actualización: `revoked_at` y `expires_at` dicen todo. Índice sobre `user_id` para revocar en bloque.
+
+## Rotación y detección de robo
+
+Cada uso del refresh emite uno nuevo y marca el viejo con `replaced_by` apuntando al reemplazo.
+
+Si llega un token que **ya tiene `replaced_by`**, es reúso, señal de robo:
+
+- Se revocan **todos los refresh tokens vigentes del usuario** (D-024) y se fuerza re-login.
+- Si dos pestañas refrescan a la vez, la segunda dispara esta regla y el usuario legítimo se desloguea. **Se acepta ese falso positivo**; no hay ventana de gracia (D-025).
+
+## Contraseñas
+
+- `PasswordHasher<T>` de `Microsoft.Extensions.Identity.Core`, que ya viene en el framework (D-020). Sin dependencias.
+- El admin semilla de `db/schema.sql` tiene `'admin123'` en texto plano: se reemplaza por su hash (#62).
+- Nunca se registran contraseñas, hashes ni tokens, ni en logs ni en la [[Auditoria]].
+
+## Configuración
+
+- Clave de firma del JWT en **user-secrets** (D-022). `dotnet user-secrets init` agrega `UserSecretsId` al `.csproj`; no es un paquete.
+
+## Usuario actual
+
+La tarea #30 crea un servicio de usuario actual detrás de una interfaz. Hoy devuelve el `AdminId` de configuración; en #66 pasa a leer el claim del JWT. Así el cambio de `_adminId` a login real toca un solo lugar.
+
+## Limpieza
+
+Los tokens vencidos se borran con un job diario registrado en `job_runs` (#74).
+
+## Tareas
+
+#30, #31, #60–#68, #74. Pruebas: #103–#105. Ver [[Tareas]].
