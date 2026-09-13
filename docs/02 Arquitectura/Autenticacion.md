@@ -58,7 +58,7 @@ Si llega un token que **ya tiene `replaced_by`**, es reúso, señal de robo:
 
 ## Usuario actual
 
-La tarea #30 crea un servicio de usuario actual detrás de una interfaz. Hoy devuelve el `AdminId` de configuración; en #66 pasa a leer el claim del JWT. Así el cambio de `_adminId` a login real toca un solo lugar.
+`ICurrentUserService` (#30) expone `UserId`. Hoy `CurrentUserService` lo lee del `AdminId` de configuración, y lanza un error si falta o no es un GUID válido (antes los controllers seguían con `Guid.Empty`). En #66 pasa a leer el claim del JWT. Así el cambio a login real toca un solo lugar.
 
 ## Limpieza
 

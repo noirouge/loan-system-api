@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-13
 
+- **#30**: nuevo `ICurrentUserService` con `UserId`, implementado por `CurrentUserService`, que lee `AdminId` de la configuración y lanza un error si falta o no es un GUID válido. Registrado como scoped en `Program.cs`, para que en #66 pueda leer el JWT de la petición sin cambiar su ciclo de vida.
 - **#23**: `POST api/cash-entries/contribution` rechaza con `400` los montos menores o iguales a cero, igual que el retiro y el gasto (modifica #6).
 - **#19**: la reversión de caja hereda el `value_date` de la entrada original en vez de usar la fecha de hoy, para no mover el saldo de un período ya reportado (D-013, modifica #10).
 - **#33**: nuevos enums `AuditAction` y `JobRunStatus`, con `: short`.
