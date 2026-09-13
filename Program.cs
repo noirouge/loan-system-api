@@ -1,4 +1,5 @@
 using LoanSystemAPI.Data;
+using LoanSystemAPI.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,10 @@ string connectionString = builder.Configuration.GetConnectionString("DefaultConn
     throw new InvalidOperationException("ConnectionString Not Found");
     ;
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString).UseSnakeCaseNamingConvention()); 
+
+//SERVICES
+builder.Services.AddSingleton(TimeProvider.System);
+builder.Services.AddSingleton<LocalDateService>();
 
 var app = builder.Build();
 

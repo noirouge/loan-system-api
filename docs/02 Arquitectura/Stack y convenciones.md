@@ -18,7 +18,7 @@ DTOs/          un DTO por operación de entrada, uno de lectura por recurso
 Entities/      espejo de las tablas
 Enums/         un archivo por enum
 Data/          AppDbContext
-Services/      vacía por ahora
+Services/      servicios compartidos entre controllers
 db/schema.sql  esquema de la base, escrito a mano
 docs/          este vault
 ```
@@ -73,6 +73,7 @@ docs/          este vault
 - Constraints con nombre: `fk_tabla_campo`, `uq_tabla_campo`; índices únicos `ux_...`.
 - Montos `NUMERIC(11,2)`, tasas `NUMERIC(5,4)`. En C# siempre `decimal`, nunca `float` ni `double`.
 - Ids: `Guid.NewGuid()` generado en la aplicación (UUID v4, D-012).
+- **"Hoy" sale de `LocalDateService.Today()`**, nunca de `DateTime.Now` ni `DateTime.UtcNow`: usa la hora dominicana y un `TimeProvider` que las pruebas pueden reemplazar.
 
 ## Formato de archivos
 

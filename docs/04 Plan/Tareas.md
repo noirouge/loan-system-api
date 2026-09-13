@@ -52,7 +52,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 14 | `users.role` en SQL: `DEFAULT 1`, admin semilla con `role = 2`, comentario corregido (modifica #2) | Completada | No | N/A |
 | 15 | Actualizar el rol del admin en la base local: `UPDATE users SET role = 2 WHERE username = 'admin'` | Pendiente | No | N/A |
 | 16 | Migrar `value_date`, `period` y `loan_date` a `DateOnly` en entidades y DTOs (modifica #6, #8, #9, #10, #11) | Completada | No | N/A |
-| 17 | Helper de fecha "hoy" en hora local dominicana | Pendiente | No | N/A |
+| 17 | Helper de fecha "hoy" en hora local dominicana | Completada | No | N/A |
 | 18 | Quitar `updated_by` y `updated_date` de `cash_entries`: SQL, entidad y reversión (modifica #2, #10) | Pendiente | No | N/A |
 | 19 | La reversión de caja hereda el `value_date` del original (modifica #10) | Pendiente | No | N/A |
 | 20 | Reversión de caja: capturar `23505` en vez de consultar antes (modifica #10) | Pendiente | No | N/A |
