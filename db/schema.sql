@@ -92,7 +92,7 @@ CONSTRAINT uq_loan_entries_reverses_entry_id UNIQUE (reverses_entry_id)
 
 CREATE UNIQUE INDEX IF NOT EXISTS ux_loan_entries_loan_id_and_period
 ON loan_entries (loan_id, period)
-WHERE entry_type = 1;
+WHERE entry_type = 2; -- INTERESTCHARGE = 2
 
 CREATE TABLE IF NOT EXISTS freezes(
 id 					UUID PRIMARY KEY,
