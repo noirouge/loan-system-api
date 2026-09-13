@@ -25,7 +25,7 @@
 | 7 | Quitar la validación de counterparty del aporte (modifica #6) | Completada | No | N/A |
 | 8 | POST retiro de caja; ruta del controller a `api/cash-entries` (modifica #6) | Completada | Sí | 16 |
 | 9 | POST gasto de caja | Completada | Sí | 16 |
-| 10 | POST reversión de caja | Completada | Sí | 16, 18 |
+| 10 | POST reversión de caja | Completada | Sí | 16, 18, 19 |
 | 11 | GET listar entradas de caja | Completada | Sí | 16 |
 | 12 | Crear vault de documentación, plan y tareas | Completada | No | N/A |
 
@@ -54,7 +54,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 16 | Migrar `value_date`, `period` y `loan_date` a `DateOnly` en entidades y DTOs (modifica #6, #8, #9, #10, #11) | Completada | No | N/A |
 | 17 | Helper de fecha "hoy" en hora local dominicana | Completada | No | N/A |
 | 18 | Quitar `updated_by` y `updated_date` de `cash_entries`: SQL, entidad y reversión (modifica #2, #10) | Completada | No | N/A |
-| 19 | La reversión de caja hereda el `value_date` del original (modifica #10) | Pendiente | No | N/A |
+| 19 | La reversión de caja hereda el `value_date` del original (modifica #10) | Completada | No | N/A |
 | 20 | Reversión de caja: capturar `23505` en vez de consultar antes (modifica #10) | Pendiente | No | N/A |
 | 21 | Servicio de efectivo disponible (`SUM(amount)` de caja) | Completada | No | N/A |
 | 22 | Validar efectivo disponible en retiro y gasto (modifica #8, #9) | Pendiente | No | N/A |

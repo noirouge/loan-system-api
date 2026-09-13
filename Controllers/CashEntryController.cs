@@ -155,7 +155,7 @@ namespace LoanSystemAPI.Controllers
                         ReversesEntryId = cashEntry.Id,
                         EntryType = CashEntryType.REVERSAL,
                         Note = $"REVERSAL OF THE CASH ENTRY {cashEntry.Id}",
-                        ValueDate = DateOnly.FromDateTime(DateTime.UtcNow),
+                        ValueDate = cashEntry.ValueDate,
                         CreatedBy = _adminId,
                         CreatedDate = DateTime.UtcNow,
                         status = CashEntryStatus.APPLIED,

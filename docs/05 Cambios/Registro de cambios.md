@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-13
 
+- **#19**: la reversión de caja hereda el `value_date` de la entrada original en vez de usar la fecha de hoy, para no mover el saldo de un período ya reportado (D-013, modifica #10).
 - **#33**: nuevos enums `AuditAction` y `JobRunStatus`, con `: short`.
 - **#27**: `Loan.CreatedBy` pasa de `Guid?` a `Guid`, porque `loans.created_by` es `NOT NULL`.
 - **#25**: las respuestas de clientes devuelven `CustomerDTO` en vez de la entidad, sin `created_by`, `updated_by` ni fechas de auditoría. El listado proyecta con `Select` antes de consultar. Además del GET de lista se corrigieron el GET por id, el POST y el PUT, que tenían la misma fuga (modifica #3, #4, #5).

@@ -45,11 +45,11 @@ Lo calcula `CashService.GetAvailableCashAsync()`. Toda operación que saca diner
 
 `POST api/cash-entries/reversal/{id}`. Solo para aportes, retiros y gastos. Pagos y desembolsos se reversan desde el préstamo, para que el ledger del préstamo y la caja no se desincronicen (D-006).
 
-1. Se crea la entrada `REVERSAL`, `APPLIED`, con `amount = -original.amount` y `reverses_entry_id = original.id`.
+1. Se crea la entrada `REVERSAL`, `APPLIED`, con `amount = -original.amount`, `reverses_entry_id = original.id` y el mismo `value_date` de la original (D-013).
 2. La original pasa a `REVERSED`.
 3. Las dos cosas van en un solo `SaveChangesAsync`, es decir, en una transacción.
 
-Pendiente de corregir en el código actual: heredar el `value_date` del original (#19) y capturar `23505` en vez de consultar antes (#20).
+Pendiente de corregir en el código actual: capturar `23505` en vez de consultar antes (#20).
 
 ## Reversión de un pago (ejemplo)
 
