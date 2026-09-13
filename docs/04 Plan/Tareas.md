@@ -61,7 +61,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 23 | Validar monto mayor que cero en el aporte (modifica #6) | Pendiente | No | N/A |
 | 24 | Corregir el `GroupBy(CreatedDate)` de GET clientes, que devuelve grupos en vez de clientes (modifica #4) | Completada | No | N/A |
 | 25 | Proyectar GET clientes a DTO sin campos de auditoría (modifica #4) | Pendiente | No | N/A |
-| 26 | Corregir `ILogger<CustomersController>` en `LoansController` | Pendiente | No | N/A |
+| 26 | Corregir `ILogger<CustomersController>` en `LoansController` | Completada | No | N/A |
 | 27 | `Loan.CreatedBy` de `Guid?` a `Guid` | Pendiente | No | N/A |
 | 28 | `User.CreatedBy` de `Guid` a `Guid?` | Pendiente | No | N/A |
 | 29 | Borrar `Enums/EntryStatus.cs`, que está vacío | Bloqueada (P-03) | No | N/A |
