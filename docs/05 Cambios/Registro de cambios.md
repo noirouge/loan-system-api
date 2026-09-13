@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-13
 
+- **#18**: `cash_entries` pierde `updated_by`, `updated_date` y su FK en `db/schema.sql`; se quitan de la entidad `CashEntry`, y la reversión deja de escribirlos en la entrada original (modifica #2, #10). Quién reversó queda en el `created_by` de la reversión (D-014). En una base ya creada las columnas siguen existiendo: son nullables y EF las ignora.
 - **#28**: `User.CreatedBy` pasa a `Guid?`, porque `users.created_by` es nullable y el admin semilla no tiene creador.
 - **#26**: `LoansController` inyecta `ILogger<LoansController>` en vez de `ILogger<CustomersController>`.
 - **#24**: `GET api/customers` ordena por fecha de creación, más recientes primero, en vez de agrupar por `CreatedDate`, que devolvía grupos y no clientes (modifica #4).

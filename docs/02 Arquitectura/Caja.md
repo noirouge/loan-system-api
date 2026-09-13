@@ -47,7 +47,7 @@ El API recibe los montos **en positivo** y aplica el signo (D-004).
 2. La original pasa a `REVERSED`.
 3. Las dos cosas van en un solo `SaveChangesAsync`, es decir, en una transacción.
 
-Pendiente de corregir en el código actual: heredar el `value_date` del original (#19), capturar `23505` en vez de consultar antes (#20), dejar de escribir `updated_by`/`updated_date` (#18).
+Pendiente de corregir en el código actual: heredar el `value_date` del original (#19) y capturar `23505` en vez de consultar antes (#20).
 
 ## Reversión de un pago (ejemplo)
 

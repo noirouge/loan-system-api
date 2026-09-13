@@ -25,8 +25,6 @@ namespace LoanSystemAPI.Entities
         [Required]
         required public Guid CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
-        public Guid? UpdatedBy { get; set; }
-        public DateTime? UpdatedDate { get; set; }
 
 
     }

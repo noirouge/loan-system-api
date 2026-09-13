@@ -162,8 +162,6 @@ namespace LoanSystemAPI.Controllers
                     };
 
                     cashEntry.status = CashEntryStatus.REVERSED;
-                    cashEntry.UpdatedBy = _adminId;
-                    cashEntry.UpdatedDate = DateTime.UtcNow;
 
                     await _dbContext.CashEntries.AddAsync(reversalEntry);
                     await _dbContext.SaveChangesAsync();
