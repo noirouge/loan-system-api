@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-13
 
+- **#24**: `GET api/customers` ordena por fecha de creación, más recientes primero, en vez de agrupar por `CreatedDate`, que devolvía grupos y no clientes (modifica #4).
 - **#17**: nuevo `Services/LocalDateService` con `Today()`, que devuelve la fecha de hoy en `America/Santo_Domingo` a partir de un `TimeProvider` inyectado. Se registran `TimeProvider.System` y el servicio en `Program.cs`.
 - **#16**: `CashEntry.ValueDate`, `Loan.LoanDate` y el `ValueDate` de los DTOs de caja pasan de `DateTime` a `DateOnly`, igual que sus columnas `DATE` (modifica #6, #8, #9, #10, #11). En JSON, `valueDate` ahora va como `YYYY-MM-DD`. `period` nacerá como `DateOnly` en la #35. La reversión usa temporalmente la fecha UTC de hoy, hasta la #19.
 - **#14**: en `db/schema.sql`, `users.role` pasa a `DEFAULT 1` (WORKER) y el admin semilla se inserta con `role = 2` (ADMIN), alineados con el enum `UserRole` (modifica #2). Antes todo usuario nuevo nacía ADMIN. La base local todavía necesita la #15.

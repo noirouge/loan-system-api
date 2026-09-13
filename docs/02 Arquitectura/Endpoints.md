@@ -8,7 +8,7 @@ Las fechas de hecho (`valueDate`, `loanDate`) viajan en JSON como `YYYY-MM-DD`, 
 
 | Método | Ruta | Qué hace | Estado |
 |---|---|---|---|
-| GET | `api/customers` | Lista clientes | Implementado. Bug de `GroupBy` (#24); expone campos de auditoría (#25) |
+| GET | `api/customers` | Lista clientes, más recientes primero | Implementado. Expone campos de auditoría (#25) |
 | GET | `api/customers/{id}` | Cliente por id | Implementado |
 | POST | `api/customers` | Crea cliente | Implementado |
 | PUT | `api/customers` | Actualiza cliente (id en el cuerpo) | Implementado |

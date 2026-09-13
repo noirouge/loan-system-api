@@ -36,7 +36,7 @@ namespace LoanSystemAPI.Controllers
         {
             try
             {
-                var customers = await _dbContext.Customers.GroupBy(c => c.CreatedDate).ToListAsync();
+                var customers = await _dbContext.Customers.OrderByDescending(c => c.CreatedDate).ToListAsync();
                 return Ok(customers);
             }
             catch (Exception ex)
