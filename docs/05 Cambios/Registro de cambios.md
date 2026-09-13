@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-13
 
+- **#36**: `Loan`, `LoanEntry` y `Freeze` quedan registrados en `AppDbContext` con sus tablas. `Loan` y `Freeze` ocultan sus borrados lógicos con `HasQueryFilter`, igual que `Customer`; `LoanEntry` no lo necesita porque es append-only.
 - **#34**: nuevas entidades `RefreshToken`, `AuditLog` y `JobRun`, registradas en `AppDbContext` con sus tablas. `AuditLog.Changes` se mapea como `jsonb`.
 - **#35**: las entidades `LoanEntry` y `Freeze` quedan completas, espejo de `loan_entries` y `freezes`. `LoanEntry` no tiene columnas de actualización porque es append-only; `Period`, `ValueDate`, `StartDate` y `EndDate` son `DateOnly`.
 - **#32**: `db/schema.sql` crea `refresh_tokens`, `audit_logs` y `job_runs` con sus índices, incluido `ux_job_runs_success` (modifica #2). `token_hash` es SHA-256 en hexadecimal con índice único; `replaced_by` usa `ON DELETE SET NULL` para que la limpieza de tokens vencidos no choque con la FK; `attempted_user` admite 100 caracteres. Todo es `IF NOT EXISTS`, así que volver a correr el script en la base local basta para crearlas.
