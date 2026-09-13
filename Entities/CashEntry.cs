@@ -14,7 +14,7 @@ namespace LoanSystemAPI.Entities
         required public decimal amount { get; set; }
 
         [Required]
-        required public DateTime ValueDate { get; set; }
+        required public DateOnly ValueDate { get; set; }
        public Guid? LoanEntryId { get; set; }
        public Guid? ReversesEntryId { get; set; }
         public string? Note { get; set; } = "";

@@ -47,6 +47,7 @@ docs/          este vault
 
 - Campos obligatorios: `[Required]` en la línea de arriba y `required public` en la declaración.
 - Nullables con `?`, espejando exactamente el `NULL`/`NOT NULL` de la tabla.
+- Columnas `DATE` → `DateOnly`; columnas `TIMESTAMPTZ` → `DateTime` en UTC.
 - Valores por defecto en línea: `= DateTime.UtcNow`, `= CustomerStatus.ACTIVE`, `= ""`.
 - Bloque de auditoría al final: `CreatedBy`, `CreatedDate`, `UpdatedBy`, `UpdatedDate`.
 - La propiedad de estado se llama `Status`.

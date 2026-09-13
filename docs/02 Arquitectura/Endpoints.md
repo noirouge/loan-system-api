@@ -2,6 +2,8 @@
 
 Los mensajes de respuesta van en inglés. Las secciones marcadas *propuesta* aún no existen y sus rutas pueden cambiar.
 
+Las fechas de hecho (`valueDate`, `loanDate`) viajan en JSON como `YYYY-MM-DD`, sin hora.
+
 ## Clientes: `api/customers`
 
 | Método | Ruta | Qué hace | Estado |

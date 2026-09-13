@@ -21,12 +21,12 @@
 | 3 | POST crear cliente | Completada | No | N/A |
 | 4 | GET listar clientes | Completada | No | N/A |
 | 5 | CRUD de clientes (GET por id, PUT, DELETE lógico) y enums | Completada | No | N/A |
-| 6 | POST aporte de caja | Completada | Sí | 7, 8 |
+| 6 | POST aporte de caja | Completada | Sí | 7, 8, 16 |
 | 7 | Quitar la validación de counterparty del aporte (modifica #6) | Completada | No | N/A |
-| 8 | POST retiro de caja; ruta del controller a `api/cash-entries` (modifica #6) | Completada | No | N/A |
-| 9 | POST gasto de caja | Completada | No | N/A |
-| 10 | POST reversión de caja | Completada | No | N/A |
-| 11 | GET listar entradas de caja | Completada | No | N/A |
+| 8 | POST retiro de caja; ruta del controller a `api/cash-entries` (modifica #6) | Completada | Sí | 16 |
+| 9 | POST gasto de caja | Completada | Sí | 16 |
+| 10 | POST reversión de caja | Completada | Sí | 16 |
+| 11 | GET listar entradas de caja | Completada | Sí | 16 |
 | 12 | Crear vault de documentación, plan y tareas | Completada | No | N/A |
 
 ## Pruebas: infraestructura y red de seguridad
@@ -51,7 +51,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 13 | Corregir índice `ux_loan_entries_loan_id_and_period` a `entry_type = 2` (modifica #2) | Completada | No | N/A |
 | 14 | `users.role` en SQL: `DEFAULT 1`, admin semilla con `role = 2`, comentario corregido (modifica #2) | Completada | No | N/A |
 | 15 | Actualizar el rol del admin en la base local: `UPDATE users SET role = 2 WHERE username = 'admin'` | Pendiente | No | N/A |
-| 16 | Migrar `value_date`, `period` y `loan_date` a `DateOnly` en entidades y DTOs (modifica #6, #8, #9, #10, #11) | Pendiente | No | N/A |
+| 16 | Migrar `value_date`, `period` y `loan_date` a `DateOnly` en entidades y DTOs (modifica #6, #8, #9, #10, #11) | Completada | No | N/A |
 | 17 | Helper de fecha "hoy" en hora local dominicana | Pendiente | No | N/A |
 | 18 | Quitar `updated_by` y `updated_date` de `cash_entries`: SQL, entidad y reversión (modifica #2, #10) | Pendiente | No | N/A |
 | 19 | La reversión de caja hereda el `value_date` del original (modifica #10) | Pendiente | No | N/A |

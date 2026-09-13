@@ -12,7 +12,7 @@ namespace LoanSystemAPI.DTOs
         [Required]
         required public decimal Amount { get; set; }
         [Required]
-        required public DateTime ValueDate { get; set; }
+        required public DateOnly ValueDate { get; set; }
         public string? Note { get; set; } = "";
         public CashEntryStatus Status { get; set; }
         public Guid? CounterpartyUserId { get; set; }

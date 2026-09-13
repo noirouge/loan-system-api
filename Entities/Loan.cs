@@ -21,7 +21,7 @@ namespace LoanSystemAPI.Entities
         required public decimal InterestRate { get; set; }
 
         [Required]
-       required public DateTime LoanDate { get; set; }
+       required public DateOnly LoanDate { get; set; }
 
         [Required]
         required public int PaymentDay { get; set; } = 1;
