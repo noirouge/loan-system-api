@@ -1,4 +1,5 @@
 ﻿using LoanSystemAPI.Data;
+using LoanSystemAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LoanSystemAPI.Controllers
@@ -10,20 +11,13 @@ namespace LoanSystemAPI.Controllers
     {
         private readonly ILogger<LoansController> _logger;
         private readonly AppDbContext _dbContext;
-        private readonly IConfiguration _configuration;
-        // THIS IF FOR TESTING UNTIL LOGIN ARE AVAILABLE
-        private readonly Guid _adminId;
+        private readonly ICurrentUserService _currentUserService;
 
-        public LoansController(ILogger<LoansController> logger, AppDbContext dbContext, IConfiguration configuration)
+        public LoansController(ILogger<LoansController> logger, AppDbContext dbContext, ICurrentUserService currentUserService)
         {
             _logger = logger;
             _dbContext = dbContext;
-            _configuration = configuration;
-            var configAdminId = _configuration["AdminId"] ?? throw new InvalidOperationException("NOT FOUND AdminId");
-            if (Guid.TryParse(configAdminId, out Guid adminId))
-            {
-                _adminId = adminId;
-            }
+            _currentUserService = currentUserService;
         }
 
         

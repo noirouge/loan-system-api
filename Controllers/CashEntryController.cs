@@ -16,21 +16,15 @@ namespace LoanSystemAPI.Controllers
     {
         private readonly AppDbContext _dbContext;
         private readonly ILogger<CashEntryController> _logger;
-        private readonly IConfiguration _configuration;
+        private readonly ICurrentUserService _currentUserService;
         private readonly CashService _cashService;
-        private readonly Guid _adminId;
 
-        public CashEntryController(AppDbContext dbContext, ILogger<CashEntryController> logger, IConfiguration configuration, CashService cashService)
+        public CashEntryController(AppDbContext dbContext, ILogger<CashEntryController> logger, ICurrentUserService currentUserService, CashService cashService)
         {
             _dbContext = dbContext;
             _logger = logger;
-            _configuration = configuration;
+            _currentUserService = currentUserService;
             _cashService = cashService;
-            var configAdminId = _configuration["AdminId"] ?? throw new InvalidOperationException("NOT FOUND AdminId");
-            if (Guid.TryParse(configAdminId, out Guid adminId))
-            {
-                _adminId = adminId;
-            }
         }
         [HttpPost("contribution")]
         public async Task<ActionResult<CashEntryContributionDTO>> PostContribution([FromBody] CashEntryContributionDTO cashEntryDTO)
@@ -48,7 +42,7 @@ namespace LoanSystemAPI.Controllers
                         EntryType = CashEntryType.CONTRIBUTION,
                         Note = cashEntryDTO.Note,
                         ValueDate = cashEntryDTO.ValueDate,
-                        CreatedBy = _adminId,
+                        CreatedBy = _currentUserService.UserId,
                         CreatedDate = DateTime.UtcNow,
                         status = CashEntryStatus.APPLIED,
          
@@ -91,7 +85,7 @@ namespace LoanSystemAPI.Controllers
                         EntryType = CashEntryType.WITHDRAWAL,
                         Note = cashEntryDTO.Note,
                         ValueDate = cashEntryDTO.ValueDate,
-                        CreatedBy = _adminId,
+                        CreatedBy = _currentUserService.UserId,
                         CreatedDate = DateTime.UtcNow,
                         status = CashEntryStatus.APPLIED,
                     };
@@ -139,7 +133,7 @@ namespace LoanSystemAPI.Controllers
                         EntryType = CashEntryType.EXPENSE,
                         Note = cashEntryDTO.Note,
                         ValueDate = cashEntryDTO.ValueDate,
-                        CreatedBy = _adminId,
+                        CreatedBy = _currentUserService.UserId,
                         CreatedDate = DateTime.UtcNow,
                         status = CashEntryStatus.APPLIED,
                     };
@@ -178,7 +172,7 @@ namespace LoanSystemAPI.Controllers
                         EntryType = CashEntryType.REVERSAL,
                         Note = $"REVERSAL OF THE CASH ENTRY {cashEntry.Id}",
                         ValueDate = cashEntry.ValueDate,
-                        CreatedBy = _adminId,
+                        CreatedBy = _currentUserService.UserId,
                         CreatedDate = DateTime.UtcNow,
                         status = CashEntryStatus.APPLIED,
                     };

@@ -18,14 +18,14 @@
 |---:|---|---|---|---:|
 | 1 | Configurar conexión a PostgreSQL | Completada | No | N/A |
 | 2 | Crear esquema inicial de la base (`db/schema.sql`) | Completada | Sí | 13, 14, 18, 32 |
-| 3 | POST crear cliente | Completada | Sí | 25 |
+| 3 | POST crear cliente | Completada | Sí | 25, 31 |
 | 4 | GET listar clientes | Completada | Sí | 24, 25 |
-| 5 | CRUD de clientes (GET por id, PUT, DELETE lógico) y enums | Completada | Sí | 25 |
-| 6 | POST aporte de caja | Completada | Sí | 7, 8, 16, 23 |
+| 5 | CRUD de clientes (GET por id, PUT, DELETE lógico) y enums | Completada | Sí | 25, 31 |
+| 6 | POST aporte de caja | Completada | Sí | 7, 8, 16, 23, 31 |
 | 7 | Quitar la validación de counterparty del aporte (modifica #6) | Completada | No | N/A |
-| 8 | POST retiro de caja; ruta del controller a `api/cash-entries` (modifica #6) | Completada | Sí | 16, 22 |
-| 9 | POST gasto de caja | Completada | Sí | 16, 22 |
-| 10 | POST reversión de caja | Completada | Sí | 16, 18, 19, 20 |
+| 8 | POST retiro de caja; ruta del controller a `api/cash-entries` (modifica #6) | Completada | Sí | 16, 22, 31 |
+| 9 | POST gasto de caja | Completada | Sí | 16, 22, 31 |
+| 10 | POST reversión de caja | Completada | Sí | 16, 18, 19, 20, 31 |
 | 11 | GET listar entradas de caja | Completada | Sí | 16 |
 | 12 | Crear vault de documentación, plan y tareas | Completada | No | N/A |
 
@@ -75,7 +75,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | # | Tarea | Estado | ¿Modificada? | Modificada por |
 |---:|---|---|---|---:|
 | 30 | Servicio de usuario actual detrás de una interfaz; hoy devuelve `AdminId` | Completada | No | N/A |
-| 31 | Reemplazar `_adminId` de los controllers por el servicio de usuario actual (modifica #3, #5, #6, #8, #9, #10) | Pendiente | No | N/A |
+| 31 | Reemplazar `_adminId` de los controllers por el servicio de usuario actual (modifica #3, #5, #6, #8, #9, #10) | Completada | No | N/A |
 | 32 | Tablas `refresh_tokens`, `audit_logs` y `job_runs` con sus índices en `schema.sql` (modifica #2) | Completada | No | N/A |
 | 33 | Enums `AuditAction` y `JobRunStatus` | Completada | No | N/A |
 | 34 | Entidades `RefreshToken`, `AuditLog` y `JobRun`, registradas en `AppDbContext` | Completada | No | N/A |

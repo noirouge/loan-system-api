@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-13
 
+- **#31**: `CashEntryController`, `CustomersController` y `LoansController` dejan de leer `AdminId` de `IConfiguration` y reciben `ICurrentUserService`; `CreatedBy` y `UpdatedBy` salen de `UserId` (modifica #3, #5, #6, #8, #9, #10). Si `AdminId` falta o no es válido, ahora falla en vez de guardar `Guid.Empty`.
 - **#22**: el retiro y el gasto abren una transacción, toman el candado de caja (`CashService.LockCashAsync`) y rechazan con `400` si el efectivo disponible no alcanza, informando cuánto hay. Si dos llegan a la vez, la segunda espera a que la primera confirme y ve el saldo ya descontado (D-016, modifica #8, #9).
 - **#20**: la reversión de caja ya no consulta antes si la entrada estaba reversada, porque dos peticiones simultáneas pasaban las dos esa consulta. Ahora inserta directo y captura la violación de `uq_cash_entries_reverses` (`SqlState 23505`), respondiendo `409 Conflict` en vez del `400` anterior o de un `500` (modifica #10).
 - **#36**: `Loan`, `LoanEntry` y `Freeze` quedan registrados en `AppDbContext` con sus tablas. `Loan` y `Freeze` ocultan sus borrados lógicos con `HasQueryFilter`, igual que `Customer`; `LoanEntry` no lo necesita porque es append-only.

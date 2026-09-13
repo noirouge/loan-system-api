@@ -2,6 +2,7 @@
 using LoanSystemAPI.DTOs;
 using LoanSystemAPI.Entities;
 using LoanSystemAPI.Enums;
+using LoanSystemAPI.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -16,19 +17,12 @@ namespace LoanSystemAPI.Controllers
 
         private readonly ILogger<CustomersController> _logger;
         private readonly AppDbContext _dbContext;
-        private readonly IConfiguration _configuration;
-// THIS IF FOR TESTING UNTIL LOGIN ARE AVAILABLE
-        private readonly Guid _adminId;
+        private readonly ICurrentUserService _currentUserService;
 
-        public CustomersController( ILogger<CustomersController> logger, AppDbContext dbContext, IConfiguration configuration ) { 
+        public CustomersController( ILogger<CustomersController> logger, AppDbContext dbContext, ICurrentUserService currentUserService ) { 
         _logger = logger;
         _dbContext = dbContext;
-        _configuration = configuration;
-            var configAdminId = _configuration["AdminId"] ?? throw new InvalidOperationException("NOT FOUND AdminId"); 
-            if (Guid.TryParse(configAdminId, out Guid adminId))
-            {
-            _adminId = adminId; 
-            }
+        _currentUserService = currentUserService;
         }
 
         [HttpGet]
@@ -88,7 +82,7 @@ namespace LoanSystemAPI.Controllers
                 Phone = customer.Phone,
                 Note = customer.Note,
                 Id = Guid.NewGuid(),
-                CreatedBy = _adminId,
+                CreatedBy = _currentUserService.UserId,
             };
             try
             {
@@ -120,7 +114,7 @@ namespace LoanSystemAPI.Controllers
                 var customer = await _dbContext.Customers.FirstOrDefaultAsync(c => c.Id == customerDTO.Id);
                 if(customer == null)
                     return NotFound(new {message = $"The customer to update with id {customerDTO.Id} was not found" });
-                customer.UpdatedBy = _adminId;
+                customer.UpdatedBy = _currentUserService.UserId;
                 customer.UpdatedDate = DateTime.UtcNow;
                 customer.Note = customerDTO.Note;
                 customer.Code = customerDTO.Code;

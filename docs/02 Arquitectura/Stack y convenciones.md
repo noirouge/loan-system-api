@@ -26,8 +26,8 @@ docs/          este vault
 ## Controllers
 
 - Heredan de `Controller`. Llevan `[ApiController]` y `[Route("api/recurso-en-plural-kebab")]`.
-- El constructor inyecta `AppDbContext _dbContext`, `ILogger<NombreController> _logger` e `IConfiguration _configuration`.
-- `_adminId` se lee de `appsettings` (`AdminId`) y se usa como `CreatedBy`/`UpdatedBy`. **Es temporal hasta que exista el login** (D-019; tareas #30, #31, #66).
+- El constructor inyecta `AppDbContext _dbContext`, `ILogger<NombreController> _logger`, `ICurrentUserService _currentUserService` y los servicios que use (`CashService`, `LocalDateService`).
+- `CreatedBy`/`UpdatedBy` salen de `_currentUserService.UserId`. Hoy es el `AdminId` de configuración; con el login (#66) será el usuario del JWT, sin tocar los controllers (D-019).
 - Rutas con id usan restricción de tipo `{id:guid}`, y el parámetro lleva `[FromRoute]`. Los cuerpos llevan `[FromBody]`.
 - Firma: `async Task<ActionResult<XDTO>>`, o `Task<IActionResult>` cuando no se devuelve cuerpo.
 - Las validaciones de negocio van **antes** del `try` y devuelven `BadRequest(new { message = "..." })`.
