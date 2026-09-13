@@ -39,7 +39,7 @@ Lo calcula `CashService.GetAvailableCashAsync()`. Toda operación que saca diner
 | Retiro | Monto > 0 · **efectivo disponible suficiente** (pendiente, #22) |
 | Gasto | Monto > 0 · al menos un counterparty (`Guid.Empty` y texto en blanco cuentan como vacío) · **efectivo disponible suficiente** (pendiente, #22) |
 | Desembolso | **Efectivo disponible suficiente** (#39) |
-| Reversión manual | Solo `CONTRIBUTION`, `WITHDRAWAL` o `EXPENSE` · que no esté reversada. ¿Reversar un aporte valida efectivo? P-09 |
+| Reversión manual | Solo `CONTRIBUTION`, `WITHDRAWAL` o `EXPENSE` · que no esté reversada (`409`). ¿Reversar un aporte valida efectivo? P-09 |
 
 ## Reversión manual
 
@@ -49,7 +49,7 @@ Lo calcula `CashService.GetAvailableCashAsync()`. Toda operación que saca diner
 2. La original pasa a `REVERSED`.
 3. Las dos cosas van en un solo `SaveChangesAsync`, es decir, en una transacción.
 
-Pendiente de corregir en el código actual: capturar `23505` en vez de consultar antes (#20).
+Una segunda reversión de la misma entrada choca con `uq_cash_entries_reverses` y responde `409 Conflict`, también cuando las dos peticiones llegan a la vez (#20).
 
 ## Reversión de un pago (ejemplo)
 

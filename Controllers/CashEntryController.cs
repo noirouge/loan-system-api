@@ -4,6 +4,7 @@ using LoanSystemAPI.Entities;
 using LoanSystemAPI.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace LoanSystemAPI.Controllers
 {
@@ -148,9 +149,6 @@ namespace LoanSystemAPI.Controllers
                     if (cashEntry.EntryType != CashEntryType.CONTRIBUTION && cashEntry.EntryType != CashEntryType.WITHDRAWAL && cashEntry.EntryType != CashEntryType.EXPENSE)
                         return BadRequest(new { message = "Only a contribution, a withdrawal or an expense can be reversed from this endpoint" });
 
-                    if (cashEntry.status == CashEntryStatus.REVERSED)
-                        return BadRequest(new { message = $"The cash entry with id {id} was already reversed" });
-
                     var reversalEntry = new CashEntry
                     {
                         Id = Guid.NewGuid(),
@@ -170,6 +168,11 @@ namespace LoanSystemAPI.Controllers
                     await _dbContext.SaveChangesAsync();
 
                     return Created();
+                }
+                // THE UNIQUE INDEX ON reverses_entry_id IS WHAT STOPS A DOUBLE REVERSAL, EVEN WITH TWO REQUESTS AT THE SAME TIME
+                catch (DbUpdateException ex) when (ex.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation, ConstraintName: "uq_cash_entries_reverses" })
+                {
+                    return Conflict(new { message = $"The cash entry with id {id} was already reversed" });
                 }
                 catch (Exception ex)
                 {
