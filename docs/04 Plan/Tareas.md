@@ -77,7 +77,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 30 | Servicio de usuario actual detrás de una interfaz; hoy devuelve `AdminId` | Pendiente | No | N/A |
 | 31 | Reemplazar `_adminId` de los controllers por el servicio de usuario actual (modifica #3, #5, #6, #8, #9, #10) | Pendiente | No | N/A |
 | 32 | Tablas `refresh_tokens`, `audit_logs` y `job_runs` con sus índices en `schema.sql` (modifica #2) | Pendiente | No | N/A |
-| 33 | Enums `AuditAction` y `JobRunStatus` | Pendiente | No | N/A |
+| 33 | Enums `AuditAction` y `JobRunStatus` | Completada | No | N/A |
 | 34 | Entidades `RefreshToken`, `AuditLog` y `JobRun`, registradas en `AppDbContext` | Pendiente | No | N/A |
 | 35 | Completar las entidades `LoanEntry` y `Freeze` | Pendiente | No | N/A |
 | 36 | Registrar `Loan`, `LoanEntry` y `Freeze` en `AppDbContext` | Pendiente | No | N/A |

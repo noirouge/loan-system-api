@@ -68,7 +68,7 @@ Valores tal como están en el código (D-009, D-010). **El código manda sobre l
 | `FreezeStatus` | `ACTIVE=1`, `DELETED=2` |
 | `EntryStatus` | Vacío, sin uso (P-03, #29) |
 
-Pendientes de crear (#33):
+Infraestructura (#33):
 
 | Enum | Valores |
 |---|---|
