@@ -27,6 +27,21 @@ Préstamo de 1000 al 10% mensual:
 > [!warning] Prueba crítica
 > En el mes 3 el interés se calcula sobre **840**, no sobre 800, porque quedaron 40 de interés sin pagar. Da **84**. Si una implementación da 80, está mal. Lo verifica la prueba de integración #94.
 
+## Ejemplo del negocio: Fulanito
+
+Préstamo de 100 al 10% mensual, con plazo informativo de 5 meses (capital sugerido por mes: 100 ÷ 5 = 20).
+
+| Mes | Interés del mes | Paga | Se aplica | Capital después |
+|---|---|---:|---|---:|
+| 1 | 10% de 100 = 10 | 30 | 10 a interés, 20 a capital | 80 |
+| 2 | 10% de 80 = 8 | 28 | 8 a interés, 20 a capital | 60 |
+| 3 | 10% de 60 = 6 | 46 | 6 a interés, 40 a capital (paga de más) | 20 |
+| 4 | 10% de 20 = 2 | 22 | 2 a interés, 20 a capital | 0 |
+
+Termina un mes antes del plazo. Pagar de más siempre está permitido y reduce capital (D-042).
+
+**Si no paga el mes 1:** los 10 de interés quedan pendientes y en el mes 2 el interés se calcula sobre 110, o sea, 11. Debe 100 de capital y 21 de interés. Si paga 31, la cascada aplica 21 a interés y 10 a capital, y queda debiendo 90. Cómo se registra ese interés impago está en P-16.
+
 ## Cascada de imputación
 
 Todo pago se aplica en este orden:

@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-13
 
+- Respuestas del usuario: la tasa se envía como fracción (D-041, cierra P-14) y pagar de más reduce capital, con el ejemplo de Fulanito agregado a [[Modelo de negocio]] (D-042). Se reescriben con ejemplos P-01, P-05, P-10, P-13 y P-15, y se agregan P-16 (interés impago aparte del capital) y P-17 (pago sugerido del mes). La #39 queda bloqueada solo por P-15 y la #42 por P-10 y P-16.
 - Se registran P-14 y P-15 (cómo se envía la tasa y qué se valida al crear un préstamo), que bloquean la #39; la #42 y la #43 pasan a bloqueadas por P-10. Se actualiza el estado del plan tras terminar las tareas desbloqueadas de las fases 1 y 2.
 - **#31**: `CashEntryController`, `CustomersController` y `LoansController` dejan de leer `AdminId` de `IConfiguration` y reciben `ICurrentUserService`; `CreatedBy` y `UpdatedBy` salen de `UserId` (modifica #3, #5, #6, #8, #9, #10). Si `AdminId` falta o no es válido, ahora falla en vez de guardar `Guid.Empty`.
 - **#22**: el retiro y el gasto abren una transacción, toman el candado de caja (`CashService.LockCashAsync`) y rechazan con `400` si el efectivo disponible no alcanza, informando cuánto hay. Si dos llegan a la vez, la segunda espera a que la primera confirme y ve el saldo ya descontado (D-016, modifica #8, #9).
