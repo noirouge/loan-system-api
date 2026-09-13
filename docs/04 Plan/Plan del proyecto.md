@@ -4,8 +4,8 @@ La lista detallada está en [[Tareas]]. Aquí va el orden de las fases, por qué
 
 ## Estado al 2026-09-13
 
-- **Hecho:** conexión a PostgreSQL, esquema inicial, CRUD de clientes; en caja: aportes, retiros, gastos, reversión y listado; índice de cargos de interés corregido (#13).
-- **Siguiente:** resolver P-05 y P-13 para montar la red de pruebas sobre lo que ya existe (#82–#89). Mientras tanto se pueden hacer las tareas de Fase 1 que solo tocan SQL (#14, #15, #81).
+- **Hecho:** conexión a PostgreSQL, esquema inicial, CRUD de clientes, caja completa (aportes, retiros y gastos con validación de efectivo, reversión y listado) y todas las tareas desbloqueadas de las fases 1 y 2.
+- **Siguiente:** el usuario corre #15 y #81 en su base local. Para seguir hacen falta respuestas: P-05 y P-13 para las pruebas; P-14 y P-15 para crear préstamos (#39); P-10 para el pago (#42).
 
 ## Fases
 
@@ -56,7 +56,7 @@ Incluye: índice de cargos, roles en SQL, `DateOnly` y fecha local, ajustes a la
 
 **Orden interno:** proyección de saldo (#38) → crear préstamo (#39) → consultas (#40, #41) → pago (#42) → idempotencia (#43) → condonación (#44) → reversión (#45).
 
-**Bloqueos:** #46 (P-06), #47 (P-07), #48 (P-08). Antes del pago (#42) hay que responder P-10, y conviene tener N-02. Pruebas: P-05.
+**Bloqueos:** #39 (P-14, P-15), #42 y #43 (P-10), #46 (P-06), #47 (P-07), #48 (P-08). Conviene tener N-02 antes del pago. Pruebas: P-05.
 
 La #49 se canceló: la reemplazan #82 (proyecto de pruebas) y #94 (ejemplo canónico).
 
