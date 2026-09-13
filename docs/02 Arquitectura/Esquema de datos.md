@@ -79,7 +79,6 @@ Pendientes de crear (#33):
 
 | Tarea | Cambio |
 |---|---|
-| #14 | `users.role`: `DEFAULT 1` (WORKER), admin semilla con `role = 2`, comentario corregido. **Hoy todo usuario nuevo nace ADMIN** |
 | #15 | En la base local: `UPDATE users SET role = 2 WHERE username = 'admin'` |
 | #81 | En la base local: recrear `ux_loan_entries_loan_id_and_period` con `entry_type = 2`. `CREATE ... IF NOT EXISTS` no reemplaza el índice viejo, así que volver a correr el script no basta |
 | #18 | Quitar `updated_by` y `updated_date` de `cash_entries` |

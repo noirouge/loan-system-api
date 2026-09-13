@@ -17,7 +17,7 @@
 | # | Tarea | Estado | ¿Modificada? | Modificada por |
 |---:|---|---|---|---:|
 | 1 | Configurar conexión a PostgreSQL | Completada | No | N/A |
-| 2 | Crear esquema inicial de la base (`db/schema.sql`) | Completada | Sí | 13 |
+| 2 | Crear esquema inicial de la base (`db/schema.sql`) | Completada | Sí | 13, 14 |
 | 3 | POST crear cliente | Completada | No | N/A |
 | 4 | GET listar clientes | Completada | No | N/A |
 | 5 | CRUD de clientes (GET por id, PUT, DELETE lógico) y enums | Completada | No | N/A |
@@ -49,7 +49,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | # | Tarea | Estado | ¿Modificada? | Modificada por |
 |---:|---|---|---|---:|
 | 13 | Corregir índice `ux_loan_entries_loan_id_and_period` a `entry_type = 2` (modifica #2) | Completada | No | N/A |
-| 14 | `users.role` en SQL: `DEFAULT 1`, admin semilla con `role = 2`, comentario corregido (modifica #2) | Pendiente | No | N/A |
+| 14 | `users.role` en SQL: `DEFAULT 1`, admin semilla con `role = 2`, comentario corregido (modifica #2) | Completada | No | N/A |
 | 15 | Actualizar el rol del admin en la base local: `UPDATE users SET role = 2 WHERE username = 'admin'` | Pendiente | No | N/A |
 | 16 | Migrar `value_date`, `period` y `loan_date` a `DateOnly` en entidades y DTOs (modifica #6, #8, #9, #10, #11) | Pendiente | No | N/A |
 | 17 | Helper de fecha "hoy" en hora local dominicana | Pendiente | No | N/A |

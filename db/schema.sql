@@ -13,7 +13,7 @@ name           VARCHAR(50) NOT NULL,
 lastname       VARCHAR(50) NOT NULL,
 username       VARCHAR(50) NOT NULL,
 password_hash       VARCHAR(100) NOT NULL,
-role 		   SMALLINT NOT NULL DEFAULT 2, -- WORKER = 2, ADMIN = 1,
+role 		   SMALLINT NOT NULL DEFAULT 1, -- WORKER = 1, ADMIN = 2
 status         SMALLINT NOT NULL DEFAULT 1, -- ACTIVE = 1, INACTIVE = 2, DELETED = 3
 created_by     UUID,
 created_date   TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -25,7 +25,7 @@ CONSTRAINT fk_users_updated_by FOREIGN KEY (updated_by) REFERENCES users(id)
 );
 
 INSERT INTO users (id, name, lastname, username, password_hash, role)
-VALUES (gen_random_uuid(), 'ADMIN', 'DEFAULT', 'admin', 'admin123', 1)
+VALUES (gen_random_uuid(), 'ADMIN', 'DEFAULT', 'admin', 'admin123', 2)
 ON CONFLICT (username) DO NOTHING;
 
 -- SELECT * FROM users;

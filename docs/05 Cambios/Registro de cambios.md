@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-13
 
+- **#14**: en `db/schema.sql`, `users.role` pasa a `DEFAULT 1` (WORKER) y el admin semilla se inserta con `role = 2` (ADMIN), alineados con el enum `UserRole` (modifica #2). Antes todo usuario nuevo nacía ADMIN. La base local todavía necesita la #15.
 - Se agregan las pruebas de integración al plan y a las tareas: infraestructura y red de seguridad sobre lo que ya existe (#82–#89) y pruebas por fase (#90–#109). Se cancela la #49, reemplazada por #82 y #94 (D-040).
 - `docs/` sale de `.gitignore` (D-039). El vault vuelve a ser visible para git, todavía sin commitear.
 - Se deshacen con `git reset` los commits de las tareas #12 y #13, que no se habían publicado, y `docs/` pasa a `.gitignore` (D-038). Los archivos se conservan en el disco. El cambio de `db/schema.sql` de la #13 queda sin commitear.
