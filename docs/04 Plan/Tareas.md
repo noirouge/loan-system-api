@@ -79,7 +79,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 32 | Tablas `refresh_tokens`, `audit_logs` y `job_runs` con sus índices en `schema.sql` (modifica #2) | Completada | No | N/A |
 | 33 | Enums `AuditAction` y `JobRunStatus` | Completada | No | N/A |
 | 34 | Entidades `RefreshToken`, `AuditLog` y `JobRun`, registradas en `AppDbContext` | Pendiente | No | N/A |
-| 35 | Completar las entidades `LoanEntry` y `Freeze` | Pendiente | No | N/A |
+| 35 | Completar las entidades `LoanEntry` y `Freeze` | Completada | No | N/A |
 | 36 | Registrar `Loan`, `LoanEntry` y `Freeze` en `AppDbContext` | Pendiente | No | N/A |
 | 37 | Helper de redondeo a 2 decimales | Bloqueada (P-01) | No | N/A |
 | 93 | Pruebas de restricciones de la base: un cargo por período, un congelamiento abierto, una reversión por asiento; `schema.sql` reejecutable | Bloqueada (P-05) | No | N/A |
