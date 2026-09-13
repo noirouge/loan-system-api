@@ -23,8 +23,8 @@
 | 5 | CRUD de clientes (GET por id, PUT, DELETE lógico) y enums | Completada | Sí | 25 |
 | 6 | POST aporte de caja | Completada | Sí | 7, 8, 16, 23 |
 | 7 | Quitar la validación de counterparty del aporte (modifica #6) | Completada | No | N/A |
-| 8 | POST retiro de caja; ruta del controller a `api/cash-entries` (modifica #6) | Completada | Sí | 16 |
-| 9 | POST gasto de caja | Completada | Sí | 16 |
+| 8 | POST retiro de caja; ruta del controller a `api/cash-entries` (modifica #6) | Completada | Sí | 16, 22 |
+| 9 | POST gasto de caja | Completada | Sí | 16, 22 |
 | 10 | POST reversión de caja | Completada | Sí | 16, 18, 19, 20 |
 | 11 | GET listar entradas de caja | Completada | Sí | 16 |
 | 12 | Crear vault de documentación, plan y tareas | Completada | No | N/A |
@@ -57,7 +57,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 19 | La reversión de caja hereda el `value_date` del original (modifica #10) | Completada | No | N/A |
 | 20 | Reversión de caja: capturar `23505` en vez de consultar antes (modifica #10) | Completada | No | N/A |
 | 21 | Servicio de efectivo disponible (`SUM(amount)` de caja) | Completada | No | N/A |
-| 22 | Validar efectivo disponible en retiro y gasto (modifica #8, #9) | Pendiente | No | N/A |
+| 22 | Validar efectivo disponible en retiro y gasto (modifica #8, #9) | Completada | No | N/A |
 | 23 | Validar monto mayor que cero en el aporte (modifica #6) | Completada | No | N/A |
 | 24 | Corregir el `GroupBy(CreatedDate)` de GET clientes, que devuelve grupos en vez de clientes (modifica #4) | Completada | No | N/A |
 | 25 | Proyectar GET clientes a DTO sin campos de auditoría (modifica #4) | Completada | No | N/A |

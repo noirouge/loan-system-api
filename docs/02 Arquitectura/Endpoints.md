@@ -22,8 +22,8 @@ Todas las respuestas devuelven `CustomerDTO`, sin campos de auditoría.
 |---|---|---|---|---|
 | GET | `api/cash-entries` | — | Lista entradas, más recientes primero. Sin `created_by`, `updated_by` ni `updated_date` | Implementado |
 | POST | `api/cash-entries/contribution` | `CashEntryContributionDTO` | Aporte (+) | Implementado |
-| POST | `api/cash-entries/withdrawal` | `CashEntryWithdrawalDTO` | Retiro (−) | Implementado. Falta validar efectivo (#22) |
-| POST | `api/cash-entries/expense` | `CashEntryExpenseDTO` | Gasto (−), al menos un counterparty | Implementado. Falta validar efectivo (#22) |
+| POST | `api/cash-entries/withdrawal` | `CashEntryWithdrawalDTO` | Retiro (−), si hay efectivo suficiente | Implementado |
+| POST | `api/cash-entries/expense` | `CashEntryExpenseDTO` | Gasto (−), al menos un counterparty, si hay efectivo suficiente | Implementado |
 | POST | `api/cash-entries/reversal/{id}` | — | Reversa un aporte, retiro o gasto | Implementado. `409` si la entrada ya estaba reversada |
 
 ## Préstamos: `api/loans` *(propuesta)*

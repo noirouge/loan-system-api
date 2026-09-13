@@ -2,6 +2,7 @@
 using LoanSystemAPI.DTOs;
 using LoanSystemAPI.Entities;
 using LoanSystemAPI.Enums;
+using LoanSystemAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
@@ -16,13 +17,15 @@ namespace LoanSystemAPI.Controllers
         private readonly AppDbContext _dbContext;
         private readonly ILogger<CashEntryController> _logger;
         private readonly IConfiguration _configuration;
+        private readonly CashService _cashService;
         private readonly Guid _adminId;
 
-        public CashEntryController(AppDbContext dbContext, ILogger<CashEntryController> logger, IConfiguration configuration)
+        public CashEntryController(AppDbContext dbContext, ILogger<CashEntryController> logger, IConfiguration configuration, CashService cashService)
         {
             _dbContext = dbContext;
             _logger = logger;
             _configuration = configuration;
+            _cashService = cashService;
             var configAdminId = _configuration["AdminId"] ?? throw new InvalidOperationException("NOT FOUND AdminId");
             if (Guid.TryParse(configAdminId, out Guid adminId))
             {
@@ -72,6 +75,14 @@ namespace LoanSystemAPI.Controllers
 
                 try
                 {
+                    // THE LOCK MAKES A SECOND WITHDRAWAL OR EXPENSE WAIT UNTIL THIS ONE COMMITS
+                    await using var transaction = await _dbContext.Database.BeginTransactionAsync();
+                    await _cashService.LockCashAsync();
+
+                    var availableCash = await _cashService.GetAvailableCashAsync();
+                    if (availableCash < cashEntryDTO.Amount)
+                        return BadRequest(new { message = $"Not enough cash available to withdraw. Available cash: {availableCash}" });
+
                     var cashEntry = new CashEntry
                     {
                         Id = Guid.NewGuid(),
@@ -87,6 +98,7 @@ namespace LoanSystemAPI.Controllers
 
                     await _dbContext.CashEntries.AddAsync(cashEntry);
                     await _dbContext.SaveChangesAsync();
+                    await transaction.CommitAsync();
 
                     return Created();
                 }
@@ -110,6 +122,14 @@ namespace LoanSystemAPI.Controllers
 
                 try
                 {
+                    // THE LOCK MAKES A SECOND WITHDRAWAL OR EXPENSE WAIT UNTIL THIS ONE COMMITS
+                    await using var transaction = await _dbContext.Database.BeginTransactionAsync();
+                    await _cashService.LockCashAsync();
+
+                    var availableCash = await _cashService.GetAvailableCashAsync();
+                    if (availableCash < cashEntryDTO.Amount)
+                        return BadRequest(new { message = $"Not enough cash available for this expense. Available cash: {availableCash}" });
+
                     var cashEntry = new CashEntry
                     {
                         Id = Guid.NewGuid(),
@@ -126,6 +146,7 @@ namespace LoanSystemAPI.Controllers
 
                     await _dbContext.CashEntries.AddAsync(cashEntry);
                     await _dbContext.SaveChangesAsync();
+                    await transaction.CommitAsync();
 
                     return Created();
                 }
