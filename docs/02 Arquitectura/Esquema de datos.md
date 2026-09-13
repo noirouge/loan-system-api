@@ -82,6 +82,5 @@ Pendientes de crear (#33):
 | #15 | En la base local: `UPDATE users SET role = 2 WHERE username = 'admin'` |
 | #81 | En la base local: recrear `ux_loan_entries_loan_id_and_period` con `entry_type = 2`. `CREATE ... IF NOT EXISTS` no reemplaza el índice viejo, así que volver a correr el script no basta |
 | #18 | Quitar `updated_by` y `updated_date` de `cash_entries` |
-| #28 | `users.created_by` es nullable (el admin semilla no tiene creador); la entidad debe ser `Guid?` |
 | #32 | Crear `refresh_tokens`, `audit_logs` y `job_runs` con sus índices |
 | #62 | Reemplazar `'admin123'` del admin semilla por su hash |

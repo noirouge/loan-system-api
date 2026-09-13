@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-13
 
+- **#28**: `User.CreatedBy` pasa a `Guid?`, porque `users.created_by` es nullable y el admin semilla no tiene creador.
 - **#26**: `LoansController` inyecta `ILogger<LoansController>` en vez de `ILogger<CustomersController>`.
 - **#24**: `GET api/customers` ordena por fecha de creación, más recientes primero, en vez de agrupar por `CreatedDate`, que devolvía grupos y no clientes (modifica #4).
 - **#17**: nuevo `Services/LocalDateService` con `Today()`, que devuelve la fecha de hoy en `America/Santo_Domingo` a partir de un `TimeProvider` inyectado. Se registran `TimeProvider.System` y el servicio en `Program.cs`.

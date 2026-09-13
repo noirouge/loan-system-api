@@ -20,8 +20,7 @@ namespace LoanSystemAPI.Entities
         public UserRole Role { get; set; } = UserRole.WORKER;
         public UserStatus Status { get; set; } = UserStatus.ACTIVE;
         
-        [Required]
-       required public Guid CreatedBy { get; set; }
+        public Guid? CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public Guid? UpdatedBy { get; set; }
         public DateTime? UpdatedDate {get; set;}
