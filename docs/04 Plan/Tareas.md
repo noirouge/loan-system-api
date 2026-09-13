@@ -18,9 +18,9 @@
 |---:|---|---|---|---:|
 | 1 | Configurar conexión a PostgreSQL | Completada | No | N/A |
 | 2 | Crear esquema inicial de la base (`db/schema.sql`) | Completada | Sí | 13, 14, 18 |
-| 3 | POST crear cliente | Completada | No | N/A |
-| 4 | GET listar clientes | Completada | Sí | 24 |
-| 5 | CRUD de clientes (GET por id, PUT, DELETE lógico) y enums | Completada | No | N/A |
+| 3 | POST crear cliente | Completada | Sí | 25 |
+| 4 | GET listar clientes | Completada | Sí | 24, 25 |
+| 5 | CRUD de clientes (GET por id, PUT, DELETE lógico) y enums | Completada | Sí | 25 |
 | 6 | POST aporte de caja | Completada | Sí | 7, 8, 16 |
 | 7 | Quitar la validación de counterparty del aporte (modifica #6) | Completada | No | N/A |
 | 8 | POST retiro de caja; ruta del controller a `api/cash-entries` (modifica #6) | Completada | Sí | 16 |
@@ -60,7 +60,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 22 | Validar efectivo disponible en retiro y gasto (modifica #8, #9) | Pendiente | No | N/A |
 | 23 | Validar monto mayor que cero en el aporte (modifica #6) | Pendiente | No | N/A |
 | 24 | Corregir el `GroupBy(CreatedDate)` de GET clientes, que devuelve grupos en vez de clientes (modifica #4) | Completada | No | N/A |
-| 25 | Proyectar GET clientes a DTO sin campos de auditoría (modifica #4) | Pendiente | No | N/A |
+| 25 | Proyectar GET clientes a DTO sin campos de auditoría (modifica #4) | Completada | No | N/A |
 | 26 | Corregir `ILogger<CustomersController>` en `LoansController` | Completada | No | N/A |
 | 27 | `Loan.CreatedBy` de `Guid?` a `Guid` | Pendiente | No | N/A |
 | 28 | `User.CreatedBy` de `Guid` a `Guid?` | Completada | No | N/A |

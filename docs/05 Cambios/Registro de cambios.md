@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-13
 
+- **#25**: las respuestas de clientes devuelven `CustomerDTO` en vez de la entidad, sin `created_by`, `updated_by` ni fechas de auditoría. El listado proyecta con `Select` antes de consultar. Además del GET de lista se corrigieron el GET por id, el POST y el PUT, que tenían la misma fuga (modifica #3, #4, #5).
 - **#21**: nuevo `Services/CashService` con `GetAvailableCashAsync()` (`SUM(amount)` de caja) y `LockCashAsync()`, un `pg_advisory_xact_lock` que serializa las operaciones que sacan dinero para que dos retiros simultáneos no vean el mismo saldo. Registrado como scoped en `Program.cs`.
 - **#18**: `cash_entries` pierde `updated_by`, `updated_date` y su FK en `db/schema.sql`; se quitan de la entidad `CashEntry`, y la reversión deja de escribirlos en la entrada original (modifica #2, #10). Quién reversó queda en el `created_by` de la reversión (D-014). En una base ya creada las columnas siguen existiendo: son nullables y EF las ignora.
 - **#28**: `User.CreatedBy` pasa a `Guid?`, porque `users.created_by` es nullable y el admin semilla no tiene creador.

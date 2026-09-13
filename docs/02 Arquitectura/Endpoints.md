@@ -6,9 +6,11 @@ Las fechas de hecho (`valueDate`, `loanDate`) viajan en JSON como `YYYY-MM-DD`, 
 
 ## Clientes: `api/customers`
 
+Todas las respuestas devuelven `CustomerDTO`, sin campos de auditoría.
+
 | Método | Ruta | Qué hace | Estado |
 |---|---|---|---|
-| GET | `api/customers` | Lista clientes, más recientes primero | Implementado. Expone campos de auditoría (#25) |
+| GET | `api/customers` | Lista clientes, más recientes primero | Implementado |
 | GET | `api/customers/{id}` | Cliente por id | Implementado |
 | POST | `api/customers` | Crea cliente | Implementado |
 | PUT | `api/customers` | Actualiza cliente (id en el cuerpo) | Implementado |

@@ -36,7 +36,17 @@ namespace LoanSystemAPI.Controllers
         {
             try
             {
-                var customers = await _dbContext.Customers.OrderByDescending(c => c.CreatedDate).ToListAsync();
+                var customers = await _dbContext.Customers
+                    .OrderByDescending(c => c.CreatedDate)
+                    .Select(c => new CustomerDTO
+                    {
+                        Id = c.Id,
+                        Fullname = c.Fullname,
+                        Code = c.Code,
+                        Note = c.Note,
+                        Phone = c.Phone,
+                    })
+                    .ToListAsync();
                 return Ok(customers);
             }
             catch (Exception ex)
@@ -54,7 +64,14 @@ namespace LoanSystemAPI.Controllers
                 var customer = await _dbContext.Customers.FirstOrDefaultAsync(c => c.Id == id);
              
                 if (customer == null) return NotFound(new { message = $"The customer with the id: {id} was not found" });
-                return Ok(customer);
+                return Ok(new CustomerDTO
+                {
+                    Id = customer.Id,
+                    Fullname = customer.Fullname,
+                    Code = customer.Code,
+                    Note = customer.Note,
+                    Phone = customer.Phone,
+                });
             }
             catch (Exception ex) {
                 _logger.LogError( ex, "ERROR FINDING CUSTOMER");
@@ -78,7 +95,14 @@ namespace LoanSystemAPI.Controllers
            await _dbContext.Customers.AddAsync(newCustomer);
            await _dbContext.SaveChangesAsync();
 
-                return CreatedAtAction(nameof(GetCustomer), new {id = newCustomer.Id}, newCustomer);
+                return CreatedAtAction(nameof(GetCustomer), new {id = newCustomer.Id}, new CustomerDTO
+                {
+                    Id = newCustomer.Id,
+                    Fullname = newCustomer.Fullname,
+                    Code = newCustomer.Code,
+                    Note = newCustomer.Note,
+                    Phone = newCustomer.Phone,
+                });
             }
             catch (Exception ex)
             {
@@ -103,7 +127,14 @@ namespace LoanSystemAPI.Controllers
                 customer.Phone = customerDTO.Phone;
                 customer.Fullname = customerDTO.Fullname;
                 await _dbContext.SaveChangesAsync();
-                return Ok(customer);
+                return Ok(new CustomerDTO
+                {
+                    Id = customer.Id,
+                    Fullname = customer.Fullname,
+                    Code = customer.Code,
+                    Note = customer.Note,
+                    Phone = customer.Phone,
+                });
             }
             catch (Exception ex)
             {
