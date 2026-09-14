@@ -11,4 +11,3 @@ Cuando se responde una pregunta: se pasa a [[Registro de decisiones]], se borra 
 
 | ID | Pregunta | Bloquea o afecta |
 |---|---|---|
-| N-03 | ¿El saldo de liquidación incluye interés prorrateado del mes en curso? | Afecta #46 |

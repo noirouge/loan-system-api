@@ -83,3 +83,4 @@ Cada decisión tiene un id que no se reutiliza. Si una decisión cambia, se agre
 | D-070 | Reversar un aporte exige efectivo disponible suficiente, con el mismo candado de caja que un retiro (P-09) | Decisión del usuario |
 | D-071 | Un cargo de interés se puede reversar solo si fue un error del sistema; cualquier otro caso se condona. La API lo permite si el interés del cargo sigue pendiente completo (P-11) | Recomendación del agente aceptada por el usuario. Cambia D-017 |
 | D-072 | Un pago con fecha anterior a un cargo ya generado no recalcula ese cargo (N-02) | Decisión del usuario |
+| D-073 | Liquidar un préstamo es pagar el capital y el interés ya generado; no se cobra interés prorrateado del mes en curso (N-03). Es lo que ya hace el sistema | Decisión del usuario |
