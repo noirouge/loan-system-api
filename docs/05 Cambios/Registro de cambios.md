@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-13
 
+- **#37**: nuevo `Services/MoneyRounding.Round()`, que redondea a 2 decimales mirando solo el tercer decimal (D-043). Tiene pruebas para 1.266, 1.265, 1.2659, 104.16625 y negativos. No usa `Math.Round`, porque ninguno de sus modos sigue esta regla.
 - **#110**: `CustomerStatus` pierde `INACTIVE`, y el comentario de `customers.status` en `db/schema.sql` también (D-046, modifica #2, #5). Queda un comentario donde estaba el valor 2 para que no se reutilice. No había usos en el código.
 - **#82**: nuevo proyecto `tests/LoanSystemAPI.IntegrationTests` con `xunit`, `xunit.runner.visualstudio`, `Microsoft.NET.Test.Sdk` y `Microsoft.AspNetCore.Mvc.Testing` 8.0.30 (la misma versión que el runtime instalado), con referencia a la API y agregado a `LoanSystemAPI.sln`. Como la API vive en la raíz del repo, su `.csproj` excluye `tests/**` para no compilar las pruebas dentro de la API.
 - Respuestas del usuario: redondeo (D-043), pago mayor que la deuda (D-044), validaciones al crear un préstamo (D-045), se quita `INACTIVE` de clientes (D-046, nueva tarea #110) y pruebas contra `prestamos_test` (D-047). Se desbloquean #37 y las pruebas que solo esperaban P-05 o P-13. P-15 queda solo con el rango del día de pago, y P-16 y P-17 se reescriben con el ejemplo de los asientos.

@@ -57,6 +57,8 @@ Solución: bloquear la fila del préstamo con `SELECT ... FOR UPDATE` al inicio 
 
 Todo monto calculado se redondea a 2 decimales mirando solo el tercer decimal: si es mayor que 5 sube, si es 5 o menos se queda (D-043).
 
+Lo hace `MoneyRounding.Round()`. No se usa `Math.Round`, porque ninguno de sus modos sigue esta regla.
+
 ## Reportes
 
 | Reporte | Cálculo |
