@@ -180,4 +180,4 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 78 | Reporte de interés cobrado | Completada | No | N/A |
 | 79 | Reporte de interés y capital pendientes | Completada | No | N/A |
 | 80 | Reporte de ganancia real | Completada | No | N/A |
-| 109 | Pruebas de reportes sobre el ejemplo canónico, con pagos y gastos reversados | Pendiente | No | N/A |
+| 109 | Pruebas de reportes sobre el ejemplo canónico, con pagos y gastos reversados | Completada | No | N/A |
