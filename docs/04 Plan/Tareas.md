@@ -37,7 +37,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 |---:|---|---|---|---:|
 | 82 | Proyecto `LoanSystemAPI.IntegrationTests` con xUnit | Completada | No | N/A |
 | 83 | Base PostgreSQL de prueba creada con `db/schema.sql` | Completada | No | N/A |
-| 84 | `WebApplicationFactory<Program>` apuntando a la base de prueba; `public partial class Program` | Pendiente | No | N/A |
+| 84 | `WebApplicationFactory<Program>` apuntando a la base de prueba; `public partial class Program` | Completada | No | N/A |
 | 85 | Aislamiento entre pruebas: `TRUNCATE ... CASCADE`, admin semilla y colección de xUnit sin paralelismo | Pendiente | No | N/A |
 | 86 | Reloj controlable: `TimeProvider` registrado en la app y uno falso para las pruebas | Pendiente | No | N/A |
 | 87 | Pruebas de integración de clientes: CRUD y borrado lógico oculto por `HasQueryFilter` | Pendiente | No | N/A |

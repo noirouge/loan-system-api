@@ -39,3 +39,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// PUBLIC SO THE INTEGRATION TESTS CAN START THE API WITH WebApplicationFactory<Program>
+public partial class Program { }
