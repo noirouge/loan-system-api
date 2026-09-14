@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-14
 
+- **#108**: pruebas de mantenimiento: los dos jobs están registrados para la revisión diaria; la limpieza borra los refresh tokens vencidos (también el que vence justo ahora y uno que era reemplazo de otro), deja los vigentes, pone en nulo el `replaced_by` que apuntaba a uno borrado y registra `SUCCESS` con `processed` = 3; puede correr dos veces el mismo día sin nada que borrar; la purga borra solo los registros de auditoría con más de un año y deja el que cumple justo un año.
 - **#75**: `AuditLogPurgeJob`, segundo `IDailyJob`: borra con `ExecuteDelete` los registros de `audit_logs` con `created_date` anterior a un año atrás (según el `TimeProvider`) y deja la cantidad en `processed`. Corre al arrancar y cada día, dentro de `JobRunner`.
 - **#74**: `RefreshTokenCleanupJob`, el primer `IDailyJob`: borra con `ExecuteDelete` los refresh tokens cuyo `expires_at` ya pasó y deja la cantidad en `processed`. Corre dentro de `JobRunner` sin período, así que puede terminar en `SUCCESS` todos los días. Si un token borrado era el reemplazo de otro, `replaced_by` queda en nulo por la FK `ON DELETE SET NULL`.
 - **#107**: pruebas de la bitácora frente a transacciones: un cambio dentro de una transacción no se audita hasta el commit; uno revertido con rollback no deja registro; y si `audit_logs` no se puede escribir (la prueba le cambia el nombre a la tabla), el cliente se crea igual, responde `201` y queda guardado (D-030).
