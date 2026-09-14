@@ -76,6 +76,13 @@ docs/          este vault
 - Ids: `Guid.NewGuid()` generado en la aplicación (UUID v4, D-012).
 - **"Hoy" sale de `LocalDateService.Today()`**, nunca de `DateTime.Now` ni `DateTime.UtcNow`: usa la hora dominicana y un `TimeProvider` que las pruebas pueden reemplazar.
 
+## Pruebas
+
+- Proyecto `tests/LoanSystemAPI.IntegrationTests`, con xUnit. Se corren con `dotnet test tests/LoanSystemAPI.IntegrationTests`.
+- Base `prestamos_test` en el mismo PostgreSQL de desarrollo: mismo host, usuario y contraseña que `appsettings.Development.json`, solo cambia el nombre de la base. Si no existe, las pruebas la crean. La variable de entorno `LOANSYSTEM_TEST_CONNECTION` la reemplaza completa.
+- Al empezar, el esquema se borra y se recrea desde `db/schema.sql`. Las pruebas se niegan a correr contra una base cuyo nombre no termine en `_test`.
+- Nunca corren en paralelo, porque comparten la base.
+
 ## Formato de archivos
 
 - `.cs`: UTF-8 **con BOM** y finales de línea **CRLF**, como los genera Visual Studio.
