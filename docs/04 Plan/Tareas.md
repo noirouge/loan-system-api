@@ -50,7 +50,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 |---:|---|---|---|---:|
 | 13 | Corregir índice `ux_loan_entries_loan_id_and_period` a `entry_type = 2` (modifica #2) | Completada | No | N/A |
 | 14 | `users.role` en SQL: `DEFAULT 1`, admin semilla con `role = 2`, comentario corregido (modifica #2) | Completada | No | N/A |
-| 15 | Actualizar el rol del admin en la base local: `UPDATE users SET role = 2 WHERE username = 'admin'` | Pendiente | No | N/A |
+| 15 | Actualizar el rol del admin en la base local: `UPDATE users SET role = 2 WHERE username = 'admin'` | Completada | No | N/A |
 | 16 | Migrar `value_date`, `period` y `loan_date` a `DateOnly` en entidades y DTOs (modifica #6, #8, #9, #10, #11) | Completada | No | N/A |
 | 17 | Helper de fecha "hoy" en hora local dominicana | Completada | No | N/A |
 | 18 | Quitar `updated_by` y `updated_date` de `cash_entries`: SQL, entidad y reversión (modifica #2, #10) | Completada | No | N/A |
@@ -65,7 +65,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 27 | `Loan.CreatedBy` de `Guid?` a `Guid` | Completada | No | N/A |
 | 28 | `User.CreatedBy` de `Guid` a `Guid?` | Completada | No | N/A |
 | 29 | Borrar `Enums/EntryStatus.cs`, que está vacío | Completada | No | N/A |
-| 81 | Recrear en la base local el índice `ux_loan_entries_loan_id_and_period` con `entry_type = 2` | Pendiente | No | N/A |
+| 81 | Recrear en la base local el índice `ux_loan_entries_loan_id_and_period` con `entry_type = 2` | Completada | No | N/A |
 | 110 | Quitar `INACTIVE` de `CustomerStatus` y del comentario de `customers.status` (D-046) | Completada | No | N/A |
 | 111 | Los POST de caja responden `201` con el id creado; `Created()` sin cuerpo respondía `204` (modifica #6, #8, #9, #10) | Completada | No | N/A |
 | 112 | Rechazar montos con más de 2 decimales en los POST de caja: Postgres los redondearía solo, con otra regla que D-043 (modifica #6, #8, #9) | Completada | No | N/A |
