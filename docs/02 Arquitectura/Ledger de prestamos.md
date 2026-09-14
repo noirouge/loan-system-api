@@ -42,6 +42,7 @@ Esta separación es la única forma de calcular ganancias: el capital que vuelve
 - La reversión **hereda el `value_date` del original**, no la fecha de hoy (D-013).
 - Si el asiento reversado tenía movimiento de caja, se crea también la reversión de caja. Su `loan_entry_id` apunta al **asiento de reversión nuevo**, no al original (D-018). Ejemplo completo en [[Caja]].
 - Por ahora los cargos de interés no se reversan, se condonan (D-017; P-11).
+- Si un pago o una condonación deja la deuda en 0, el préstamo pasa solo a `CLOSED`; si una reversión le devuelve saldo, vuelve a `ACTIVE` (D-058, #46).
 
 ## Pagos: idempotencia
 

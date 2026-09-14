@@ -292,6 +292,7 @@ namespace LoanSystemAPI.Controllers
                 await _dbContext.CashEntries.AddAsync(cashEntry);
                 await _dbContext.SaveChangesAsync();
 
+                await UpdateLoanStatusAfterEntryAsync(loan);
                 await transaction.CommitAsync();
 
                 return StatusCode(StatusCodes.Status201Created, new { id = payment.Id });
@@ -362,6 +363,7 @@ namespace LoanSystemAPI.Controllers
                 await _dbContext.LoanEntries.AddAsync(forgiveness);
                 await _dbContext.SaveChangesAsync();
 
+                await UpdateLoanStatusAfterEntryAsync(loan);
                 await transaction.CommitAsync();
 
                 return StatusCode(StatusCodes.Status201Created, new { id = forgiveness.Id });
@@ -443,6 +445,7 @@ namespace LoanSystemAPI.Controllers
                     await _dbContext.SaveChangesAsync();
                 }
 
+                await UpdateLoanStatusAfterEntryAsync(loan);
                 await transaction.CommitAsync();
 
                 return StatusCode(StatusCodes.Status201Created, new { id = reversal.Id });
@@ -452,6 +455,23 @@ namespace LoanSystemAPI.Controllers
                 _logger.LogError(ex, "LOAN ENTRY REVERSAL ERROR");
                 return StatusCode(500, new { message = "ERROR COULD NOT SAVED THE LOAN ENTRY REVERSAL" });
             }
+        }
+
+        // A LOAN CLOSES BY ITSELF WHEN NOTHING IS OWED, AND OPENS AGAIN IF A REVERSAL GIVES IT BALANCE BACK (D-058)
+        private async Task UpdateLoanStatusAfterEntryAsync(Loan loan)
+        {
+            var balance = await _loanBalanceService.GetBalanceAsync(loan.Id);
+
+            if (balance.Total <= 0 && (loan.Status == LoanStatus.ACTIVE || loan.Status == LoanStatus.WRITTENOFF))
+                loan.Status = LoanStatus.CLOSED;
+            else if (balance.Total > 0 && loan.Status == LoanStatus.CLOSED)
+                loan.Status = LoanStatus.ACTIVE;
+            else
+                return;
+
+            loan.UpdatedBy = _currentUserService.UserId;
+            loan.UpdatedDate = DateTime.UtcNow;
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

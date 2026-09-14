@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-14
 
+- **#46**: cierre automático. Antes de confirmar un pago, una condonación o una reversión, el préstamo pasa a `CLOSED` si su deuda quedó en 0 (también desde `WRITTENOFF`), y vuelve de `CLOSED` a `ACTIVE` si una reversión le devuelve saldo (D-058; modifica #42, #44, #45).
 - Respuestas del usuario: se confirman el corte global del día 1 «por ahora» (D-054, N-01), las reversiones contadas con el tipo que reversan (D-055, P-12), y el cierre automático (D-058, P-06) y los detalles de incobrable (D-057, P-07), que dejan de ser provisionales.
 ## 2026-09-13
 

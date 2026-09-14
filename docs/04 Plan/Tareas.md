@@ -95,11 +95,11 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 39 | POST crear préstamo con desembolso: préstamo + asiento + caja en una transacción, validando efectivo | Completada | No | N/A |
 | 40 | GET listar préstamos con saldo | Completada | No | N/A |
 | 41 | GET préstamo por id con saldo y asientos | Completada | No | N/A |
-| 42 | POST pago con cascada (interés → capital), `SELECT ... FOR UPDATE` y entrada de caja | Completada | Sí | 43 |
+| 42 | POST pago con cascada (interés → capital), `SELECT ... FOR UPDATE` y entrada de caja | Completada | Sí | 43, 46 |
 | 43 | Idempotencia del pago: `idempotency_key`, captura de `23505`, `422` si cambia el cuerpo | Completada | No | N/A |
-| 44 | POST condonación de interés | Completada | No | N/A |
-| 45 | POST reversión de asiento de préstamo y de su caja (`loan_entry_id` = asiento nuevo) | Completada | No | N/A |
-| 46 | Cierre de préstamo (`CLOSED`) | Pendiente | No | N/A |
+| 44 | POST condonación de interés | Completada | Sí | 46 |
+| 45 | POST reversión de asiento de préstamo y de su caja (`loan_entry_id` = asiento nuevo) | Completada | Sí | 46 |
+| 46 | Cierre de préstamo (`CLOSED`) | Completada | No | N/A |
 | 47 | Préstamo incobrable (`WRITTENOFF`) | Pendiente | No | N/A |
 | 48 | Borrado lógico de préstamo (`DELETED`) | Pendiente | No | N/A |
 | 49 | Proyecto de pruebas y prueba del ejemplo canónico (mes 3 = 84) | Cancelada | Sí | 82, 94 |
