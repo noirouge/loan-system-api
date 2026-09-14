@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using LoanSystemAPI.Enums;
+using LoanSystemAPI.IntegrationTests.Auth;
+using System.Net;
 
 namespace LoanSystemAPI.IntegrationTests.Infrastructure
 {
@@ -11,7 +13,7 @@ namespace LoanSystemAPI.IntegrationTests.Infrastructure
             await using var factory = new LoanApiFactory();
 
             factory.EnsureUsesTestDatabase();
-            var response = await factory.CreateClient().GetAsync("/api/cash-entries");
+            var response = await factory.CreateClientAs(LoanApiFactory.AdminId, UserRole.ADMIN).GetAsync("/api/cash-entries");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }

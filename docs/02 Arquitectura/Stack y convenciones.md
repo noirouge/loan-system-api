@@ -83,6 +83,7 @@ docs/          este vault
 - Base `prestamos_test` en el mismo PostgreSQL de desarrollo: mismo host, usuario y contraseña que `appsettings.Development.json`, solo cambia el nombre de la base. Si no existe, las pruebas la crean. La variable de entorno `LOANSYSTEM_TEST_CONNECTION` la reemplaza completa.
 - Al empezar, el esquema se borra y se recrea desde `db/schema.sql`. Las pruebas se niegan a correr contra una base cuyo nombre no termine en `_test`.
 - Nunca corren en paralelo, porque comparten la base.
+- `Client` llama a la API como el admin de las pruebas, con un JWT que `AuthTokenService` firma al empezar cada prueba, sin pasar por el login. `Factory.CreateClientAs(id, rol)` da un cliente como otro usuario, `Factory.AddUserAsync` inserta usuarios con la contraseña hasheada y `TestUsers.AdminPassword` es la contraseña del admin. Si una prueba mueve el reloj más de 15 minutos antes de llamar a la API, tiene que volver a autenticarse (#103).
 - Las pruebas que llaman a la API heredan de `IntegrationTest` y llevan `[Collection(ApiCollection.Name)]`. Comparten una sola API en memoria (`ApiFixture`), y cada prueba empieza con las tablas vacías y solo el usuario admin (`LoanApiFactory.AdminId`).
 - La hora la controla `Factory.Clock` (`FakeTimeProvider`), que reemplaza al `TimeProvider` de la API. Vuelve a su valor por defecto antes de cada prueba.
 

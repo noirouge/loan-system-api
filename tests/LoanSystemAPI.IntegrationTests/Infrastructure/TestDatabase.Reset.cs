@@ -4,7 +4,7 @@ namespace LoanSystemAPI.IntegrationTests.Infrastructure
 {
     public static partial class TestDatabase
     {
-        // EMPTIES EVERY TABLE AND INSERTS THE ADMIN THAT THE API USES AS CreatedBy
+        // EMPTIES EVERY TABLE AND INSERTS THE ADMIN OF THE TESTS, WHO CAN LOG IN WITH TestUsers.AdminPassword
         public static async Task ResetAsync(Guid adminId)
         {
             await using var connection = new NpgsqlConnection(ConnectionString);
@@ -24,9 +24,10 @@ namespace LoanSystemAPI.IntegrationTests.Infrastructure
             await truncate.ExecuteNonQueryAsync();
 
             await using var insertAdmin = new NpgsqlCommand(
-                "INSERT INTO users (id, name, lastname, username, password_hash, role) VALUES (@id, 'ADMIN', 'TEST', 'admin', 'not-used-in-tests', 2)",
+                "INSERT INTO users (id, name, lastname, username, password_hash, role) VALUES (@id, 'ADMIN', 'TEST', 'admin', @passwordHash, 2)",
                 connection);
             insertAdmin.Parameters.AddWithValue("id", adminId);
+            insertAdmin.Parameters.AddWithValue("passwordHash", TestUsers.AdminPasswordHash);
             await insertAdmin.ExecuteNonQueryAsync();
         }
     }
