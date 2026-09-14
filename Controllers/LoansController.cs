@@ -318,5 +318,59 @@ namespace LoanSystemAPI.Controllers
 
             return StatusCode(StatusCodes.Status201Created, new { id = savedPayment.Id });
         }
+
+        [HttpPost("{id:guid}/forgiveness")]
+        public async Task<IActionResult> PostForgiveness([FromRoute] Guid id, [FromBody] LoanForgivenessDTO forgivenessDTO)
+        {
+            if (forgivenessDTO.Amount <= 0 || forgivenessDTO.Amount != Math.Round(forgivenessDTO.Amount, 2))
+                return BadRequest(new { message = "The amount to forgive must be greater than zero and have at most 2 decimals" });
+
+            if (forgivenessDTO.ValueDate > _localDateService.Today())
+                return BadRequest(new { message = "The forgiveness date cannot be in the future" });
+
+            try
+            {
+                await using var transaction = await _dbContext.Database.BeginTransactionAsync();
+                await _dbContext.Database.ExecuteSqlAsync($"SELECT id FROM loans WHERE id = {id} FOR UPDATE");
+
+                var loan = await _dbContext.Loans.FirstOrDefaultAsync(l => l.Id == id);
+                if (loan == null)
+                    return NotFound(new { message = $"The loan with id {id} was not found" });
+
+                if (forgivenessDTO.ValueDate < loan.LoanDate)
+                    return BadRequest(new { message = "The forgiveness date cannot be earlier than the loan date" });
+
+                // ONLY INTEREST IS FORGIVEN, AND NEVER MORE THAN WHAT IS PENDING: THE INTEREST CANNOT END NEGATIVE
+                var balanceBeforeForgiveness = await _loanBalanceService.GetBalanceAsync(loan.Id);
+                if (forgivenessDTO.Amount > balanceBeforeForgiveness.Interest)
+                    return BadRequest(new { message = $"The amount to forgive is greater than the pending interest. Maximum: {balanceBeforeForgiveness.Interest}" });
+
+                // NO CASH ENTRY: NO MONEY COMES IN OR GOES OUT
+                var forgiveness = new LoanEntry
+                {
+                    Id = Guid.NewGuid(),
+                    LoanId = loan.Id,
+                    EntryType = LoanEntryType.FORGIVENESS,
+                    Principal = 0,
+                    Interest = -forgivenessDTO.Amount,
+                    ValueDate = forgivenessDTO.ValueDate,
+                    Note = forgivenessDTO.Note,
+                    Status = LoanEntryStatus.APPLIED,
+                    CreatedBy = _currentUserService.UserId,
+                    CreatedDate = DateTime.UtcNow,
+                };
+                await _dbContext.LoanEntries.AddAsync(forgiveness);
+                await _dbContext.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+
+                return StatusCode(StatusCodes.Status201Created, new { id = forgiveness.Id });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "LOAN FORGIVENESS ERROR");
+                return StatusCode(500, new { message = "ERROR COULD NOT SAVED THE LOAN FORGIVENESS" });
+            }
+        }
     }
 }

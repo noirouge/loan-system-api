@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-13
 
+- **#44**: `POST api/loans/{id}/forgiveness` condona interés: con la fila del préstamo bloqueada, crea un asiento `FORGIVENESS` con `interest` negativo y sin movimiento de caja. Rechaza montos de 0 o con más de 2 decimales, fechas futuras o anteriores al préstamo, y condonar más que el interés pendiente, para que el interés nunca quede negativo. Nuevo `LoanForgivenessDTO`.
 - **#98**: pruebas de pagos simultáneos al mismo préstamo: dos pagos de 600 sobre una deuda de 1100 terminan con uno aceptado y otro rechazado, y dos pagos de 300 pagan los 100 de interés una sola vez. Sin el bloqueo de la fila del préstamo, las dos pruebas terminarían con saldos negativos.
 - **#97**: pruebas de idempotencia del pago: la misma clave con el mismo pago crea un solo pago y devuelve el mismo id, también si llegan las dos a la vez; con otro monto o en otro préstamo da `422`; reintentar un pago que saldó la deuda devuelve el pago original en vez de rechazarlo; sin clave da `400`.
 - **#95**: pruebas de la cascada del pago: un pago mayor que el interés paga primero el interés y el resto va a capital, igual al interés deja el capital intacto, menor deja el resto del interés pendiente, sin interés pendiente todo va a capital, pagar toda la deuda deja 0, y se rechazan pagos mayores que la deuda, de monto 0 o con 3 decimales, futuros o anteriores al préstamo. Como el job todavía no existe, las pruebas escriben el cargo de interés directo en la base. Incluye `PaymentsApi`.

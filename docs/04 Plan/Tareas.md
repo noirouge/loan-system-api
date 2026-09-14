@@ -97,7 +97,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 41 | GET préstamo por id con saldo y asientos | Completada | No | N/A |
 | 42 | POST pago con cascada (interés → capital), `SELECT ... FOR UPDATE` y entrada de caja | Completada | Sí | 43 |
 | 43 | Idempotencia del pago: `idempotency_key`, captura de `23505`, `422` si cambia el cuerpo | Completada | No | N/A |
-| 44 | POST condonación de interés | Pendiente | No | N/A |
+| 44 | POST condonación de interés | Completada | No | N/A |
 | 45 | POST reversión de asiento de préstamo y de su caja (`loan_entry_id` = asiento nuevo) | Pendiente | No | N/A |
 | 46 | Cierre de préstamo (`CLOSED`) | Pendiente | No | N/A |
 | 47 | Préstamo incobrable (`WRITTENOFF`) | Pendiente | No | N/A |

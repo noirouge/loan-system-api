@@ -36,7 +36,7 @@ Los POST responden `201` con el id de la entrada creada: `{ "id": "..." }` (#111
 | GET | `api/loans` | Lista los préstamos, más recientes primero, con el nombre del cliente y su saldo (capital, interés y total) | Implementado (#40) |
 | GET | `api/loans/{id}` | Préstamo con saldo, asientos en orden de fecha y pago sugerido si tiene plazo (D-049) | Implementado (#41) |
 | POST | `api/loans/{id}/payments` | Pago: primero todo el interés pendiente y luego capital, con la fila del préstamo bloqueada y entrada de caja. Rechaza pagos mayores que la deuda total (D-044), futuros o anteriores al préstamo. Exige `idempotencyKey`: la misma clave con el mismo pago devuelve el mismo id, y con otro pago da `422`. Responde `201` con el id del asiento | Implementado (#42, #43) |
-| POST | `api/loans/{id}/forgiveness` | Condonación de interés | #44 |
+| POST | `api/loans/{id}/forgiveness` | Condona interés, sin movimiento de caja y nunca más que el interés pendiente. Responde `201` con el id del asiento | Implementado (#44) |
 | POST | `api/loans/entries/{id}/reversal` | Reversión de un asiento y de su caja | #45 |
 
 ## Congelamientos *(propuesta)*
