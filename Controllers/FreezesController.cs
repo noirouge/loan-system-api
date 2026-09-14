@@ -79,5 +79,45 @@ namespace LoanSystemAPI.Controllers
                 return StatusCode(500, new { message = "ERROR COULD NOT SAVED THE LOAN FREEZE" });
             }
         }
+
+        // A FREEZE IS CLOSED BY WRITING ITS END DATE, NOT BY CHANGING ITS STATUS
+        [HttpPost("freezes/{id:guid}/close")]
+        public async Task<IActionResult> CloseFreeze([FromRoute] Guid id, [FromBody] FreezeCloseDTO closeDTO)
+        {
+            if (closeDTO.EndDate > _localDateService.Today())
+                return BadRequest(new { message = "The freeze end date cannot be in the future" });
+
+            try
+            {
+                var freeze = await _dbContext.Freezes.AsNoTracking().FirstOrDefaultAsync(f => f.Id == id);
+                if (freeze == null)
+                    return NotFound(new { message = $"The freeze with id {id} was not found" });
+
+                if (freeze.EndDate != null)
+                    return Conflict(new { message = $"The freeze with id {id} was already closed" });
+
+                if (closeDTO.EndDate < freeze.StartDate)
+                    return BadRequest(new { message = "The freeze end date cannot be earlier than its start date" });
+
+                // THE CONDITION ON end_date MAKES TWO CLOSES AT THE SAME TIME SAFE: ONLY ONE OF THEM UPDATES THE ROW
+                var userId = _currentUserService.UserId;
+                var closedRows = await _dbContext.Freezes
+                    .Where(f => f.Id == id && f.EndDate == null)
+                    .ExecuteUpdateAsync(s => s
+                        .SetProperty(f => f.EndDate, (DateOnly?)closeDTO.EndDate)
+                        .SetProperty(f => f.UpdatedBy, (Guid?)userId)
+                        .SetProperty(f => f.UpdatedDate, (DateTime?)DateTime.UtcNow));
+
+                if (closedRows == 0)
+                    return Conflict(new { message = $"The freeze with id {id} was already closed" });
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "LOAN FREEZE CLOSE ERROR");
+                return StatusCode(500, new { message = "ERROR COULD NOT CLOSE THE LOAN FREEZE" });
+            }
+        }
     }
 }

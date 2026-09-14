@@ -46,7 +46,7 @@ Los POST responden `201` con el id de la entrada creada: `{ "id": "..." }` (#111
 | Método | Ruta | Qué hace | Tarea |
 |---|---|---|---|
 | POST | `api/loans/{id}/freezes` | Abre un congelamiento sobre un préstamo activo, con `startDate` no futura ni anterior al préstamo (D-060). `409` si ya tiene uno abierto. Responde `201` con `{ "id": "..." }` | Implementado (#50) |
-| POST | `api/freezes/{id}/close` | Cierra un congelamiento | #51 |
+| POST | `api/freezes/{id}/close` | Cierra un congelamiento escribiendo `endDate`, que no puede ser futura ni anterior al inicio. `409` si ya estaba cerrado. Responde `204` | Implementado (#51) |
 | GET | `api/loans/{id}/freezes` | Lista congelamientos del préstamo | #52 |
 
 ## Jobs *(propuesta)*
