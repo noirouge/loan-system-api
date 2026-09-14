@@ -2,10 +2,11 @@
 
 La lista detallada está en [[Tareas]]. Aquí va el orden de las fases, por qué va en ese orden y qué bloquea cada una.
 
-## Estado al 2026-09-13
+## Estado al 2026-09-14
 
-- **Hecho:** conexión a PostgreSQL, esquema inicial, CRUD de clientes, caja completa (aportes, retiros y gastos con validación de efectivo, reversión y listado), todas las tareas desbloqueadas de las fases 1 y 2, redondeo (#37), y pruebas de integración montadas (#82–#86) que cubren clientes, caja, fechas, concurrencia y restricciones de la base (#87–#93).
-- **Siguiente:** Fase 3 (préstamos): saldo, crear préstamo con desembolso, consultas con pago sugerido, pago con cascada e idempotencia, condonación y reversión, con sus pruebas. El usuario corre #15 y #81 en su base local.
+- **Hecho:** todas las fases, salvo lo bloqueado. Préstamos completos (desembolso, consultas, pago con cascada e idempotencia, condonación, reversión, cierre automático, incobrable y borrado), congelamientos, cálculo del cargo de interés con el ejemplo canónico verificado (#94), mecanismo de jobs con `job_runs`, login con JWT y refresh rotativo, roles y CRUD de usuarios, auditoría automática y de sesiones, limpieza de tokens y purga de la bitácora, y los cinco reportes. 213 pruebas de integración.
+- **Bloqueado:** el job de cargos de interés en sí (#54, #58, #59 y la prueba #101) espera N-04: cuándo le toca el primer cargo a un préstamo nuevo. El cálculo (#53) y el mecanismo (#55–#57) ya existen, así que falta poco una vez respondida.
+- **Pendiente del usuario:** #15 y #81 en su base local, volver a correr `db/schema.sql` (tablas nuevas y hash del admin, #62), y responder N-04, P-18 (qué más es solo de ADMIN), P-09, P-11, N-02 y N-03.
 
 ## Fases
 

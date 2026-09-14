@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-14
 
+- Se actualiza el estado de [[Plan del proyecto]]: todas las fases hechas salvo el job de cargos de interés (#54, #58, #59, #101), que espera N-04, y lo que depende del usuario (#15, #81, volver a correr `db/schema.sql` y las preguntas abiertas).
 - **#109**: pruebas de reportes sobre el ejemplo canónico, con un pago de 20 y un gasto de 15 reversados: interés devengado 264 (80 en marzo), cobrado 264 (40 en marzo, 124 desde abril), pendiente 600 hoy y 800 + 40 al 31 de marzo, caja 634 con cada tipo y 300 al 28 de febrero, ganancia 234 (10 en marzo); lo incobrable va aparte y un préstamo borrado no es deuda; un rango invertido da `400`.
 - **#80**: `GET api/reports/profit` devuelve el interés cobrado, los gastos (en positivo, con las reversiones de gasto restando) y la ganancia real como su diferencia, en el rango `from`–`to` opcional. El capital que vuelve no es ingreso, así que no entra (D-066).
 - **#79**: `GET api/reports/pending` suma capital e interés de todos los asientos con `value_date` hasta `date` (opcional), agrupados por si el préstamo está `WRITTENOFF`: lo cobrable en `principal`, `interest` y `total`, y lo incobrable aparte. Los préstamos borrados quedan fuera por el filtro de `Loan` (D-067).
