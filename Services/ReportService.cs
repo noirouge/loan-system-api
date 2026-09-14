@@ -112,5 +112,17 @@ namespace LoanSystemAPI.Services
                 WrittenOffInterest = writtenOff?.Interest ?? 0,
             };
         }
+
+        // THE EXPENSES ARE NEGATIVE IN THE CASH; THE REPORT RETURNS THEM AS A POSITIVE AMOUNT
+        public async Task<decimal> SumExpensesAsync(DateOnly? from, DateOnly? to)
+        {
+            var expenses = await EffectiveCashEntries()
+                .Where(c => c.EntryType == CashEntryType.EXPENSE)
+                .Where(c => from == null || c.ValueDate >= from)
+                .Where(c => to == null || c.ValueDate <= to)
+                .SumAsync(c => c.Amount);
+
+            return -expenses;
+        }
     }
 }

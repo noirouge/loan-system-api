@@ -86,5 +86,29 @@ namespace LoanSystemAPI.Controllers
                 return StatusCode(500, new { message = "ERROR GENERATING THE PENDING REPORT" });
             }
         }
+
+        // THE INTEREST COLLECTED MINUS THE EXPENSES OF THE BUSINESS IN THE SAME RANGE
+        [HttpGet("profit")]
+        public async Task<ActionResult<ReportProfitDTO>> GetProfit([FromQuery] DateOnly? from, [FromQuery] DateOnly? to)
+        {
+            if (from > to)
+                return BadRequest(new { message = "The start date cannot be later than the end date" });
+
+            try
+            {
+                return Ok(new ReportProfitDTO
+                {
+                    From = from,
+                    To = to,
+                    CollectedInterest = -await _reportService.SumInterestAsync(LoanEntryType.PAYMENT, from, to),
+                    Expenses = await _reportService.SumExpensesAsync(from, to),
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "PROFIT REPORT ERROR");
+                return StatusCode(500, new { message = "ERROR GENERATING THE PROFIT REPORT" });
+            }
+        }
     }
 }

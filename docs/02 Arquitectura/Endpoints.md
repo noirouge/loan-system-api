@@ -64,7 +64,7 @@ Los POST responden `201` con el id de la entrada creada: `{ "id": "..." }` (#111
 | POST | `api/auth/logout` | Revoca el refresh enviado. Responde `204` exista o no (D-062). El access sigue sirviendo hasta que vence | Implementado (#65) |
 | GET, POST, PUT, DELETE | `api/users` | Solo ADMIN. Lista (sin borrados) y consulta con `UserDTO`, sin hash ni auditoría. `POST` crea con `UserCreateDTO` y responde `201` (`409` si el usuario ya existe). `PUT` actualiza con el id en el cuerpo y contraseña opcional. `DELETE` borra lógicamente y responde `204`. Nadie cambia su propio rol o estado ni se borra; cambiar rol, estado o contraseña, o borrar, cierra las sesiones del usuario (D-064) | Implementado (#68) |
 
-## Reportes *(propuesta)*
+## Reportes
 
 | Método | Ruta | Qué hace | Tarea |
 |---|---|---|---|
@@ -72,4 +72,4 @@ Los POST responden `201` con el id de la entrada creada: `{ "id": "..." }` (#111
 | GET | `api/reports/accrued-interest?from=&to=` | Interés devengado: la suma de los cargos de interés con `value_date` en el rango (ambas fechas opcionales e inclusivas; `400` si `from` es posterior a `to`) | Implementado (#77) |
 | GET | `api/reports/collected-interest?from=&to=` | Interés cobrado: el interés de los pagos con `value_date` en el rango, en positivo. Un pago reversado no suma. Las condonaciones no cuentan, porque no entró dinero | Implementado (#78) |
 | GET | `api/reports/pending?date=` | Capital, interés y total pendientes hasta `date` inclusive (o hoy), de los préstamos que no son incobrables; lo incobrable va aparte en `writtenOffPrincipal` y `writtenOffInterest` (D-067) | Implementado (#79) |
-| GET | `api/reports/profit` | Ganancia real | #80 |
+| GET | `api/reports/profit?from=&to=` | Ganancia real en el rango: `collectedInterest` − `expenses`, los dos en positivo. Un gasto reversado no resta | Implementado (#80) |

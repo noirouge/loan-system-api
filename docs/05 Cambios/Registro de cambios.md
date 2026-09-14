@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-14
 
+- **#80**: `GET api/reports/profit` devuelve el interés cobrado, los gastos (en positivo, con las reversiones de gasto restando) y la ganancia real como su diferencia, en el rango `from`–`to` opcional. El capital que vuelve no es ingreso, así que no entra (D-066).
 - **#79**: `GET api/reports/pending` suma capital e interés de todos los asientos con `value_date` hasta `date` (opcional), agrupados por si el préstamo está `WRITTENOFF`: lo cobrable en `principal`, `interest` y `total`, y lo incobrable aparte. Los préstamos borrados quedan fuera por el filtro de `Loan` (D-067).
 - **#78**: `GET api/reports/collected-interest` suma el interés de los asientos `PAYMENT` en el rango y lo devuelve en positivo. La reversión de un pago cuenta como pago, así el par se anula, y las condonaciones quedan fuera porque se filtra por tipo y no por signo (D-066).
 - **#77**: `GET api/reports/accrued-interest` suma el interés de los asientos `INTERESTCHARGE` con `value_date` entre `from` y `to` (opcionales e inclusivos), contando las reversiones con el tipo que reversan. Nuevo `ReportAmountDTO` (D-066).
