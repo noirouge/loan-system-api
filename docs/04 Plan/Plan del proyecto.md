@@ -5,7 +5,7 @@ La lista detallada está en [[Tareas]]. Aquí va el orden de las fases, por qué
 ## Estado al 2026-09-14
 
 - **Hecho:** todas las fases, salvo lo bloqueado. Préstamos completos (desembolso, consultas, pago con cascada e idempotencia, condonación, reversión, cierre automático, incobrable y borrado), congelamientos, cálculo del cargo de interés con el ejemplo canónico verificado (#94), mecanismo de jobs con `job_runs`, login con JWT y refresh rotativo, roles y CRUD de usuarios, auditoría automática y de sesiones, limpieza de tokens y purga de la bitácora, y los cinco reportes. 213 pruebas de integración.
-- **Siguiente:** el job de cargos de interés (#54, #58, #59 y la prueba #101), desbloqueado por D-068.
+- **Hecho también:** el job de cargos de interés (#54, #58, #59, #101). No quedan tareas del plan ni preguntas abiertas; 224 pruebas.
 - **Pendiente del usuario:** #15 y #81 en su base local, volver a correr `db/schema.sql` (tablas nuevas y hash del admin, #62).
 
 ## Fases
