@@ -1,6 +1,6 @@
 # Job del corte mensual
 
-Genera los cargos de interés. Implementación pendiente (Fase 5 en [[Plan del proyecto]]).
+Genera los cargos de interés. El mecanismo genérico de jobs ya existe (#55–#57); el job de cargos en sí sigue pendiente (Fase 5 en [[Plan del proyecto]], N-04).
 
 > [!warning] Bloqueo parcial
 > El corte es global el día 1 (D-054). Falta N-04: cuándo le toca el primer cargo a un préstamo nuevo. Bloquea #54, #58, #59 y #101; el cálculo (#53) y el mecanismo genérico (#55–#57) sí se pueden construir.
@@ -24,6 +24,7 @@ Para cada préstamo `ACTIVE` y no congelado:
 - Vive como `BackgroundService` dentro de la API. No requiere dependencias.
 - Solo corre una instancia a la vez: **advisory lock de Postgres** (`pg_try_advisory_lock`). Si no obtiene el lock, no hace nada.
 - Revisa una vez al día, y al arrancar, si falta el cargo de algún período ya vencido, y lo genera (D-054).
+- `DailyJobsService` (`BackgroundService`) corre al arrancar y luego cada 24 horas todos los `IDailyJob` registrados. Cada job decide qué tiene pendiente y lo corre dentro de `JobRunner`, que toma `pg_try_advisory_lock(2001, hashtext(job_name))` en una conexión que queda abierta hasta liberarlo. El error de un job se registra en el log y no detiene a los demás ni a la API. Las pruebas lo apagan con `Jobs:Enabled=false` y corren los jobs a mano (#55).
 
 ## `job_runs`
 

@@ -23,6 +23,8 @@ builder.Services.AddSingleton<LocalDateService>();
 builder.Services.AddScoped<CashService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<LoanBalanceService>();
+builder.Services.AddScoped<JobRunner>();
+builder.Services.AddHostedService<DailyJobsService>();
 
 var app = builder.Build();
 

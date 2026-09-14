@@ -22,6 +22,8 @@ namespace LoanSystemAPI.IntegrationTests.Infrastructure
             // THERE AT THAT MOMENT AND THEY OVERRIDE appsettings.Development.json
             Environment.SetEnvironmentVariable("ConnectionStrings__DefaultConnection", TestDatabase.ConnectionString);
             Environment.SetEnvironmentVariable("AdminId", AdminId.ToString());
+            // THE DAILY JOBS ARE RUN BY HAND FROM THE TESTS, NEVER IN THE BACKGROUND
+            Environment.SetEnvironmentVariable("Jobs__Enabled", "false");
         }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
