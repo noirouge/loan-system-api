@@ -52,5 +52,24 @@ namespace LoanSystemAPI.Controllers
                 return StatusCode(500, new { message = "ERROR GENERATING THE ACCRUED INTEREST REPORT" });
             }
         }
+
+        // THE INTEREST THAT CAME IN WITH THE PAYMENTS, AS A POSITIVE AMOUNT. IT IS THE INCOME: THE PRINCIPAL THAT COMES BACK IS NOT
+        [HttpGet("collected-interest")]
+        public async Task<ActionResult<ReportAmountDTO>> GetCollectedInterest([FromQuery] DateOnly? from, [FromQuery] DateOnly? to)
+        {
+            if (from > to)
+                return BadRequest(new { message = "The start date cannot be later than the end date" });
+
+            try
+            {
+                var collectedInterest = -await _reportService.SumInterestAsync(LoanEntryType.PAYMENT, from, to);
+                return Ok(new ReportAmountDTO { From = from, To = to, Amount = collectedInterest });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "COLLECTED INTEREST REPORT ERROR");
+                return StatusCode(500, new { message = "ERROR GENERATING THE COLLECTED INTEREST REPORT" });
+            }
+        }
     }
 }
