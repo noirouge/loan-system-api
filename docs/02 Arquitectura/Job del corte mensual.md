@@ -9,7 +9,7 @@ Genera los cargos de interés. Implementación pendiente (Fase 5 en [[Plan del p
 
 Para cada préstamo `ACTIVE` y no congelado:
 
-1. Calcula `tasa × (capital pendiente + interés pendiente)`, redondeado a 2 decimales.
+1. Calcula `tasa × (capital pendiente + interés pendiente)`, redondeado a 2 decimales con la regla de D-043. Lo hace `InterestCharge.Calculate` (#53); si la deuda es 0 o menos, el cargo es 0.
 2. Inserta un `INTERESTCHARGE` con `period` = día 1 del mes.
 
 ## Requisitos
