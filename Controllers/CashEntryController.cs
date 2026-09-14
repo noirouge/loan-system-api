@@ -52,7 +52,7 @@ namespace LoanSystemAPI.Controllers
                     await _dbContext.CashEntries.AddAsync(cashEntry);
                     await _dbContext.SaveChangesAsync();
 
-                    return Created();
+                    return StatusCode(StatusCodes.Status201Created, new { id = cashEntry.Id });
                 }
                 catch (Exception ex)
                 {
@@ -94,7 +94,7 @@ namespace LoanSystemAPI.Controllers
                     await _dbContext.SaveChangesAsync();
                     await transaction.CommitAsync();
 
-                    return Created();
+                    return StatusCode(StatusCodes.Status201Created, new { id = cashEntry.Id });
                 }
                 catch (Exception ex)
                 {
@@ -142,7 +142,7 @@ namespace LoanSystemAPI.Controllers
                     await _dbContext.SaveChangesAsync();
                     await transaction.CommitAsync();
 
-                    return Created();
+                    return StatusCode(StatusCodes.Status201Created, new { id = cashEntry.Id });
                 }
                 catch (Exception ex)
                 {
@@ -182,7 +182,7 @@ namespace LoanSystemAPI.Controllers
                     await _dbContext.CashEntries.AddAsync(reversalEntry);
                     await _dbContext.SaveChangesAsync();
 
-                    return Created();
+                    return StatusCode(StatusCodes.Status201Created, new { id = reversalEntry.Id });
                 }
                 // THE UNIQUE INDEX ON reverses_entry_id IS WHAT STOPS A DOUBLE REVERSAL, EVEN WITH TWO REQUESTS AT THE SAME TIME
                 catch (DbUpdateException ex) when (ex.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation, ConstraintName: "uq_cash_entries_reverses" })

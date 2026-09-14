@@ -18,6 +18,8 @@ Todas las respuestas devuelven `CustomerDTO`, sin campos de auditoría.
 
 ## Caja: `api/cash-entries`
 
+Los POST responden `201` con el id de la entrada creada: `{ "id": "..." }` (#111).
+
 | Método | Ruta | Cuerpo | Qué hace | Estado |
 |---|---|---|---|---|
 | GET | `api/cash-entries` | — | Lista entradas, más recientes primero. Sin `created_by`, `updated_by` ni `updated_date` | Implementado |

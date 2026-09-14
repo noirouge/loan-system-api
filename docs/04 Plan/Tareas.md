@@ -10,7 +10,7 @@
 - Una tarea `Bloqueada` no se empieza. El motivo está en [[Preguntas abiertas]].
 - Las tareas están agrupadas por fase, así que dentro de una tabla los números no siempre van seguidos.
 - El orden de las fases y sus dependencias están en [[Plan del proyecto]].
-- **La siguiente tarea nueva es la #111.**
+- **La siguiente tarea nueva es la #112.**
 
 ## Fase 0: Historial y documentación
 
@@ -21,11 +21,11 @@
 | 3 | POST crear cliente | Completada | Sí | 25, 31 |
 | 4 | GET listar clientes | Completada | Sí | 24, 25 |
 | 5 | CRUD de clientes (GET por id, PUT, DELETE lógico) y enums | Completada | Sí | 25, 31, 110 |
-| 6 | POST aporte de caja | Completada | Sí | 7, 8, 16, 23, 31 |
+| 6 | POST aporte de caja | Completada | Sí | 7, 8, 16, 23, 31, 111 |
 | 7 | Quitar la validación de counterparty del aporte (modifica #6) | Completada | No | N/A |
-| 8 | POST retiro de caja; ruta del controller a `api/cash-entries` (modifica #6) | Completada | Sí | 16, 22, 31 |
-| 9 | POST gasto de caja | Completada | Sí | 16, 22, 31 |
-| 10 | POST reversión de caja | Completada | Sí | 16, 18, 19, 20, 31 |
+| 8 | POST retiro de caja; ruta del controller a `api/cash-entries` (modifica #6) | Completada | Sí | 16, 22, 31, 111 |
+| 9 | POST gasto de caja | Completada | Sí | 16, 22, 31, 111 |
+| 10 | POST reversión de caja | Completada | Sí | 16, 18, 19, 20, 31, 111 |
 | 11 | GET listar entradas de caja | Completada | Sí | 16 |
 | 12 | Crear vault de documentación, plan y tareas | Completada | No | N/A |
 
@@ -67,6 +67,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 29 | Borrar `Enums/EntryStatus.cs`, que está vacío | Bloqueada (P-03) | No | N/A |
 | 81 | Recrear en la base local el índice `ux_loan_entries_loan_id_and_period` con `entry_type = 2` | Pendiente | No | N/A |
 | 110 | Quitar `INACTIVE` de `CustomerStatus` y del comentario de `customers.status` (D-046) | Completada | No | N/A |
+| 111 | Los POST de caja responden `201` con el id creado; `Created()` sin cuerpo respondía `204` (modifica #6, #8, #9, #10) | Completada | No | N/A |
 | 90 | Pruebas de efectivo disponible: retiro y gasto rechazados sin fondos (#21, #22) | Pendiente | No | N/A |
 | 91 | Pruebas de fechas: `value_date` heredado en la reversión y "hoy" dominicano cerca de la medianoche UTC (#16, #17, #19) | Pendiente | No | N/A |
 | 92 | Prueba de dos reversiones simultáneas de la misma entrada: una gana y la otra recibe un error controlado, no un 500 (#20) | Pendiente | No | N/A |
