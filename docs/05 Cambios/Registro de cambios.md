@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-14
 
+- **#52**: `GET api/loans/{loanId}/freezes` lista los congelamientos del préstamo con `FreezeDTO`, ordenados por fecha de inicio descendente. No devuelve `created_by` ni `updated_*`; `endDate` nulo significa abierto. `404` si el préstamo no existe o está borrado.
 - **#51**: `POST api/freezes/{id}/close` cierra un congelamiento escribiendo `end_date` (no toca `status`). La fecha no puede ser futura ni anterior al inicio. El `UPDATE` lleva la condición `end_date IS NULL`, así que si dos cierres llegan a la vez solo uno escribe y el otro recibe `409`, igual que cerrar uno ya cerrado (D-060).
 - **#50**: `POST api/loans/{loanId}/freezes` abre un congelamiento en el nuevo `FreezesController`. Solo sobre préstamos `ACTIVE`, con fecha de inicio no futura ni anterior al préstamo, y `authorized_by` = usuario actual hasta el login. Un segundo congelamiento abierto choca con `ux_freezes_if_open` y responde `409` (D-060).
 - **#94**: prueba del ejemplo canónico de punta a punta: préstamo de 1000 al 10%, cargos calculados con `InterestCharge` (100, 80 y **84**), pagos de 300, 40 y 324 por la API, y cierre con capital 600, interés 0, préstamo activo y 664 en caja. También reproduce a Fulanito sin pagar el mes 1: cargos de 10 y 11, deuda 100 + 21, y un pago de 31 lo deja en 90. Los cargos se insertan directo en la base hasta que exista el job.

@@ -119,5 +119,38 @@ namespace LoanSystemAPI.Controllers
                 return StatusCode(500, new { message = "ERROR COULD NOT CLOSE THE LOAN FREEZE" });
             }
         }
+
+        [HttpGet("loans/{loanId:guid}/freezes")]
+        public async Task<ActionResult<IEnumerable<FreezeDTO>>> GetFreezes([FromRoute] Guid loanId)
+        {
+            try
+            {
+                if (!await _dbContext.Loans.AnyAsync(l => l.Id == loanId))
+                    return NotFound(new { message = $"The loan with id {loanId} was not found" });
+
+                var freezes = await _dbContext.Freezes
+                    .Where(f => f.LoanId == loanId)
+                    .OrderByDescending(f => f.StartDate)
+                    .ThenByDescending(f => f.CreatedDate)
+                    .Select(f => new FreezeDTO
+                    {
+                        Id = f.Id,
+                        LoanId = f.LoanId,
+                        StartDate = f.StartDate,
+                        EndDate = f.EndDate,
+                        Reason = f.Reason,
+                        AuthorizedBy = f.AuthorizedBy,
+                        CreatedDate = f.CreatedDate,
+                    })
+                    .ToListAsync();
+
+                return Ok(freezes);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "ERROR FINDING LOAN FREEZES");
+                return StatusCode(500, new { message = "ERROR FINDING LOAN FREEZES" });
+            }
+        }
     }
 }

@@ -41,13 +41,13 @@ Los POST responden `201` con el id de la entrada creada: `{ "id": "..." }` (#111
 | POST | `api/loans/{id}/write-off` | Marca un préstamo activo como incobrable (D-057). Sigue aceptando pagos. Responde `204` | Implementado (#47) |
 | DELETE | `api/loans/{id}` | Borra un préstamo cuyo único asiento es el desembolso: reversa el desembolso y su salida de caja (el dinero vuelve) y marca el préstamo `DELETED` (D-056). Responde `204` | Implementado (#48) |
 
-## Congelamientos *(propuesta)*
+## Congelamientos
 
 | Método | Ruta | Qué hace | Tarea |
 |---|---|---|---|
 | POST | `api/loans/{id}/freezes` | Abre un congelamiento sobre un préstamo activo, con `startDate` no futura ni anterior al préstamo (D-060). `409` si ya tiene uno abierto. Responde `201` con `{ "id": "..." }` | Implementado (#50) |
 | POST | `api/freezes/{id}/close` | Cierra un congelamiento escribiendo `endDate`, que no puede ser futura ni anterior al inicio. `409` si ya estaba cerrado. Responde `204` | Implementado (#51) |
-| GET | `api/loans/{id}/freezes` | Lista congelamientos del préstamo | #52 |
+| GET | `api/loans/{id}/freezes` | Lista los congelamientos del préstamo, el más reciente primero, sin campos de auditoría salvo `authorizedBy`. `endDate` nulo = abierto | Implementado (#52) |
 
 ## Jobs *(propuesta)*
 
