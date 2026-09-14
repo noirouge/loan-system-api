@@ -154,6 +154,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 115 | Reversar un aporte valida efectivo disponible con el candado de caja (D-070; modifica #10) | Completada | No | N/A |
 | 116 | La reversión de asiento acepta cargos de interés con su interés aún pendiente (D-071; modifica #45, #99) | Completada | No | N/A |
 | 117 | Reporte `GET api/reports/monthly-collection`: hoja de cobro por mes (D-075) | Completada | No | N/A |
+| 118 | Pruebas de la hoja de cobro mensual | Completada | No | N/A |
 
 ## Fase 7: Auditoría
 
