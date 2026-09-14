@@ -9,7 +9,7 @@ namespace LoanSystemAPI.Services
 {
     // THE MONTHLY CUT: ON DAY 1 EVERY ACTIVE LOAN THAT IS NOT FROZEN RECEIVES ITS INTEREST CHARGE. THE FIRST ONE IS ON DAY 1 OF THE MONTH
     // AFTER THE LOAN DATE (D-068). THE CHARGE ONLY LOOKS AT THE ENTRIES BEFORE THE CUT, SO A PAST PERIOD GIVES THE SAME AMOUNT (D-074)
-    public class InterestChargeJob
+    public class InterestChargeJob : IDailyJob
     {
         public const string JobName = "interest-charges";
 
@@ -136,6 +136,32 @@ namespace LoanSystemAPI.Services
             await transaction.CommitAsync(cancellationToken);
 
             return true;
+        }
+
+        public string Name => JobName;
+
+        // WHEN THE API STARTS AND EVERY DAY: FROM THE FIRST PERIOD OF THE OLDEST ACTIVE LOAN TO THE CURRENT ONE, RUNS EVERY PERIOD THAT NEVER
+        // SUCCEEDED OR THAT STILL HAS A LOAN WITHOUT ITS CHARGE (A LOAN REGISTERED WITH A PAST DATE). IF THE 1ST FAILED, THE NEXT DAY CATCHES UP (D-054)
+        public async Task RunAsync(CancellationToken cancellationToken)
+        {
+            var oldestLoanDate = await _dbContext.Loans
+                .Where(l => l.Status == LoanStatus.ACTIVE)
+                .MinAsync(l => (DateOnly?)l.LoanDate, cancellationToken);
+            if (oldestLoanDate == null)
+                return;
+
+            var currentPeriod = PeriodOf(_localDateService.Today());
+            for (var period = PeriodOf(oldestLoanDate.Value).AddMonths(1); period <= currentPeriod; period = period.AddMonths(1))
+            {
+                var pendingLoans = await LoansToCharge(period)
+                    .AnyAsync(l => !_dbContext.LoanEntries.Any(e => e.LoanId == l.Id && e.EntryType == LoanEntryType.INTERESTCHARGE && e.Period == period), cancellationToken);
+                if (!pendingLoans && await HasSucceededAsync(period, cancellationToken))
+                    continue;
+
+                // ANOTHER INSTANCE IS ALREADY RUNNING THE CUT
+                if (await RunPeriodAsync(period, cancellationToken) == null)
+                    return;
+            }
         }
     }
 }

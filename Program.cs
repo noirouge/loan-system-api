@@ -55,6 +55,7 @@ builder.Services.AddHostedService<DailyJobsService>();
 builder.Services.AddScoped<IDailyJob, RefreshTokenCleanupJob>();
 builder.Services.AddScoped<IDailyJob, AuditLogPurgeJob>();
 builder.Services.AddScoped<InterestChargeJob>();
+builder.Services.AddScoped<IDailyJob>(serviceProvider => serviceProvider.GetRequiredService<InterestChargeJob>());
 
 //AUTHENTICATION
 builder.Services.AddHttpContextAccessor();
