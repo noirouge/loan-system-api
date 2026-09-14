@@ -54,6 +54,7 @@ builder.Services.AddScoped<JobRunner>();
 builder.Services.AddHostedService<DailyJobsService>();
 builder.Services.AddScoped<IDailyJob, RefreshTokenCleanupJob>();
 builder.Services.AddScoped<IDailyJob, AuditLogPurgeJob>();
+builder.Services.AddScoped<InterestChargeJob>();
 
 //AUTHENTICATION
 builder.Services.AddHttpContextAccessor();

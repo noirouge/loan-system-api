@@ -125,7 +125,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | # | Tarea | Estado | ¿Modificada? | Modificada por |
 |---:|---|---|---|---:|
 | 53 | Cálculo del cargo: tasa × (capital + interés pendiente) | Completada | No | N/A |
-| 54 | Inserción idempotente con `ON CONFLICT DO NOTHING` | Pendiente | No | N/A |
+| 54 | Inserción idempotente con `ON CONFLICT DO NOTHING` | Completada | No | N/A |
 | 55 | `BackgroundService` con advisory lock de Postgres | Completada | No | N/A |
 | 56 | Registro en `job_runs`: fila de arranque en transacción propia y resultado final | Completada | No | N/A |
 | 57 | Detección de corridas huérfanas | Completada | No | N/A |

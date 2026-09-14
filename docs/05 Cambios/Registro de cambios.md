@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-14
 
+- **#54**: `InterestChargeJob.RunPeriodAsync(period)` cobra el período: préstamos `ACTIVE` con fecha anterior al día 1 y sin congelamiento que cubra el corte. Por préstamo, bajo `FOR UPDATE`, calcula con los asientos anteriores al corte y crea el cargo; si ya existía, o choca con `ux_loan_entries_loan_id_and_period`, cuenta como `skipped`. Se usa EF en vez de `ON CONFLICT` para que el cargo quede auditado (D-074).
 - Respuesta del usuario: liquidar es pagar capital e interés ya generado, sin prorrateo (D-073, N-03). No quedan preguntas abiertas.
 - **#116**: `POST api/loans/entries/{id}/reversal` acepta también un `INTERESTCHARGE`, siempre que el interés pendiente del préstamo cubra el cargo completo; si ya se pagó o condonó en parte, `400` (D-071, modifica #45, #99). Pruebas en `InterestChargeReversalTests`.
 - **#115**: la reversión de caja toma el candado de caja y, si la entrada es un aporte, rechaza con `400` cuando el efectivo disponible no alcanza (D-070, modifica #10). Pruebas en `ContributionReversalCashTests`.

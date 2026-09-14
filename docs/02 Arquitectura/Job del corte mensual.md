@@ -1,6 +1,6 @@
 # Job del corte mensual
 
-Genera los cargos de interés. El mecanismo genérico de jobs ya existe (#55–#57); el job de cargos en sí sigue pendiente (Fase 5 en [[Plan del proyecto]], N-04).
+Genera los cargos de interés con `InterestChargeJob` (#54, #58, #59, D-074).
 
 > [!warning] Bloqueo parcial
 > El corte es global el día 1 (D-054). El primer cargo de un préstamo es el día 1 del mes siguiente a su fecha (D-068).
