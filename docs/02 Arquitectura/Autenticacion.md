@@ -46,6 +46,7 @@ Si llega un token que **ya tiene `replaced_by`**, es reúso, señal de robo:
 
 - Se revocan **todos los refresh tokens vigentes del usuario** (D-024) y se fuerza re-login.
 - Si dos pestañas refrescan a la vez, la segunda dispara esta regla y el usuario legítimo se desloguea. **Se acepta ese falso positivo**; no hay ventana de gracia (D-025).
+- El token usado se retira con un `UPDATE ... WHERE replaced_by IS NULL` dentro de la transacción que crea el nuevo. De dos refresh simultáneos con el mismo token, solo uno lo retira; el otro espera la fila, la encuentra reemplazada y revoca todas las sesiones (#64).
 
 ## Contraseñas
 
