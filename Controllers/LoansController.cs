@@ -5,6 +5,7 @@ using LoanSystemAPI.Enums;
 using LoanSystemAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace LoanSystemAPI.Controllers
 {
@@ -235,6 +236,11 @@ namespace LoanSystemAPI.Controllers
                 if (paymentDTO.ValueDate < loan.LoanDate)
                     return BadRequest(new { message = "The payment date cannot be earlier than the loan date" });
 
+                // A RETRY WITH THE SAME KEY GETS THE PAYMENT ALREADY SAVED. IT IS CHECKED UNDER THE LOAN LOCK AND BEFORE THE
+                // AMOUNT CHECK, SO RETRYING A PAYMENT THAT SETTLED THE DEBT IS NOT REJECTED FOR BEING LARGER THAN THE DEBT
+                var savedWithKey = await _dbContext.LoanEntries.AsNoTracking().FirstOrDefaultAsync(e => e.IdempotencyKey == paymentDTO.IdempotencyKey);
+                if (savedWithKey != null)
+                    return IdempotentPaymentResult(savedWithKey, loan.Id, paymentDTO);
                 var balanceBeforePayment = await _loanBalanceService.GetBalanceAsync(loan.Id);
                 if (paymentDTO.Amount > balanceBeforePayment.Total)
                     return BadRequest(new { message = $"The payment is greater than the total debt. Maximum: {balanceBeforePayment.Total}" });
@@ -248,6 +254,7 @@ namespace LoanSystemAPI.Controllers
                     Id = Guid.NewGuid(),
                     LoanId = loan.Id,
                     EntryType = LoanEntryType.PAYMENT,
+                    IdempotencyKey = paymentDTO.IdempotencyKey,
                     Principal = -principalPaid,
                     Interest = -interestPaid,
                     ValueDate = paymentDTO.ValueDate,
@@ -257,7 +264,17 @@ namespace LoanSystemAPI.Controllers
                     CreatedDate = DateTime.UtcNow,
                 };
                 await _dbContext.LoanEntries.AddAsync(payment);
-                await _dbContext.SaveChangesAsync();
+                try
+                {
+                    await _dbContext.SaveChangesAsync();
+                }
+                // THE UNIQUE INDEX IS THE REAL GUARD: IT ALSO STOPS THE SAME KEY SENT TO TWO DIFFERENT LOANS AT THE SAME TIME
+                catch (DbUpdateException ex) when (ex.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation, ConstraintName: "uq_loan_entries_idempotency_key" })
+                {
+                    await transaction.RollbackAsync();
+                    var savedPayment = await _dbContext.LoanEntries.AsNoTracking().FirstAsync(e => e.IdempotencyKey == paymentDTO.IdempotencyKey);
+                    return IdempotentPaymentResult(savedPayment, loan.Id, paymentDTO);
+                }
 
                 // THE CASH RECEIVES THE WHOLE AMOUNT; THE SPLIT BETWEEN INTEREST AND PRINCIPAL LIVES IN THE LOAN ENTRY
                 var cashEntry = new CashEntry
@@ -284,6 +301,22 @@ namespace LoanSystemAPI.Controllers
                 _logger.LogError(ex, "LOAN PAYMENT ERROR");
                 return StatusCode(500, new { message = "ERROR COULD NOT SAVED THE LOAN PAYMENT" });
             }
+        }
+
+        // SAME KEY AND SAME PAYMENT: THE CLIENT RETRIED, SO IT GETS THE SAME ANSWER.
+        // SAME KEY WITH A DIFFERENT PAYMENT, OR ON ANOTHER LOAN, IS A CLIENT ERROR
+        private IActionResult IdempotentPaymentResult(LoanEntry savedPayment, Guid loanId, LoanPaymentDTO paymentDTO)
+        {
+            var isSamePayment = savedPayment.EntryType == LoanEntryType.PAYMENT
+                && savedPayment.LoanId == loanId
+                && -(savedPayment.Principal + savedPayment.Interest) == paymentDTO.Amount
+                && savedPayment.ValueDate == paymentDTO.ValueDate
+                && (savedPayment.Note ?? "") == (paymentDTO.Note ?? "");
+
+            if (!isSamePayment)
+                return UnprocessableEntity(new { message = "This idempotency key was already used for a different payment" });
+
+            return StatusCode(StatusCodes.Status201Created, new { id = savedPayment.Id });
         }
     }
 }

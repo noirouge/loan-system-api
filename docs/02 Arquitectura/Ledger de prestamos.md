@@ -48,6 +48,7 @@ Esta separación es la única forma de calcular ganancias: el capital que vuelve
 - Cada pago lleva `idempotency_key` con índice único.
 - **Inserta primero y captura la violación** (`SqlState 23505`). No consultes antes: eso tiene condición de carrera.
 - Misma clave con un cuerpo distinto → error del cliente, **422**.
+- Implementado en #43. La clave se busca bajo el bloqueo de la fila del préstamo y antes de validar el monto: así el reintento de un pago que saldó la deuda devuelve el pago original en vez de rechazarse por exceder la deuda. El índice único sigue siendo la garantía, también para la misma clave en préstamos distintos.
 
 ## Pagos: concurrencia
 
