@@ -176,7 +176,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | # | Tarea | Estado | ¿Modificada? | Modificada por |
 |---:|---|---|---|---:|
 | 76 | Reporte de saldo de caja | Completada | No | N/A |
-| 77 | Reporte de interés devengado | Pendiente | No | N/A |
+| 77 | Reporte de interés devengado | Completada | No | N/A |
 | 78 | Reporte de interés cobrado | Pendiente | No | N/A |
 | 79 | Reporte de interés y capital pendientes | Pendiente | No | N/A |
 | 80 | Reporte de ganancia real | Pendiente | No | N/A |

@@ -1,4 +1,5 @@
 ﻿using LoanSystemAPI.DTOs;
+using LoanSystemAPI.Enums;
 using LoanSystemAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,6 +31,25 @@ namespace LoanSystemAPI.Controllers
             {
                 _logger.LogError(ex, "CASH BALANCE REPORT ERROR");
                 return StatusCode(500, new { message = "ERROR GENERATING THE CASH BALANCE REPORT" });
+            }
+        }
+
+        // ALL THE INTEREST CHARGED TO THE CUSTOMERS, PAID OR NOT
+        [HttpGet("accrued-interest")]
+        public async Task<ActionResult<ReportAmountDTO>> GetAccruedInterest([FromQuery] DateOnly? from, [FromQuery] DateOnly? to)
+        {
+            if (from > to)
+                return BadRequest(new { message = "The start date cannot be later than the end date" });
+
+            try
+            {
+                var accruedInterest = await _reportService.SumInterestAsync(LoanEntryType.INTERESTCHARGE, from, to);
+                return Ok(new ReportAmountDTO { From = from, To = to, Amount = accruedInterest });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "ACCRUED INTEREST REPORT ERROR");
+                return StatusCode(500, new { message = "ERROR GENERATING THE ACCRUED INTEREST REPORT" });
             }
         }
     }

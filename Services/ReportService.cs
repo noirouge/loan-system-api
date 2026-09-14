@@ -56,5 +56,37 @@ namespace LoanSystemAPI.Services
             public DateOnly ValueDate { get; set; }
             public decimal Amount { get; set; }
         }
+
+        public async Task<decimal> SumInterestAsync(LoanEntryType entryType, DateOnly? from, DateOnly? to)
+        {
+            return await EffectiveLoanEntries()
+                .Where(e => e.EntryType == entryType)
+                .Where(e => from == null || e.ValueDate >= from)
+                .Where(e => to == null || e.ValueDate <= to)
+                .SumAsync(e => e.Interest);
+        }
+
+        // EVERY LOAN ENTRY WITH THE TYPE THAT COUNTS IN THE REPORTS: ITS OWN, OR THE ONE OF THE ENTRY IT REVERSES
+        private IQueryable<EffectiveLoanEntry> EffectiveLoanEntries()
+        {
+            return from e in _dbContext.LoanEntries
+                   join o in _dbContext.LoanEntries on e.ReversesEntryId equals (Guid?)o.Id into originals
+                   from o in originals.DefaultIfEmpty()
+                   select new EffectiveLoanEntry
+                   {
+                       EntryType = o == null ? e.EntryType : o.EntryType,
+                       ValueDate = e.ValueDate,
+                       Principal = e.Principal,
+                       Interest = e.Interest,
+                   };
+        }
+
+        private class EffectiveLoanEntry
+        {
+            public LoanEntryType EntryType { get; set; }
+            public DateOnly ValueDate { get; set; }
+            public decimal Principal { get; set; }
+            public decimal Interest { get; set; }
+        }
     }
 }

@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-14
 
+- **#77**: `GET api/reports/accrued-interest` suma el interés de los asientos `INTERESTCHARGE` con `value_date` entre `from` y `to` (opcionales e inclusivos), contando las reversiones con el tipo que reversan. Nuevo `ReportAmountDTO` (D-066).
 - **#76**: `GET api/reports/cash-balance` en el nuevo `ReportsController`, con `ReportService`. Devuelve el saldo de caja hasta `date` (opcional, inclusive) y los totales por tipo con el signo de la caja. Cada reversión se une con la entrada que reversa y suma dentro de su tipo, así un gasto y su reversión dan 0 en gastos (D-055, D-066).
 - **#108**: pruebas de mantenimiento: los dos jobs están registrados para la revisión diaria; la limpieza borra los refresh tokens vencidos (también el que vence justo ahora y uno que era reemplazo de otro), deja los vigentes, pone en nulo el `replaced_by` que apuntaba a uno borrado y registra `SUCCESS` con `processed` = 3; puede correr dos veces el mismo día sin nada que borrar; la purga borra solo los registros de auditoría con más de un año y deja el que cumple justo un año.
 - **#75**: `AuditLogPurgeJob`, segundo `IDailyJob`: borra con `ExecuteDelete` los registros de `audit_logs` con `created_date` anterior a un año atrás (según el `TimeProvider`) y deja la cantidad en `processed`. Corre al arrancar y cada día, dentro de `JobRunner`.
