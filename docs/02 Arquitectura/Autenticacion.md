@@ -49,7 +49,7 @@ Si llega un token que **ya tiene `replaced_by`**, es reúso, señal de robo:
 ## Contraseñas
 
 - `PasswordHasher<T>` de `Microsoft.Extensions.Identity.Core`, que ya viene en el framework (D-020). Sin dependencias.
-- El admin semilla de `db/schema.sql` tiene `'admin123'` en texto plano: se reemplaza por su hash (#62).
+- El admin semilla de `db/schema.sql` guarda el hash de `admin123` hecho con `PasswordHasher`, no el texto plano. Para las bases creadas antes, el mismo script trae un `UPDATE` que pone el hash solo si la contraseña sigue en texto plano, así que basta con volver a correrlo (#62).
 - Nunca se registran contraseñas, hashes ni tokens, ni en logs ni en la [[Auditoria]].
 
 ## Configuración

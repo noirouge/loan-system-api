@@ -27,9 +27,13 @@ CONSTRAINT fk_users_created_by FOREIGN KEY (created_by) REFERENCES users(id),
 CONSTRAINT fk_users_updated_by FOREIGN KEY (updated_by) REFERENCES users(id)
 );
 
+-- LA CLAVE DEL ADMIN SEMILLA ES admin123, PERO AQUI SOLO VA SU HASH DE PasswordHasher (D-020)
 INSERT INTO users (id, name, lastname, username, password_hash, role)
-VALUES (gen_random_uuid(), 'ADMIN', 'DEFAULT', 'admin', 'admin123', 2)
+VALUES (gen_random_uuid(), 'ADMIN', 'DEFAULT', 'admin', 'AQAAAAIAAYagAAAAEGSYQCSnLCBGB2aJY20VxKfkVAESHgGL2Pnfhx5O2+ftuNFjtHtjZYv71raG/X5PSw==', 2)
 ON CONFLICT (username) DO NOTHING;
+
+-- BASES CREADAS ANTES DE LA TAREA 62: EL ADMIN SEMILLA TENIA admin123 EN TEXTO PLANO
+UPDATE users SET password_hash = 'AQAAAAIAAYagAAAAEGSYQCSnLCBGB2aJY20VxKfkVAESHgGL2Pnfhx5O2+ftuNFjtHtjZYv71raG/X5PSw==' WHERE username = 'admin' AND password_hash = 'admin123';
 
 -- SELECT * FROM users;
 
