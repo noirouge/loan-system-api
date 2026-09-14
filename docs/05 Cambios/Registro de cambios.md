@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-14
 
+- **#48**: `DELETE api/loans/{id}` borra un préstamo creado por error: solo si su único asiento es el desembolso. No elimina filas: reversa el desembolso y su salida de caja, así el dinero vuelve a la caja, y marca el préstamo `DELETED`, que desde entonces queda oculto. Con cargos, pagos o condonaciones responde `400` (D-056).
 - **#47**: `POST api/loans/{id}/write-off` marca un préstamo `ACTIVE` como `WRITTENOFF` (incobrable). El préstamo sigue aceptando pagos, y si se salda pasa a `CLOSED` (#46). El job de cargos solo cobra préstamos activos, así que deja de generar interés. Restringirlo a ADMIN queda para #67 (D-057).
 - **#46**: cierre automático. Antes de confirmar un pago, una condonación o una reversión, el préstamo pasa a `CLOSED` si su deuda quedó en 0 (también desde `WRITTENOFF`), y vuelve de `CLOSED` a `ACTIVE` si una reversión le devuelve saldo (D-058; modifica #42, #44, #45).
 - Respuestas del usuario: se confirman el corte global del día 1 «por ahora» (D-054, N-01), las reversiones contadas con el tipo que reversan (D-055, P-12), y el cierre automático (D-058, P-06) y los detalles de incobrable (D-057, P-07), que dejan de ser provisionales.

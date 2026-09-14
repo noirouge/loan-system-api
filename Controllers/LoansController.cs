@@ -500,5 +500,79 @@ namespace LoanSystemAPI.Controllers
                 return StatusCode(500, new { message = "ERROR COULD NOT WRITE OFF THE LOAN" });
             }
         }
+
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> DeleteLoan([FromRoute] Guid id)
+        {
+            try
+            {
+                await using var transaction = await _dbContext.Database.BeginTransactionAsync();
+                await _dbContext.Database.ExecuteSqlAsync($"SELECT id FROM loans WHERE id = {id} FOR UPDATE");
+
+                var loan = await _dbContext.Loans.FirstOrDefaultAsync(l => l.Id == id);
+                if (loan == null)
+                    return NotFound(new { message = $"The loan with id {id} was not found" });
+
+                // ONLY A LOAN CREATED BY MISTAKE: ITS ONLY ENTRY IS THE DISBURSEMENT, WITHOUT CHARGES, PAYMENTS OR FORGIVENESS (D-056)
+                var entries = await _dbContext.LoanEntries.Where(e => e.LoanId == id).ToListAsync();
+                var disbursement = entries.FirstOrDefault(e => e.EntryType == LoanEntryType.DISBURSEMENT);
+                if (entries.Count != 1 || disbursement == null || disbursement.Status != LoanEntryStatus.APPLIED)
+                    return BadRequest(new { message = "Only a loan whose only entry is the disbursement can be deleted" });
+
+                // NOTHING IS REMOVED: THE DISBURSEMENT IS REVERSED, THE MONEY GOES BACK TO THE CASH AND THE LOAN IS MARKED DELETED
+                var reversal = new LoanEntry
+                {
+                    Id = Guid.NewGuid(),
+                    LoanId = loan.Id,
+                    EntryType = LoanEntryType.REVERSAL,
+                    Principal = -disbursement.Principal,
+                    Interest = -disbursement.Interest,
+                    ReversesEntryId = disbursement.Id,
+                    ValueDate = disbursement.ValueDate,
+                    Note = $"REVERSAL OF THE DISBURSEMENT OF THE DELETED LOAN {loan.Id}",
+                    Status = LoanEntryStatus.APPLIED,
+                    CreatedBy = _currentUserService.UserId,
+                    CreatedDate = DateTime.UtcNow,
+                };
+                disbursement.Status = LoanEntryStatus.REVERSED;
+                await _dbContext.LoanEntries.AddAsync(reversal);
+                await _dbContext.SaveChangesAsync();
+
+                var disbursementCash = await _dbContext.CashEntries.FirstOrDefaultAsync(c => c.LoanEntryId == disbursement.Id);
+                if (disbursementCash != null)
+                {
+                    var cashReversal = new CashEntry
+                    {
+                        Id = Guid.NewGuid(),
+                        amount = -disbursementCash.amount,
+                        EntryType = CashEntryType.REVERSAL,
+                        LoanEntryId = reversal.Id,
+                        ReversesEntryId = disbursementCash.Id,
+                        ValueDate = disbursementCash.ValueDate,
+                        Note = $"REVERSAL OF THE CASH ENTRY {disbursementCash.Id}",
+                        status = CashEntryStatus.APPLIED,
+                        CreatedBy = _currentUserService.UserId,
+                        CreatedDate = DateTime.UtcNow,
+                    };
+                    disbursementCash.status = CashEntryStatus.REVERSED;
+                    await _dbContext.CashEntries.AddAsync(cashReversal);
+                    await _dbContext.SaveChangesAsync();
+                }
+
+                loan.Status = LoanStatus.DELETED;
+                loan.UpdatedBy = _currentUserService.UserId;
+                loan.UpdatedDate = DateTime.UtcNow;
+                await _dbContext.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "LOAN DELETION ERROR");
+                return StatusCode(500, new { message = "ERROR COULD NOT DELETE THE LOAN" });
+            }
+        }
     }
 }
