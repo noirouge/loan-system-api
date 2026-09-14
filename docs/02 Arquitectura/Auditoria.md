@@ -56,7 +56,7 @@ Se guarda `old` porque es lo único irrecuperable: el valor actual ya está en s
 
 ## Retención
 
-Los registros de más de un año se purgan con un job diario (#75, D-032).
+Los registros de más de un año se purgan con `AuditLogPurgeJob`, un `IDailyJob` que borra los que tienen `created_date` anterior a hoy menos un año, con una fila en `job_runs` por corrida (#75, D-032).
 
 ## Tareas
 

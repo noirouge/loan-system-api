@@ -62,7 +62,7 @@ Si el proceso muere a media ejecución, la fila queda en `RUNNING` para siempre.
 Mismo mecanismo, cada uno con su `job_name` y `period` nulo:
 
 - Limpieza de refresh tokens vencidos: `RefreshTokenCleanupJob`, `job_name` = `refresh-token-cleanup` (#74).
-- Purga de `audit_logs` de más de un año (#75).
+- Purga de `audit_logs` de más de un año: `AuditLogPurgeJob`, `job_name` = `audit-log-purge` (#75).
 
 ## Preguntas que afectan este job
 
