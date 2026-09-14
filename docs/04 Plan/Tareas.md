@@ -116,7 +116,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | # | Tarea | Estado | ¿Modificada? | Modificada por |
 |---:|---|---|---|---:|
 | 50 | POST abrir congelamiento (`23505` → `409` si ya hay uno abierto) | Completada | No | N/A |
-| 51 | POST cerrar congelamiento (escribe `end_date`) | Completada | No | N/A |
+| 51 | POST cerrar congelamiento (escribe `end_date`) | Completada | Sí | 69 |
 | 52 | GET congelamientos de un préstamo | Completada | No | N/A |
 | 100 | Pruebas de congelamientos: segundo abierto rechazado con `409` y cierre con `end_date` | Completada | No | N/A |
 
@@ -155,7 +155,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 
 | # | Tarea | Estado | ¿Modificada? | Modificada por |
 |---:|---|---|---|---:|
-| 69 | Interceptor de `SaveChanges` con el `ChangeTracker` | Pendiente | No | N/A |
+| 69 | Interceptor de `SaveChanges` con el `ChangeTracker` | Completada | No | N/A |
 | 70 | Formato de `changes`: `CREATE` completo, `UPDATE` solo cambiados, borrado lógico como `DELETE` | Pendiente | No | N/A |
 | 71 | Escritura de la bitácora después del commit, en transacción aparte | Pendiente | No | N/A |
 | 72 | Exclusión de campos sensibles y tablas de infraestructura | Pendiente | No | N/A |

@@ -36,7 +36,10 @@ builder.Services.AddSwaggerGen(options =>
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
     throw new InvalidOperationException("ConnectionString Not Found");
     ;
-builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString).UseSnakeCaseNamingConvention()); 
+builder.Services.AddDbContext<AppDbContext>((serviceProvider, options) => options
+    .UseNpgsql(connectionString)
+    .UseSnakeCaseNamingConvention()
+    .AddInterceptors(serviceProvider.GetRequiredService<AuditInterceptor>()));
 
 //SERVICES
 builder.Services.AddSingleton(TimeProvider.System);
@@ -44,6 +47,8 @@ builder.Services.AddSingleton<LocalDateService>();
 builder.Services.AddScoped<CashService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<LoanBalanceService>();
+builder.Services.AddSingleton<AuditLogWriter>();
+builder.Services.AddScoped<AuditInterceptor>();
 builder.Services.AddScoped<JobRunner>();
 builder.Services.AddHostedService<DailyJobsService>();
 

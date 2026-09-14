@@ -89,7 +89,12 @@ namespace LoanSystemAPI.Controllers
 
             try
             {
-                var freeze = await _dbContext.Freezes.AsNoTracking().FirstOrDefaultAsync(f => f.Id == id);
+                await using var transaction = await _dbContext.Database.BeginTransactionAsync();
+
+                // LOCKS THE FREEZE ROW UNTIL THE COMMIT: A SECOND CLOSE AT THE SAME TIME WAITS HERE AND THEN FINDS IT ALREADY CLOSED
+                await _dbContext.Database.ExecuteSqlAsync($"SELECT id FROM freezes WHERE id = {id} FOR UPDATE");
+
+                var freeze = await _dbContext.Freezes.FirstOrDefaultAsync(f => f.Id == id);
                 if (freeze == null)
                     return NotFound(new { message = $"The freeze with id {id} was not found" });
 
@@ -99,17 +104,12 @@ namespace LoanSystemAPI.Controllers
                 if (closeDTO.EndDate < freeze.StartDate)
                     return BadRequest(new { message = "The freeze end date cannot be earlier than its start date" });
 
-                // THE CONDITION ON end_date MAKES TWO CLOSES AT THE SAME TIME SAFE: ONLY ONE OF THEM UPDATES THE ROW
-                var userId = _currentUserService.UserId;
-                var closedRows = await _dbContext.Freezes
-                    .Where(f => f.Id == id && f.EndDate == null)
-                    .ExecuteUpdateAsync(s => s
-                        .SetProperty(f => f.EndDate, (DateOnly?)closeDTO.EndDate)
-                        .SetProperty(f => f.UpdatedBy, (Guid?)userId)
-                        .SetProperty(f => f.UpdatedDate, (DateTime?)DateTime.UtcNow));
-
-                if (closedRows == 0)
-                    return Conflict(new { message = $"The freeze with id {id} was already closed" });
+                // A TRACKED CHANGE AND NOT A BULK UPDATE, SO THE AUDIT INTERCEPTOR SEES IT
+                freeze.EndDate = closeDTO.EndDate;
+                freeze.UpdatedBy = _currentUserService.UserId;
+                freeze.UpdatedDate = DateTime.UtcNow;
+                await _dbContext.SaveChangesAsync();
+                await transaction.CommitAsync();
 
                 return NoContent();
             }
