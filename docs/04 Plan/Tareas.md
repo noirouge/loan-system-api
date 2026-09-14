@@ -161,7 +161,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 72 | Exclusión de campos sensibles y tablas de infraestructura | Completada | No | N/A |
 | 73 | Registro manual de `LOGIN`, `LOGINFAILED` y `LOGOUT` | Completada | No | N/A |
 | 106 | Pruebas de auditoría: `CREATE` completo, `UPDATE` solo cambiados, borrado lógico como `DELETE`, campos sensibles excluidos | Completada | No | N/A |
-| 107 | Prueba de que un fallo al escribir la bitácora no revierte el cambio de negocio | Pendiente | No | N/A |
+| 107 | Prueba de que un fallo al escribir la bitácora no revierte el cambio de negocio | Completada | No | N/A |
 
 ## Fase 8: Mantenimiento
 
