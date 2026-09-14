@@ -2,8 +2,8 @@
 
 Tabla `audit_logs`. Implementación pendiente (Fase 7 en [[Plan del proyecto]]).
 
-> [!warning] Bloqueada por P-02
-> Falta decidir si el interceptor audita los inserts de los ledgers (`loan_entries`, `cash_entries`).
+> [!note] Decisión D-053
+> El interceptor audita también los inserts y los cambios de estado de `loan_entries` y `cash_entries`.
 
 ## Qué registra
 
@@ -48,7 +48,7 @@ Se guarda `old` porque es lo único irrecuperable: el valor actual ya está en s
 
 - **Campos:** `password_hash`, `token_hash`. Nunca se registran contraseñas, hashes ni tokens.
 - **Tablas:** `audit_logs` (se auditaría a sí misma), `refresh_tokens` (la rotación cada 15 minutos inundaría la bitácora), `job_runs`.
-- **Ledgers (`loan_entries`, `cash_entries`):** pendiente, P-02.
+- **Ledgers (`loan_entries`, `cash_entries`):** sí se auditan (D-053).
 
 ## Retención
 

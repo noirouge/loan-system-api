@@ -2,8 +2,8 @@
 
 Implementación pendiente (Fase 6 en [[Plan del proyecto]]).
 
-> [!warning] Bloqueada por P-04
-> JWT requiere el paquete `Microsoft.AspNetCore.Authentication.JwtBearer`, que no viene en el framework compartido. No se instala sin permiso.
+> [!note] Permiso concedido (D-052)
+> JWT usa el paquete `Microsoft.AspNetCore.Authentication.JwtBearer` 8.0.x, que no viene en el framework compartido.
 
 Mientras tanto, los controllers usan `_adminId` desde `appsettings` como usuario actual (D-019).
 

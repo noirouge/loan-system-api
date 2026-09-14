@@ -3,7 +3,7 @@
 Genera los cargos de interés. Implementación pendiente (Fase 5 en [[Plan del proyecto]]).
 
 > [!warning] Bloqueo parcial
-> Las tareas que dependen de qué es un "período" (#53, #54, #58, #59) esperan N-01: no se sabe aún si el corte es global el día 1 o por aniversario de cada préstamo. El mecanismo genérico (#55–#57) sí se puede construir.
+> El corte es global el día 1 (D-054). Falta N-04: cuándo le toca el primer cargo a un préstamo nuevo. Bloquea #54, #58, #59 y #101; el cálculo (#53) y el mecanismo genérico (#55–#57) sí se pueden construir.
 
 ## Qué hace
 
@@ -23,7 +23,7 @@ Para cada préstamo `ACTIVE` y no congelado:
 
 - Vive como `BackgroundService` dentro de la API. No requiere dependencias.
 - Solo corre una instancia a la vez: **advisory lock de Postgres** (`pg_try_advisory_lock`). Si no obtiene el lock, no hace nada.
-- Al arrancar, primero recupera los períodos perdidos; después espera al siguiente corte.
+- Revisa una vez al día, y al arrancar, si falta el cargo de algún período ya vencido, y lo genera (D-054).
 
 ## `job_runs`
 

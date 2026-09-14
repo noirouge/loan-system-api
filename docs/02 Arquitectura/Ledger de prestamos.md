@@ -72,8 +72,8 @@ Lo hace `MoneyRounding.Round()`. No se usa `Math.Round`, porque ninguno de sus m
 
 **Filtra por tipo, no por signo.** `PAYMENT` y `FORGIVENESS` llevan interés negativo, pero solo el primero es dinero que entró.
 
-> [!warning] Reversiones en reportes por tipo
-> Un pago reversado sigue siendo de tipo `PAYMENT`, así que un reporte filtrado por tipo lo contaría como cobrado. Los saldos (suma de toda la columna) no tienen este problema. Pendiente: P-12.
+> [!note] Reversiones en reportes por tipo
+> Un pago reversado sigue siendo de tipo `PAYMENT` y su reversión es de tipo `REVERSAL`. En los reportes filtrados por tipo, la reversión cuenta con el tipo del asiento que reversa, así el par suma 0 (D-055).
 
 ## Tareas
 

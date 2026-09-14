@@ -37,7 +37,7 @@ Flecha continua = dependencia. Flecha punteada = orden recomendado, no bloqueant
 
 Incluye: índice de cargos, roles en SQL, `DateOnly` y fecha local, ajustes a la reversión de caja, efectivo disponible, y bugs en clientes y entidades.
 
-**Bloqueos:** #29 (P-03).
+**Bloqueos:** ninguno.
 
 ### Fase 2: Infraestructura (#30–#37 · pruebas #93)
 
@@ -56,7 +56,7 @@ Incluye: índice de cargos, roles en SQL, `DateOnly` y fecha local, ajustes a la
 
 **Orden interno:** proyección de saldo (#38) → crear préstamo (#39) → consultas (#40, #41) → pago (#42) → idempotencia (#43) → condonación (#44) → reversión (#45).
 
-**Bloqueos:** #46 (P-06), #47 (P-07), #48 (P-08). Conviene tener N-02 antes del pago.
+**Bloqueos:** ninguno. Conviene tener N-02 (pago retroactivo que cruza un corte) antes del pago.
 
 La #49 se canceló: la reemplazan #82 (proyecto de pruebas) y #94 (ejemplo canónico).
 
@@ -70,13 +70,13 @@ La #49 se canceló: la reemplazan #82 (proyecto de pruebas) y #94 (ejemplo canó
 
 **Objetivo:** cargos de interés automáticos, reejecutables y con recuperación de períodos perdidos.
 
-**Bloqueos:** #53, #54, #58, #59 y la prueba #101 esperan N-01 (corte global o por aniversario). El mecanismo genérico (#55–#57) y su prueba (#102) no dependen de eso. El cálculo también depende de #37 (redondeo).
+**Bloqueos:** #54, #58, #59 y la prueba #101 esperan N-04 (cuándo le toca el primer cargo a un préstamo nuevo). El corte es global el día 1 y el job revisa una vez al día si falta algún período (D-054). El cálculo (#53) y el mecanismo genérico (#55–#57, prueba #102) no dependen de eso.
 
 ### Fase 6: Autenticación (#60–#68 · pruebas #103–#105)
 
 **Objetivo:** login con JWT y refresh rotativo, eliminar `_adminId` y aplicar roles.
 
-**Bloqueos:** #60, #63–#67 y las pruebas (P-04). Sin el paquete de JWT no hay tokens.
+**Bloqueos:** ninguno. Permiso para el paquete de JWT concedido (D-052).
 
 Puede adelantarse a las fases 3–5 si el usuario lo prefiere: gracias a #30 no hay dependencia de código entre ellas.
 
@@ -84,7 +84,7 @@ Puede adelantarse a las fases 3–5 si el usuario lo prefiere: gracias a #30 no 
 
 **Objetivo:** bitácora automática de cambios y registro de sesiones. Va después de autenticación porque necesita el usuario real y los eventos de login.
 
-**Bloqueos:** #69–#72 y las pruebas (P-02), #73 (P-04).
+**Bloqueos:** ninguno. La bitácora audita también los asientos (D-053).
 
 ### Fase 8: Mantenimiento (#74, #75 · pruebas #108)
 
@@ -94,7 +94,7 @@ Puede adelantarse a las fases 3–5 si el usuario lo prefiere: gracias a #30 no 
 
 **Objetivo:** saldo de caja, interés devengado, cobrado y pendiente, capital pendiente y ganancia real.
 
-**Bloqueos:** #77, #78, #80 y la prueba #109 (P-12: cómo excluir los asientos reversados en reportes filtrados por tipo).
+**Bloqueos:** ninguno. En los reportes por tipo, cada reversión cuenta con el tipo que reversa (D-055).
 
 ## Pruebas de integración
 
