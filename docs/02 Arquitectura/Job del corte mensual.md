@@ -3,7 +3,7 @@
 Genera los cargos de interés. El mecanismo genérico de jobs ya existe (#55–#57); el job de cargos en sí sigue pendiente (Fase 5 en [[Plan del proyecto]], N-04).
 
 > [!warning] Bloqueo parcial
-> El corte es global el día 1 (D-054). Falta N-04: cuándo le toca el primer cargo a un préstamo nuevo. Bloquea #54, #58, #59 y #101; el cálculo (#53) y el mecanismo genérico (#55–#57) sí se pueden construir.
+> El corte es global el día 1 (D-054). El primer cargo de un préstamo es el día 1 del mes siguiente a su fecha (D-068).
 
 ## Qué hace
 
