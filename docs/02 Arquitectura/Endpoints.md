@@ -49,11 +49,11 @@ Los POST responden `201` con el id de la entrada creada: `{ "id": "..." }` (#111
 | POST | `api/freezes/{id}/close` | Cierra un congelamiento escribiendo `endDate`, que no puede ser futura ni anterior al inicio. `409` si ya estaba cerrado. Responde `204` | Implementado (#51) |
 | GET | `api/loans/{id}/freezes` | Lista los congelamientos del préstamo, el más reciente primero, sin campos de auditoría salvo `authorizedBy`. `endDate` nulo = abierto | Implementado (#52) |
 
-## Jobs *(propuesta)*
+## Jobs
 
 | Método | Ruta | Qué hace | Tarea |
 |---|---|---|---|
-| POST | `api/jobs/interest-charges/{period}` | Re-corre el corte de un período | #59 |
+| POST | `api/jobs/interest-charges/{period}` | Corre el corte de un período (`YYYY-MM-01`, ya iniciado; si no, `400`). Nunca duplica cargos. Responde `200` con la corrida, o `409` si el job ya está corriendo | Implementado (#59) |
 
 ## Autenticación y usuarios
 

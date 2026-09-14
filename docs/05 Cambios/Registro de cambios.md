@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-14
 
+- **#59**: `POST api/jobs/interest-charges/{period}` corre a mano el corte de un período que ya empezó y devuelve la corrida (`JobRunDTO`); `409` si otra instancia lo está corriendo y `400` si la fecha no es día 1 o es futura.
 - **#58**: `InterestChargeJob` es un `IDailyJob`: al arrancar y cada día recorre los períodos desde el primero del préstamo activo más antiguo hasta el actual, y corre los que nunca terminaron en `SUCCESS` o que tienen algún préstamo sin su cargo (por ejemplo, uno registrado con fecha pasada). Así recupera los períodos perdidos (D-054, D-074).
 - **#54**: `InterestChargeJob.RunPeriodAsync(period)` cobra el período: préstamos `ACTIVE` con fecha anterior al día 1 y sin congelamiento que cubra el corte. Por préstamo, bajo `FOR UPDATE`, calcula con los asientos anteriores al corte y crea el cargo; si ya existía, o choca con `ux_loan_entries_loan_id_and_period`, cuenta como `skipped`. Se usa EF en vez de `ON CONFLICT` para que el cargo quede auditado (D-074).
 - Respuesta del usuario: liquidar es pagar capital e interés ya generado, sin prorrateo (D-073, N-03). No quedan preguntas abiertas.
