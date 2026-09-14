@@ -2,7 +2,7 @@
 
 Los mensajes de respuesta van en inglés. Las secciones marcadas *propuesta* aún no existen y sus rutas pueden cambiar.
 
-Las fechas de hecho (`valueDate`, `loanDate`) viajan en JSON como `YYYY-MM-DD`, sin hora.
+Las fechas de hecho (`valueDate`, `loanDate`) viajan en JSON como `YYYY-MM-DD`, sin hora. Todos los endpoints piden `Authorization: Bearer <access token>`, salvo los de `api/auth`: sin token, con uno vencido o mal firmado responden `401`, y con un rol que no alcanza, `403`. Los marcados "Solo ADMIN" rechazan a un WORKER (D-063). Swagger tiene el botón **Authorize** para pegar el token (#67).
 
 ## Clientes: `api/customers`
 
@@ -38,7 +38,7 @@ Los POST responden `201` con el id de la entrada creada: `{ "id": "..." }` (#111
 | POST | `api/loans/{id}/payments` | Pago: primero todo el interés pendiente y luego capital, con la fila del préstamo bloqueada y entrada de caja. Rechaza pagos mayores que la deuda total (D-044), futuros o anteriores al préstamo. Exige `idempotencyKey`: la misma clave con el mismo pago devuelve el mismo id, y con otro pago da `422`. Responde `201` con el id del asiento | Implementado (#42, #43) |
 | POST | `api/loans/{id}/forgiveness` | Condona interés, sin movimiento de caja y nunca más que el interés pendiente. Responde `201` con el id del asiento | Implementado (#44) |
 | POST | `api/loans/entries/{id}/reversal` | Reversa un pago o una condonación con los montos invertidos y la misma fecha; si es un pago, reversa también su entrada de caja, apuntando al asiento nuevo (D-018). `409` si ya estaba reversado. Responde `201` con el id de la reversión | Implementado (#45) |
-| POST | `api/loans/{id}/write-off` | Marca un préstamo activo como incobrable (D-057). Sigue aceptando pagos. Responde `204` | Implementado (#47) |
+| POST | `api/loans/{id}/write-off` | Solo ADMIN. Marca un préstamo activo como incobrable (D-057). Sigue aceptando pagos. Responde `204` | Implementado (#47, #67) |
 | DELETE | `api/loans/{id}` | Borra un préstamo cuyo único asiento es el desembolso: reversa el desembolso y su salida de caja (el dinero vuelve) y marca el préstamo `DELETED` (D-056). Responde `204` | Implementado (#48) |
 
 ## Congelamientos

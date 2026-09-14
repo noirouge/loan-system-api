@@ -100,7 +100,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 44 | POST condonación de interés | Completada | Sí | 46 |
 | 45 | POST reversión de asiento de préstamo y de su caja (`loan_entry_id` = asiento nuevo) | Completada | Sí | 46 |
 | 46 | Cierre de préstamo (`CLOSED`) | Completada | No | N/A |
-| 47 | Préstamo incobrable (`WRITTENOFF`) | Completada | No | N/A |
+| 47 | Préstamo incobrable (`WRITTENOFF`) | Completada | Sí | 67 |
 | 48 | Borrado lógico de préstamo (`DELETED`) | Completada | No | N/A |
 | 49 | Proyecto de pruebas y prueba del ejemplo canónico (mes 3 = 84) | Cancelada | Sí | 82, 94 |
 | 94 | Prueba del ejemplo canónico de punta a punta: mes 3 = 84, cierre con capital 600 e interés 0 | Completada | No | N/A |
@@ -145,7 +145,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 64 | POST `api/auth/refresh` con rotación y detección de reúso | Completada | No | N/A |
 | 65 | POST `api/auth/logout` | Completada | No | N/A |
 | 66 | El servicio de usuario actual lee el claim del JWT (modifica #30) | Completada | No | N/A |
-| 67 | `[Authorize]` y roles en los controllers | Pendiente | No | N/A |
+| 67 | `[Authorize]` y roles en los controllers | Completada | No | N/A |
 | 68 | CRUD de usuarios (solo ADMIN) | Pendiente | No | N/A |
 | 103 | Helper de pruebas para autenticarse y obtener un JWT | Completada | No | N/A |
 | 104 | Pruebas de sesión: login, refresh con rotación, reúso que revoca todas las sesiones, logout | Completada | No | N/A |

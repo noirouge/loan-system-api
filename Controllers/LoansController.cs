@@ -3,6 +3,7 @@ using LoanSystemAPI.DTOs;
 using LoanSystemAPI.Entities;
 using LoanSystemAPI.Enums;
 using LoanSystemAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
@@ -477,6 +478,7 @@ namespace LoanSystemAPI.Controllers
         }
 
         // THE CUSTOMER IS NOT GOING TO PAY: THE LOAN STOPS GENERATING INTEREST, BUT A PAYMENT IS STILL ACCEPTED IF IT COMES (D-057)
+        [Authorize(Roles = nameof(UserRole.ADMIN))]
         [HttpPost("{id:guid}/write-off")]
         public async Task<IActionResult> PostWriteOff([FromRoute] Guid id)
         {

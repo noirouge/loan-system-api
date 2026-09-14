@@ -8,6 +8,7 @@ Cuando se responde una pregunta: se pasa a [[Registro de decisiones]], se borra 
 |---|---|---|---|
 | P-09 | ¿Reversar un aporte valida efectivo disponible? Reversar un aporte saca dinero de caja | Sí, por la misma regla de D-016 | Afecta #10, #20 |
 | P-11 | ¿Se puede reversar un `INTERESTCHARGE`? La especificación lo permite para errores ("nunca debió existir", como un cargo mal calculado por el job), pero D-017 dice que se condonan | Reversar solo errores del sistema; condonar todo lo demás | Afecta #45 |
+| P-18 | Hoy un WORKER puede hacer todo menos marcar incobrable y administrar usuarios (D-063). ¿Qué otras acciones son solo del dueño (ADMIN)? | Solo ADMIN: aportes y retiros de caja, reversiones de caja y de asientos, condonaciones, borrar un préstamo y el reporte de ganancia. El WORKER registra clientes, préstamos, pagos, gastos y congelamientos | Afecta #67, #80 |
 
 ## Pendientes con el negocio
 

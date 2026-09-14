@@ -3,6 +3,7 @@ using LoanSystemAPI.DTOs;
 using LoanSystemAPI.Entities;
 using LoanSystemAPI.Enums;
 using LoanSystemAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,8 @@ namespace LoanSystemAPI.Controllers
 
     [ApiController]
     [Route("api/auth")]
+    // THE LOGIN, THE REFRESH AND THE LOGOUT ARE CALLED WITHOUT AN ACCESS TOKEN, OR WITH ONE ALREADY EXPIRED
+    [AllowAnonymous]
     public class AuthController : Controller
     {
         // HASH OF A RANDOM PASSWORD: AN UNKNOWN USERNAME ALSO PAYS ONE VERIFICATION, SO THE RESPONSE TIME DOES NOT REVEAL WHICH USERNAMES EXIST
