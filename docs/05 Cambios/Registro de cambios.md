@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-13
 
+- Respuestas del usuario: día de pago de 1 a 28 (D-048), pago sugerido cuando hay plazo (D-049), interés impago en su propia columna y deuda total como capital + interés (D-050), y commits sin `Co-Authored-By` (D-051). Se desbloquean #39, #42 y #43.
 - **#93**: pruebas de las restricciones de la base, directo contra PostgreSQL: dos cargos de interés del mismo período se rechazan con `ux_loan_entries_loan_id_and_period`, otros tipos de asiento sí pueden compartir período (esta fallaba con el índice viejo de antes de la #13), no se pueden abrir dos congelamientos a la vez pero sí uno nuevo tras cerrar el anterior, un asiento no se reversa dos veces, y `db/schema.sql` se puede volver a correr sobre una base con datos.
 - **#92**: prueba de concurrencia de la reversión de caja: cinco reversiones simultáneas de la misma entrada terminan con una aceptada y cuatro `409`, una sola entrada de reversión y la caja en 0. Confirma que capturar la violación del índice único (#20) funciona también bajo carrera.
 - **#91**: pruebas de fechas: la reversión conserva el `valueDate` de la entrada original, `LocalDateService.Today()` devuelve la fecha dominicana y no la UTC alrededor de la medianoche UTC (02:30 y 03:59 UTC del 14 siguen siendo el 13), y un `valueDate` con hora se rechaza con `400`.

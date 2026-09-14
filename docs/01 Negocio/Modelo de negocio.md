@@ -40,7 +40,7 @@ Préstamo de 100 al 10% mensual, con plazo informativo de 5 meses (capital suger
 
 Termina un mes antes del plazo. Pagar de más siempre está permitido y reduce capital (D-042).
 
-**Si no paga el mes 1:** los 10 de interés quedan pendientes y en el mes 2 el interés se calcula sobre 110, o sea, 11. Debe 100 de capital y 21 de interés. Si paga 31, la cascada aplica 21 a interés y 10 a capital, y queda debiendo 90. Cómo se registra ese interés impago está en P-16.
+**Si no paga el mes 1:** los 10 de interés quedan pendientes y en el mes 2 el interés se calcula sobre 110, o sea, 11. Debe 100 de capital y 21 de interés, 121 en total. Si paga 31, la cascada aplica 21 a interés y 10 a capital, y queda debiendo 90. El interés impago se queda en la cuenta de interés y no se pasa al capital (D-050): así la ganancia cuadra.
 
 ## Cascada de imputación
 

@@ -8,6 +8,7 @@ Tabla `loan_entries`. Implementación pendiente (Fase 3 en [[Plan del proyecto]]
 
 - Capital pendiente = `SUM(principal)`
 - Interés pendiente = `SUM(interest)`
+- Deuda total = capital pendiente + interés pendiente (D-050)
 
 Nada se edita ni se borra. Un error se corrige con un asiento de reversión que lleva los montos invertidos y apunta al original.
 
@@ -28,7 +29,7 @@ Esta separación es la única forma de calcular ganancias: el capital que vuelve
 | Tipo | `principal` | `interest` | `period` | Notas |
 |---|---|---|---|---|
 | `DISBURSEMENT` (1) | +monto | 0 | NULL | Uno por préstamo. Genera caja negativa |
-| `INTERESTCHARGE` (2) | 0 | +monto | Día 1 del mes | Lo crea el job mensual |
+| `INTERESTCHARGE` (2) | 0 | +monto | Día 1 del mes | Lo crea el job mensual. No genera caja |
 | `PAYMENT` (3) | ≤ 0 | ≤ 0 | NULL | Cascada: interés primero, luego capital. Genera caja positiva |
 | `FORGIVENESS` (4) | 0 | −monto | NULL | Sin dinero de por medio. No genera caja |
 | `REVERSAL` (5) | Invertido | Invertido | NULL | Lleva `reverses_entry_id` |

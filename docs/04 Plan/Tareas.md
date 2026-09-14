@@ -91,11 +91,11 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | # | Tarea | Estado | ¿Modificada? | Modificada por |
 |---:|---|---|---|---:|
 | 38 | Proyección de saldo del préstamo (`SUM(principal)`, `SUM(interest)`) | Pendiente | No | N/A |
-| 39 | POST crear préstamo con desembolso: préstamo + asiento + caja en una transacción, validando efectivo | Bloqueada (P-15) | No | N/A |
+| 39 | POST crear préstamo con desembolso: préstamo + asiento + caja en una transacción, validando efectivo | Pendiente | No | N/A |
 | 40 | GET listar préstamos con saldo | Pendiente | No | N/A |
 | 41 | GET préstamo por id con saldo y asientos | Pendiente | No | N/A |
-| 42 | POST pago con cascada (interés → capital), `SELECT ... FOR UPDATE` y entrada de caja | Bloqueada (P-16) | No | N/A |
-| 43 | Idempotencia del pago: `idempotency_key`, captura de `23505`, `422` si cambia el cuerpo | Bloqueada (P-16) | No | N/A |
+| 42 | POST pago con cascada (interés → capital), `SELECT ... FOR UPDATE` y entrada de caja | Pendiente | No | N/A |
+| 43 | Idempotencia del pago: `idempotency_key`, captura de `23505`, `422` si cambia el cuerpo | Pendiente | No | N/A |
 | 44 | POST condonación de interés | Pendiente | No | N/A |
 | 45 | POST reversión de asiento de préstamo y de su caja (`loan_entry_id` = asiento nuevo) | Pendiente | No | N/A |
 | 46 | Cierre de préstamo (`CLOSED`) | Bloqueada (P-06) | No | N/A |

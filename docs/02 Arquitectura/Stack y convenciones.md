@@ -93,6 +93,7 @@ docs/          este vault
 ## Commits
 
 - **Una tarea, un commit.** Al terminar una tarea el agente hace el commit, **nunca el push**: el push lo hace el usuario a mano.
+- Sin la línea `Co-Authored-By` (D-051).
 - El commit incluye el código **y** las actualizaciones del vault de esa tarea (D-037, D-039).
 - `feat: ...` para funcionalidad nueva. Ejemplo: `feat: Cash-Entry Withdrawal Post Endpoint`
 - `Update: ...` para ajustes a algo existente. Ejemplo: `Update: endpoint post contribution don't need the field counterparty`
