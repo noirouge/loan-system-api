@@ -64,7 +64,7 @@ Mismo mecanismo, cada uno con su `job_name` y `period` nulo:
 
 ## Preguntas que afectan este job
 
-- N-01: corte global o por aniversario.
+- N-04: cuándo le toca el primer cargo a un préstamo nuevo.
 - N-02: pago retroactivo que cruza un corte ya calculado.
 - P-01: redondeo en empate.
 

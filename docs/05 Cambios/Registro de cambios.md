@@ -10,6 +10,9 @@ git log --grep "Task 13"
 
 Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde el historial.
 
+## 2026-09-14
+
+- Respuestas del usuario: se confirman el corte global del día 1 «por ahora» (D-054, N-01), las reversiones contadas con el tipo que reversan (D-055, P-12), y el cierre automático (D-058, P-06) y los detalles de incobrable (D-057, P-07), que dejan de ser provisionales.
 ## 2026-09-13
 
 - **#99**: pruebas de condonación y reversión de asientos: la condonación baja solo el interés y no toca la caja, no se puede condonar más que el interés pendiente, se rechazan montos de 0, fechas futuras y préstamos inexistentes; reversar un pago devuelve la deuda y reversa su entrada de caja apuntando al asiento nuevo y con la fecha del pago; reversar una condonación devuelve el interés sin caja; una segunda reversión da `409`; los cargos de interés y los desembolsos no se reversan por aquí.

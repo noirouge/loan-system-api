@@ -119,4 +119,4 @@ El capital que vuelve **no es ingreso**; el interés cobrado **sí**. Por eso ca
 
 ## Pendiente con el negocio
 
-Ver [[Preguntas abiertas]]: N-01 (corte global o por aniversario), N-02 (pago retroactivo que cruza un corte), N-03 (liquidación con interés prorrateado).
+Ver [[Preguntas abiertas]]: N-02 (pago retroactivo que cruza un corte), N-03 (liquidación con interés prorrateado), N-04 (cuándo le toca el primer cargo a un préstamo nuevo). N-01 ya se decidió: por ahora el corte es global, el día 1 (D-054).
