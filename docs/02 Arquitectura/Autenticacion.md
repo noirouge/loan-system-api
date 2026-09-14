@@ -65,7 +65,7 @@ Si llega un token que **ya tiene `replaced_by`**, es reúso, señal de robo:
 
 ## Limpieza
 
-Los tokens vencidos se borran con un job diario registrado en `job_runs` (#74).
+Los tokens vencidos (`expires_at` ya cumplido según el `TimeProvider`) los borra `RefreshTokenCleanupJob`, un `IDailyJob` que `DailyJobsService` corre al arrancar y cada día dentro de `JobRunner`, con una fila en `job_runs` por corrida (#74).
 
 ## Tareas
 

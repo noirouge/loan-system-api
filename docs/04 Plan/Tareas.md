@@ -167,7 +167,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 
 | # | Tarea | Estado | ¿Modificada? | Modificada por |
 |---:|---|---|---|---:|
-| 74 | Job diario: borrar refresh tokens vencidos | Pendiente | No | N/A |
+| 74 | Job diario: borrar refresh tokens vencidos | Completada | No | N/A |
 | 75 | Job diario: purgar `audit_logs` de más de un año | Pendiente | No | N/A |
 | 108 | Pruebas de mantenimiento: borrado de tokens vencidos y purga de la bitácora de más de un año | Pendiente | No | N/A |
 
