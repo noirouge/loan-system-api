@@ -36,7 +36,7 @@ audit_logs(id, entity_name, entity_id, action, user_id,
 { "phone": { "old": "809-555-1234", "new": "849-555-9876" } }
 ```
 
-Se guarda `old` porque es lo único irrecuperable: el valor actual ya está en su tabla.
+Se guarda `old` porque es lo único irrecuperable: el valor actual ya está en su tabla. Las claves de `changes` son los nombres de columna y cada campo es siempre un objeto: `CREATE` lleva `{ "columna": { "new": ... } }` por cada columna, `UPDATE` `{ "columna": { "old": ..., "new": ... } }` solo por las que cambiaron, y `DELETE` `{ "columna": { "old": ... } }` por cada columna. Un `UPDATE` sin cambios reales no se registra. `entity_name` es el nombre de la tabla (D-065, #70).
 
 ## Implementación
 

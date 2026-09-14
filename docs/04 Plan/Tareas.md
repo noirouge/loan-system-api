@@ -156,7 +156,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | # | Tarea | Estado | ¿Modificada? | Modificada por |
 |---:|---|---|---|---:|
 | 69 | Interceptor de `SaveChanges` con el `ChangeTracker` | Completada | No | N/A |
-| 70 | Formato de `changes`: `CREATE` completo, `UPDATE` solo cambiados, borrado lógico como `DELETE` | Pendiente | No | N/A |
+| 70 | Formato de `changes`: `CREATE` completo, `UPDATE` solo cambiados, borrado lógico como `DELETE` | Completada | No | N/A |
 | 71 | Escritura de la bitácora después del commit, en transacción aparte | Pendiente | No | N/A |
 | 72 | Exclusión de campos sensibles y tablas de infraestructura | Pendiente | No | N/A |
 | 73 | Registro manual de `LOGIN`, `LOGINFAILED` y `LOGOUT` | Pendiente | No | N/A |
