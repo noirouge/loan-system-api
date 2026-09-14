@@ -36,6 +36,7 @@ job_runs(id, job_name, period, status, started_at, finished_at,
 - **Una fila por período.** Recuperar tres meses perdidos son tres filas.
 - Al arrancar se inserta con `RUNNING` y `finished_at` nulo, **en su propia transacción**, separada del trabajo. Si fueran juntas y el proceso fallara, el rollback se llevaría justo la evidencia de que se intentó.
 - Al terminar se actualiza con el resultado.
+- `JobRunner.RunAsync(job, período, trabajo)` guarda la fila `RUNNING` con su propio `SaveChanges` antes del trabajo y escribe el resultado con `ExecuteUpdate`, fuera del change tracker. El trabajo devuelve `JobRunCounters`. Si lanza una excepción, la corrida queda `FAILED` con el mensaje en `error_message`. Un período que ya terminó en `SUCCESS` no se vuelve a correr (D-061, #56).
 - `period` es nullable, para los jobs que no son por período (limpiezas). Postgres trata los NULL como distintos en un índice único, así que esos jobs pueden terminar en `SUCCESS` muchas veces.
 
 | Contador | Significado |
