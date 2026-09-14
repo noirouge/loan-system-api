@@ -103,7 +103,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 47 | Préstamo incobrable (`WRITTENOFF`) | Completada | No | N/A |
 | 48 | Borrado lógico de préstamo (`DELETED`) | Completada | No | N/A |
 | 49 | Proyecto de pruebas y prueba del ejemplo canónico (mes 3 = 84) | Cancelada | Sí | 82, 94 |
-| 94 | Prueba del ejemplo canónico de punta a punta: mes 3 = 84, cierre con capital 600 e interés 0 | Pendiente | No | N/A |
+| 94 | Prueba del ejemplo canónico de punta a punta: mes 3 = 84, cierre con capital 600 e interés 0 | Completada | No | N/A |
 | 95 | Pruebas de la cascada: pago menor, igual y mayor que el interés pendiente; el interés nunca queda negativo | Completada | No | N/A |
 | 96 | Pruebas del desembolso: préstamo, asiento y caja en una transacción; rechazo sin efectivo | Completada | No | N/A |
 | 97 | Pruebas de idempotencia del pago: misma clave y cuerpo crean un solo pago; misma clave con otro cuerpo da `422` | Completada | No | N/A |
