@@ -211,5 +211,79 @@ namespace LoanSystemAPI.Controllers
                 return StatusCode(500, new { message = "ERROR FINDING LOAN" });
             }
         }
+
+        [HttpPost("{id:guid}/payments")]
+        public async Task<IActionResult> PostPayment([FromRoute] Guid id, [FromBody] LoanPaymentDTO paymentDTO)
+        {
+            if (paymentDTO.Amount <= 0 || paymentDTO.Amount != Math.Round(paymentDTO.Amount, 2))
+                return BadRequest(new { message = "The payment amount must be greater than zero and have at most 2 decimals" });
+
+            if (paymentDTO.ValueDate > _localDateService.Today())
+                return BadRequest(new { message = "The payment date cannot be in the future" });
+
+            try
+            {
+                await using var transaction = await _dbContext.Database.BeginTransactionAsync();
+
+                // LOCKS THE LOAN ROW UNTIL THE COMMIT: A SECOND PAYMENT TO THE SAME LOAN WAITS HERE AND THEN READS THE UPDATED BALANCE
+                await _dbContext.Database.ExecuteSqlAsync($"SELECT id FROM loans WHERE id = {id} FOR UPDATE");
+
+                var loan = await _dbContext.Loans.FirstOrDefaultAsync(l => l.Id == id);
+                if (loan == null)
+                    return NotFound(new { message = $"The loan with id {id} was not found" });
+
+                if (paymentDTO.ValueDate < loan.LoanDate)
+                    return BadRequest(new { message = "The payment date cannot be earlier than the loan date" });
+
+                var balanceBeforePayment = await _loanBalanceService.GetBalanceAsync(loan.Id);
+                if (paymentDTO.Amount > balanceBeforePayment.Total)
+                    return BadRequest(new { message = $"The payment is greater than the total debt. Maximum: {balanceBeforePayment.Total}" });
+
+                // CASCADE: FIRST ALL THE PENDING INTEREST, THEN PRINCIPAL
+                var interestPaid = Math.Min(paymentDTO.Amount, Math.Max(balanceBeforePayment.Interest, 0));
+                var principalPaid = paymentDTO.Amount - interestPaid;
+
+                var payment = new LoanEntry
+                {
+                    Id = Guid.NewGuid(),
+                    LoanId = loan.Id,
+                    EntryType = LoanEntryType.PAYMENT,
+                    Principal = -principalPaid,
+                    Interest = -interestPaid,
+                    ValueDate = paymentDTO.ValueDate,
+                    Note = paymentDTO.Note,
+                    Status = LoanEntryStatus.APPLIED,
+                    CreatedBy = _currentUserService.UserId,
+                    CreatedDate = DateTime.UtcNow,
+                };
+                await _dbContext.LoanEntries.AddAsync(payment);
+                await _dbContext.SaveChangesAsync();
+
+                // THE CASH RECEIVES THE WHOLE AMOUNT; THE SPLIT BETWEEN INTEREST AND PRINCIPAL LIVES IN THE LOAN ENTRY
+                var cashEntry = new CashEntry
+                {
+                    Id = Guid.NewGuid(),
+                    amount = paymentDTO.Amount,
+                    EntryType = CashEntryType.PAYMENT,
+                    LoanEntryId = payment.Id,
+                    ValueDate = paymentDTO.ValueDate,
+                    Note = $"PAYMENT OF THE LOAN {loan.Id}",
+                    status = CashEntryStatus.APPLIED,
+                    CreatedBy = _currentUserService.UserId,
+                    CreatedDate = DateTime.UtcNow,
+                };
+                await _dbContext.CashEntries.AddAsync(cashEntry);
+                await _dbContext.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+
+                return StatusCode(StatusCodes.Status201Created, new { id = payment.Id });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "LOAN PAYMENT ERROR");
+                return StatusCode(500, new { message = "ERROR COULD NOT SAVED THE LOAN PAYMENT" });
+            }
+        }
     }
 }

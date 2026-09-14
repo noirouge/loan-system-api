@@ -55,6 +55,8 @@ Dos pagos simultáneos al mismo préstamo leen el mismo saldo y el segundo pisa 
 
 Solución: bloquear la fila del préstamo con `SELECT ... FOR UPDATE` al inicio de la transacción.
 
+Implementado en #42: `SELECT id FROM loans WHERE id = ... FOR UPDATE` antes de leer el saldo.
+
 ## Redondeo
 
 Todo monto calculado se redondea a 2 decimales mirando solo el tercer decimal: si es mayor que 5 sube, si es 5 o menos se queda (D-043).
