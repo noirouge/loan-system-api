@@ -33,7 +33,7 @@ Los POST responden `201` con el id de la entrada creada: `{ "id": "..." }` (#111
 | Método | Ruta | Qué hace | Tarea |
 |---|---|---|---|
 | POST | `api/loans` | Crea el préstamo con su desembolso (asiento y salida de caja). Responde `201` con `{ "id": "..." }` | Implementado (#39) |
-| GET | `api/loans` | Lista préstamos con saldo | #40 |
+| GET | `api/loans` | Lista los préstamos, más recientes primero, con el nombre del cliente y su saldo (capital, interés y total) | Implementado (#40) |
 | GET | `api/loans/{id}` | Préstamo con saldo y asientos | #41 |
 | POST | `api/loans/{id}/payments` | Pago con cascada e idempotencia | #42, #43 |
 | POST | `api/loans/{id}/forgiveness` | Condonación de interés | #44 |

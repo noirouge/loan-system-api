@@ -121,5 +121,41 @@ namespace LoanSystemAPI.Controllers
                 return StatusCode(500, new { message = "ERROR COULD NOT SAVED THE LOAN" });
             }
         }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<LoanDTO>>> GetLoans()
+        {
+            try
+            {
+                // THE CUSTOMER IS SHOWN EVEN IF IT WAS DELETED LATER: ITS LOAN STILL EXISTS
+                var loans = await (from l in _dbContext.Loans
+                                   join c in _dbContext.Customers.IgnoreQueryFilters() on l.CustomerId equals c.Id
+                                   orderby l.LoanDate descending, l.CreatedDate descending
+                                   select new LoanDTO
+                                   {
+                                       Id = l.Id,
+                                       CustomerId = l.CustomerId,
+                                       CustomerFullname = c.Fullname,
+                                       Principal = l.Principal,
+                                       Term = l.Term,
+                                       InterestRate = l.InterestRate,
+                                       LoanDate = l.LoanDate,
+                                       PaymentDay = l.PaymentDay,
+                                       Status = l.Status,
+                                   })
+                                  .ToListAsync();
+
+                var balances = await _loanBalanceService.GetBalancesAsync(loans.Select(l => l.Id));
+                foreach (var loan in loans)
+                    loan.Balance = balances[loan.Id];
+
+                return Ok(loans);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "ERROR CONSULTING LOANS");
+                return StatusCode(500, new { message = "Error Consulting Loans" });
+            }
+        }
     }
 }

@@ -93,7 +93,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 |---:|---|---|---|---:|
 | 38 | Proyección de saldo del préstamo (`SUM(principal)`, `SUM(interest)`) | Completada | No | N/A |
 | 39 | POST crear préstamo con desembolso: préstamo + asiento + caja en una transacción, validando efectivo | Completada | No | N/A |
-| 40 | GET listar préstamos con saldo | Pendiente | No | N/A |
+| 40 | GET listar préstamos con saldo | Completada | No | N/A |
 | 41 | GET préstamo por id con saldo y asientos | Pendiente | No | N/A |
 | 42 | POST pago con cascada (interés → capital), `SELECT ... FOR UPDATE` y entrada de caja | Pendiente | No | N/A |
 | 43 | Idempotencia del pago: `idempotency_key`, captura de `23505`, `422` si cambia el cuerpo | Pendiente | No | N/A |
