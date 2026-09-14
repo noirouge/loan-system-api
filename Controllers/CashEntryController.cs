@@ -164,6 +164,17 @@ namespace LoanSystemAPI.Controllers
                     if (cashEntry.EntryType != CashEntryType.CONTRIBUTION && cashEntry.EntryType != CashEntryType.WITHDRAWAL && cashEntry.EntryType != CashEntryType.EXPENSE)
                         return BadRequest(new { message = "Only a contribution, a withdrawal or an expense can be reversed from this endpoint" });
 
+                    // REVERSING A CONTRIBUTION TAKES ITS MONEY OUT OF THE CASH: IT NEEDS THE SAME CHECK AS A WITHDRAWAL (D-070)
+                    await using var transaction = await _dbContext.Database.BeginTransactionAsync();
+                    await _cashService.LockCashAsync();
+                    // UNDER THE LOCK A SECOND REVERSAL SEES THE FIRST ONE ALREADY SAVED
+                    await _dbContext.Entry(cashEntry).ReloadAsync();
+                    if (cashEntry.status == CashEntryStatus.REVERSED)
+                        return Conflict(new { message = $"The cash entry with id {id} was already reversed" });
+                    var availableCash = await _cashService.GetAvailableCashAsync();
+                    if (cashEntry.amount > 0 && availableCash < cashEntry.amount)
+                        return BadRequest(new { message = $"Not enough cash available to reverse this contribution. Available cash: {availableCash}" });
+
                     var reversalEntry = new CashEntry
                     {
                         Id = Guid.NewGuid(),
@@ -181,6 +192,8 @@ namespace LoanSystemAPI.Controllers
 
                     await _dbContext.CashEntries.AddAsync(reversalEntry);
                     await _dbContext.SaveChangesAsync();
+
+                    await transaction.CommitAsync();
 
                     return StatusCode(StatusCodes.Status201Created, new { id = reversalEntry.Id });
                 }

@@ -25,7 +25,7 @@
 | 7 | Quitar la validación de counterparty del aporte (modifica #6) | Completada | No | N/A |
 | 8 | POST retiro de caja; ruta del controller a `api/cash-entries` (modifica #6) | Completada | Sí | 16, 22, 31, 111 |
 | 9 | POST gasto de caja | Completada | Sí | 16, 22, 31, 111 |
-| 10 | POST reversión de caja | Completada | Sí | 16, 18, 19, 20, 31, 111 |
+| 10 | POST reversión de caja | Completada | Sí | 16, 18, 19, 20, 31, 111, 115 |
 | 11 | GET listar entradas de caja | Completada | Sí | 16 |
 | 12 | Crear vault de documentación, plan y tareas | Completada | No | N/A |
 
@@ -151,6 +151,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 104 | Pruebas de sesión: login, refresh con rotación, reúso que revoca todas las sesiones, logout | Completada | No | N/A |
 | 105 | Pruebas de autorización por rol: WORKER contra ADMIN | Completada | No | N/A |
 | 114 | Marcar incobrable deja de ser solo de ADMIN (D-069; modifica #47, #67) | Completada | No | N/A |
+| 115 | Reversar un aporte valida efectivo disponible con el candado de caja (D-070; modifica #10) | Completada | No | N/A |
 
 ## Fase 7: Auditoría
 
