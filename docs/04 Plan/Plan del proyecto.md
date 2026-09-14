@@ -5,7 +5,7 @@ La lista detallada está en [[Tareas]]. Aquí va el orden de las fases, por qué
 ## Estado al 2026-09-13
 
 - **Hecho:** conexión a PostgreSQL, esquema inicial, CRUD de clientes, caja completa (aportes, retiros y gastos con validación de efectivo, reversión y listado) y todas las tareas desbloqueadas de las fases 1 y 2.
-- **Siguiente:** el usuario corre #15 y #81 en su base local. Para seguir hacen falta respuestas: P-05 y P-13 para las pruebas; P-15 para crear préstamos (#39); P-10 y P-16 para el pago (#42); P-01 para el redondeo (#37).
+- **Siguiente:** montar las pruebas de integración (#82–#89) y cubrir lo ya construido (#90–#93); redondeo (#37) y quitar `INACTIVE` (#110). El usuario corre #15 y #81 en su base local. Para crear préstamos falta confirmar el día de pago (P-15), y para el pago, P-16.
 
 ## Fases
 
@@ -29,7 +29,7 @@ Flecha continua = dependencia. Flecha punteada = orden recomendado, no bloqueant
 
 **Objetivo:** montar el proyecto de pruebas de integración y cubrir lo que ya existe (clientes, caja y reversión de caja) **antes** de modificarlo. Así, cuando la Fase 1 cambie comportamiento (#16, #18–#23), se ve qué cambió a propósito y qué se rompió sin querer.
 
-**Bloqueos:** P-05 (paquetes) y P-13 (dónde corre PostgreSQL). Diseño en [[#Pruebas de integración]].
+**Bloqueos:** ninguno. Base de prueba: `prestamos_test` en el PostgreSQL local (D-047). Diseño en [[#Pruebas de integración]].
 
 ### Fase 1: Correcciones (#13–#29, #81 · pruebas #90–#92)
 
@@ -37,7 +37,7 @@ Flecha continua = dependencia. Flecha punteada = orden recomendado, no bloqueant
 
 Incluye: índice de cargos, roles en SQL, `DateOnly` y fecha local, ajustes a la reversión de caja, efectivo disponible, y bugs en clientes y entidades.
 
-**Bloqueos:** #29 (P-03). Pruebas: P-05.
+**Bloqueos:** #29 (P-03).
 
 ### Fase 2: Infraestructura (#30–#37 · pruebas #93)
 
@@ -48,7 +48,7 @@ Incluye: índice de cargos, roles en SQL, `DateOnly` y fecha local, ajustes a la
 - Entidades de préstamo completas y registradas en el contexto (#35, #36).
 - Redondeo (#37).
 
-**Bloqueos:** #37 (P-01). Pruebas: P-05.
+**Bloqueos:** ninguno.
 
 ### Fase 3: Préstamos (#38–#48 · pruebas #94–#99)
 
@@ -56,7 +56,7 @@ Incluye: índice de cargos, roles en SQL, `DateOnly` y fecha local, ajustes a la
 
 **Orden interno:** proyección de saldo (#38) → crear préstamo (#39) → consultas (#40, #41) → pago (#42) → idempotencia (#43) → condonación (#44) → reversión (#45).
 
-**Bloqueos:** #39 (P-15), #42 (P-10, P-16), #43 (P-10), #46 (P-06), #47 (P-07), #48 (P-08). Conviene tener N-02 antes del pago. Pruebas: P-05.
+**Bloqueos:** #39 (P-15, día de pago), #42 y #43 (P-16), #46 (P-06), #47 (P-07), #48 (P-08). Conviene tener N-02 antes del pago.
 
 La #49 se canceló: la reemplazan #82 (proyecto de pruebas) y #94 (ejemplo canónico).
 
@@ -114,9 +114,9 @@ Una prueba contra una base simulada pasaría aunque cualquiera de esas cosas est
 
 | Pieza | Cómo | Dependencias |
 |---|---|---|
-| Proyecto | `LoanSystemAPI.IntegrationTests`, con xUnit | `xunit`, `xunit.runner.visualstudio`, `Microsoft.NET.Test.Sdk` (P-05) |
-| API en memoria | `WebApplicationFactory<Program>`. Requiere `public partial class Program { }` en `Program.cs`, porque usa top-level statements | `Microsoft.AspNetCore.Mvc.Testing` 8.0.x (P-05) |
-| Base de datos | PostgreSQL 18 real, creada aplicando `db/schema.sql`: así también se prueba el script. Contenedor desechable o base local de prueba (P-13) | `Testcontainers.PostgreSql`, solo si se elige contenedor |
+| Proyecto | `tests/LoanSystemAPI.IntegrationTests`, con xUnit | `xunit`, `xunit.runner.visualstudio`, `Microsoft.NET.Test.Sdk` (D-047) |
+| API en memoria | `WebApplicationFactory<Program>`. Requiere `public partial class Program { }` en `Program.cs`, porque usa top-level statements | `Microsoft.AspNetCore.Mvc.Testing` 8.0.x (D-047) |
+| Base de datos | `prestamos_test` en el PostgreSQL local, recreada desde `db/schema.sql` al empezar cada corrida: así también se prueba el script. Las pruebas se niegan a correr si el nombre de la base no termina en `_test` | Ninguna |
 | Aislamiento | `TRUNCATE ... CASCADE` antes de cada prueba y recrear el admin semilla. Las clases comparten una colección de xUnit para no correr en paralelo sobre la misma base | Ninguna |
 | Reloj | `TimeProvider`, incluido en .NET 8, inyectado en la app; en las pruebas, una subclase falsa escrita a mano | Ninguna |
 | Usuario | `AdminId` de prueba por configuración. Con login, un helper que obtiene el JWT (#103) | Ninguna |

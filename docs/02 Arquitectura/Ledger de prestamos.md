@@ -55,7 +55,7 @@ Solución: bloquear la fila del préstamo con `SELECT ... FOR UPDATE` al inicio 
 
 ## Redondeo
 
-Todo monto calculado se redondea a 2 decimales (D-015). El caso de empate (1.265) está pendiente: P-01.
+Todo monto calculado se redondea a 2 decimales mirando solo el tercer decimal: si es mayor que 5 sube, si es 5 o menos se queda (D-043).
 
 ## Reportes
 

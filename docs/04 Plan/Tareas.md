@@ -10,7 +10,7 @@
 - Una tarea `Bloqueada` no se empieza. El motivo está en [[Preguntas abiertas]].
 - Las tareas están agrupadas por fase, así que dentro de una tabla los números no siempre van seguidos.
 - El orden de las fases y sus dependencias están en [[Plan del proyecto]].
-- **La siguiente tarea nueva es la #110.**
+- **La siguiente tarea nueva es la #111.**
 
 ## Fase 0: Historial y documentación
 
@@ -35,14 +35,14 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 
 | # | Tarea | Estado | ¿Modificada? | Modificada por |
 |---:|---|---|---|---:|
-| 82 | Proyecto `LoanSystemAPI.IntegrationTests` con xUnit | Bloqueada (P-05) | No | N/A |
-| 83 | Base PostgreSQL de prueba creada con `db/schema.sql` | Bloqueada (P-05, P-13) | No | N/A |
-| 84 | `WebApplicationFactory<Program>` apuntando a la base de prueba; `public partial class Program` | Bloqueada (P-05) | No | N/A |
-| 85 | Aislamiento entre pruebas: `TRUNCATE ... CASCADE`, admin semilla y colección de xUnit sin paralelismo | Bloqueada (P-05) | No | N/A |
-| 86 | Reloj controlable: `TimeProvider` registrado en la app y uno falso para las pruebas | Bloqueada (P-05) | No | N/A |
-| 87 | Pruebas de integración de clientes: CRUD y borrado lógico oculto por `HasQueryFilter` | Bloqueada (P-05) | No | N/A |
-| 88 | Pruebas de integración de caja: aporte, retiro y gasto con su signo, validación de counterparty, listado sin campos de auditoría | Bloqueada (P-05) | No | N/A |
-| 89 | Pruebas de integración de la reversión de caja: tipos permitidos, reversión repetida rechazada, saldo que se anula por signo | Bloqueada (P-05) | No | N/A |
+| 82 | Proyecto `LoanSystemAPI.IntegrationTests` con xUnit | Pendiente | No | N/A |
+| 83 | Base PostgreSQL de prueba creada con `db/schema.sql` | Pendiente | No | N/A |
+| 84 | `WebApplicationFactory<Program>` apuntando a la base de prueba; `public partial class Program` | Pendiente | No | N/A |
+| 85 | Aislamiento entre pruebas: `TRUNCATE ... CASCADE`, admin semilla y colección de xUnit sin paralelismo | Pendiente | No | N/A |
+| 86 | Reloj controlable: `TimeProvider` registrado en la app y uno falso para las pruebas | Pendiente | No | N/A |
+| 87 | Pruebas de integración de clientes: CRUD y borrado lógico oculto por `HasQueryFilter` | Pendiente | No | N/A |
+| 88 | Pruebas de integración de caja: aporte, retiro y gasto con su signo, validación de counterparty, listado sin campos de auditoría | Pendiente | No | N/A |
+| 89 | Pruebas de integración de la reversión de caja: tipos permitidos, reversión repetida rechazada, saldo que se anula por signo | Pendiente | No | N/A |
 
 ## Fase 1: Correcciones
 
@@ -66,9 +66,10 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 28 | `User.CreatedBy` de `Guid` a `Guid?` | Completada | No | N/A |
 | 29 | Borrar `Enums/EntryStatus.cs`, que está vacío | Bloqueada (P-03) | No | N/A |
 | 81 | Recrear en la base local el índice `ux_loan_entries_loan_id_and_period` con `entry_type = 2` | Pendiente | No | N/A |
-| 90 | Pruebas de efectivo disponible: retiro y gasto rechazados sin fondos (#21, #22) | Bloqueada (P-05) | No | N/A |
-| 91 | Pruebas de fechas: `value_date` heredado en la reversión y "hoy" dominicano cerca de la medianoche UTC (#16, #17, #19) | Bloqueada (P-05) | No | N/A |
-| 92 | Prueba de dos reversiones simultáneas de la misma entrada: una gana y la otra recibe un error controlado, no un 500 (#20) | Bloqueada (P-05) | No | N/A |
+| 110 | Quitar `INACTIVE` de `CustomerStatus` y del comentario de `customers.status` (D-046) | Pendiente | No | N/A |
+| 90 | Pruebas de efectivo disponible: retiro y gasto rechazados sin fondos (#21, #22) | Pendiente | No | N/A |
+| 91 | Pruebas de fechas: `value_date` heredado en la reversión y "hoy" dominicano cerca de la medianoche UTC (#16, #17, #19) | Pendiente | No | N/A |
+| 92 | Prueba de dos reversiones simultáneas de la misma entrada: una gana y la otra recibe un error controlado, no un 500 (#20) | Pendiente | No | N/A |
 
 ## Fase 2: Infraestructura
 
@@ -81,8 +82,8 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 34 | Entidades `RefreshToken`, `AuditLog` y `JobRun`, registradas en `AppDbContext` | Completada | No | N/A |
 | 35 | Completar las entidades `LoanEntry` y `Freeze` | Completada | No | N/A |
 | 36 | Registrar `Loan`, `LoanEntry` y `Freeze` en `AppDbContext` | Completada | No | N/A |
-| 37 | Helper de redondeo a 2 decimales | Bloqueada (P-01) | No | N/A |
-| 93 | Pruebas de restricciones de la base: un cargo por período, un congelamiento abierto, una reversión por asiento; `schema.sql` reejecutable | Bloqueada (P-05) | No | N/A |
+| 37 | Helper de redondeo a 2 decimales | Pendiente | No | N/A |
+| 93 | Pruebas de restricciones de la base: un cargo por período, un congelamiento abierto, una reversión por asiento; `schema.sql` reejecutable | Pendiente | No | N/A |
 
 ## Fase 3: Préstamos
 
@@ -92,20 +93,20 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 39 | POST crear préstamo con desembolso: préstamo + asiento + caja en una transacción, validando efectivo | Bloqueada (P-15) | No | N/A |
 | 40 | GET listar préstamos con saldo | Pendiente | No | N/A |
 | 41 | GET préstamo por id con saldo y asientos | Pendiente | No | N/A |
-| 42 | POST pago con cascada (interés → capital), `SELECT ... FOR UPDATE` y entrada de caja | Bloqueada (P-10, P-16) | No | N/A |
-| 43 | Idempotencia del pago: `idempotency_key`, captura de `23505`, `422` si cambia el cuerpo | Bloqueada (P-10) | No | N/A |
+| 42 | POST pago con cascada (interés → capital), `SELECT ... FOR UPDATE` y entrada de caja | Bloqueada (P-16) | No | N/A |
+| 43 | Idempotencia del pago: `idempotency_key`, captura de `23505`, `422` si cambia el cuerpo | Bloqueada (P-16) | No | N/A |
 | 44 | POST condonación de interés | Pendiente | No | N/A |
 | 45 | POST reversión de asiento de préstamo y de su caja (`loan_entry_id` = asiento nuevo) | Pendiente | No | N/A |
 | 46 | Cierre de préstamo (`CLOSED`) | Bloqueada (P-06) | No | N/A |
 | 47 | Préstamo incobrable (`WRITTENOFF`) | Bloqueada (P-07) | No | N/A |
 | 48 | Borrado lógico de préstamo (`DELETED`) | Bloqueada (P-08) | No | N/A |
 | 49 | Proyecto de pruebas y prueba del ejemplo canónico (mes 3 = 84) | Cancelada | Sí | 82, 94 |
-| 94 | Prueba del ejemplo canónico de punta a punta: mes 3 = 84, cierre con capital 600 e interés 0 | Bloqueada (P-05) | No | N/A |
-| 95 | Pruebas de la cascada: pago menor, igual y mayor que el interés pendiente; el interés nunca queda negativo | Bloqueada (P-05) | No | N/A |
-| 96 | Pruebas del desembolso: préstamo, asiento y caja en una transacción; rechazo sin efectivo | Bloqueada (P-05) | No | N/A |
-| 97 | Pruebas de idempotencia del pago: misma clave y cuerpo crean un solo pago; misma clave con otro cuerpo da `422` | Bloqueada (P-05) | No | N/A |
-| 98 | Prueba de dos pagos simultáneos al mismo préstamo (`SELECT ... FOR UPDATE`) | Bloqueada (P-05) | No | N/A |
-| 99 | Pruebas de condonación y de reversión de asiento con su caja (`loan_entry_id` = asiento nuevo) | Bloqueada (P-05) | No | N/A |
+| 94 | Prueba del ejemplo canónico de punta a punta: mes 3 = 84, cierre con capital 600 e interés 0 | Pendiente | No | N/A |
+| 95 | Pruebas de la cascada: pago menor, igual y mayor que el interés pendiente; el interés nunca queda negativo | Pendiente | No | N/A |
+| 96 | Pruebas del desembolso: préstamo, asiento y caja en una transacción; rechazo sin efectivo | Pendiente | No | N/A |
+| 97 | Pruebas de idempotencia del pago: misma clave y cuerpo crean un solo pago; misma clave con otro cuerpo da `422` | Pendiente | No | N/A |
+| 98 | Prueba de dos pagos simultáneos al mismo préstamo (`SELECT ... FOR UPDATE`) | Pendiente | No | N/A |
+| 99 | Pruebas de condonación y de reversión de asiento con su caja (`loan_entry_id` = asiento nuevo) | Pendiente | No | N/A |
 
 ## Fase 4: Congelamientos
 
@@ -114,7 +115,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 50 | POST abrir congelamiento (`23505` → `409` si ya hay uno abierto) | Pendiente | No | N/A |
 | 51 | POST cerrar congelamiento (escribe `end_date`) | Pendiente | No | N/A |
 | 52 | GET congelamientos de un préstamo | Pendiente | No | N/A |
-| 100 | Pruebas de congelamientos: segundo abierto rechazado con `409` y cierre con `end_date` | Bloqueada (P-05) | No | N/A |
+| 100 | Pruebas de congelamientos: segundo abierto rechazado con `409` y cierre con `end_date` | Pendiente | No | N/A |
 
 ## Fase 5: Job del corte mensual
 
@@ -127,8 +128,8 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 57 | Detección de corridas huérfanas | Pendiente | No | N/A |
 | 58 | Recuperación de períodos perdidos al arrancar | Bloqueada (N-01) | No | N/A |
 | 59 | Endpoint para re-correr un período manualmente | Bloqueada (N-01) | No | N/A |
-| 101 | Pruebas del job de cargos: re-ejecución sin duplicar, salto de congelados, recuperación de períodos perdidos | Bloqueada (P-05, N-01) | No | N/A |
-| 102 | Pruebas de `job_runs`: `SUCCESS`, `PARTIAL` y `FAILED`, corridas huérfanas, un solo éxito por período, advisory lock | Bloqueada (P-05) | No | N/A |
+| 101 | Pruebas del job de cargos: re-ejecución sin duplicar, salto de congelados, recuperación de períodos perdidos | Bloqueada (N-01) | No | N/A |
+| 102 | Pruebas de `job_runs`: `SUCCESS`, `PARTIAL` y `FAILED`, corridas huérfanas, un solo éxito por período, advisory lock | Pendiente | No | N/A |
 
 ## Fase 6: Autenticación
 
@@ -143,9 +144,9 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 66 | El servicio de usuario actual lee el claim del JWT (modifica #30) | Bloqueada (P-04) | No | N/A |
 | 67 | `[Authorize]` y roles en los controllers | Bloqueada (P-04) | No | N/A |
 | 68 | CRUD de usuarios (solo ADMIN) | Pendiente | No | N/A |
-| 103 | Helper de pruebas para autenticarse y obtener un JWT | Bloqueada (P-04, P-05) | No | N/A |
-| 104 | Pruebas de sesión: login, refresh con rotación, reúso que revoca todas las sesiones, logout | Bloqueada (P-04, P-05) | No | N/A |
-| 105 | Pruebas de autorización por rol: WORKER contra ADMIN | Bloqueada (P-04, P-05) | No | N/A |
+| 103 | Helper de pruebas para autenticarse y obtener un JWT | Bloqueada (P-04) | No | N/A |
+| 104 | Pruebas de sesión: login, refresh con rotación, reúso que revoca todas las sesiones, logout | Bloqueada (P-04) | No | N/A |
+| 105 | Pruebas de autorización por rol: WORKER contra ADMIN | Bloqueada (P-04) | No | N/A |
 
 ## Fase 7: Auditoría
 
@@ -156,8 +157,8 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 71 | Escritura de la bitácora después del commit, en transacción aparte | Bloqueada (P-02) | No | N/A |
 | 72 | Exclusión de campos sensibles y tablas de infraestructura | Bloqueada (P-02) | No | N/A |
 | 73 | Registro manual de `LOGIN`, `LOGINFAILED` y `LOGOUT` | Bloqueada (P-04) | No | N/A |
-| 106 | Pruebas de auditoría: `CREATE` completo, `UPDATE` solo cambiados, borrado lógico como `DELETE`, campos sensibles excluidos | Bloqueada (P-02, P-05) | No | N/A |
-| 107 | Prueba de que un fallo al escribir la bitácora no revierte el cambio de negocio | Bloqueada (P-02, P-05) | No | N/A |
+| 106 | Pruebas de auditoría: `CREATE` completo, `UPDATE` solo cambiados, borrado lógico como `DELETE`, campos sensibles excluidos | Bloqueada (P-02) | No | N/A |
+| 107 | Prueba de que un fallo al escribir la bitácora no revierte el cambio de negocio | Bloqueada (P-02) | No | N/A |
 
 ## Fase 8: Mantenimiento
 
@@ -165,7 +166,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 |---:|---|---|---|---:|
 | 74 | Job diario: borrar refresh tokens vencidos | Pendiente | No | N/A |
 | 75 | Job diario: purgar `audit_logs` de más de un año | Pendiente | No | N/A |
-| 108 | Pruebas de mantenimiento: borrado de tokens vencidos y purga de la bitácora de más de un año | Bloqueada (P-05) | No | N/A |
+| 108 | Pruebas de mantenimiento: borrado de tokens vencidos y purga de la bitácora de más de un año | Pendiente | No | N/A |
 
 ## Fase 9: Reportes
 
@@ -176,4 +177,4 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 78 | Reporte de interés cobrado | Bloqueada (P-12) | No | N/A |
 | 79 | Reporte de interés y capital pendientes | Pendiente | No | N/A |
 | 80 | Reporte de ganancia real | Bloqueada (P-12) | No | N/A |
-| 109 | Pruebas de reportes sobre el ejemplo canónico, con pagos y gastos reversados | Bloqueada (P-05, P-12) | No | N/A |
+| 109 | Pruebas de reportes sobre el ejemplo canónico, con pagos y gastos reversados | Bloqueada (P-12) | No | N/A |

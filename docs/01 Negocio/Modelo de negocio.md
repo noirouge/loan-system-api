@@ -55,7 +55,7 @@ Todo pago se aplica en este orden:
 | Paga exactamente el interés pendiente | Capital intacto |
 | Paga menos que el interés pendiente | El faltante queda pendiente y capitaliza el mes siguiente |
 
-El interés pendiente nunca queda negativo. Pago mayor que la deuda total: ver [[Preguntas abiertas]] (P-10).
+El interés pendiente nunca queda negativo. Un pago mayor que toda la deuda se rechaza (D-044).
 
 ## Condonar no es reversar
 

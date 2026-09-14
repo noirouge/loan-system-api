@@ -6,7 +6,7 @@
 - EF Core 8 + Npgsql + `EFCore.NamingConventions` (`UseSnakeCaseNamingConvention`)
 - PostgreSQL
 - Swagger (Swashbuckle) en desarrollo
-- Pruebas de integración contra PostgreSQL real, planificadas pero sin proyecto todavía (P-05, P-13). Diseño en [[Plan del proyecto]]
+- Pruebas de integración con xUnit contra `prestamos_test` en el PostgreSQL local (D-047). Diseño en [[Plan del proyecto]]
 
 El esquema **no usa migraciones de EF**: se escribe a mano en `db/schema.sql`.
 
