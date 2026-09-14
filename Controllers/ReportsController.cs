@@ -71,5 +71,20 @@ namespace LoanSystemAPI.Controllers
                 return StatusCode(500, new { message = "ERROR GENERATING THE COLLECTED INTEREST REPORT" });
             }
         }
+
+        // PRINCIPAL AND INTEREST STILL OWED UNTIL date (INCLUSIVE), OR TODAY WITHOUT date
+        [HttpGet("pending")]
+        public async Task<ActionResult<ReportPendingDTO>> GetPending([FromQuery] DateOnly? date)
+        {
+            try
+            {
+                return Ok(await _reportService.GetPendingAsync(date));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "PENDING REPORT ERROR");
+                return StatusCode(500, new { message = "ERROR GENERATING THE PENDING REPORT" });
+            }
+        }
     }
 }

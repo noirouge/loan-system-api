@@ -88,5 +88,29 @@ namespace LoanSystemAPI.Services
             public decimal Principal { get; set; }
             public decimal Interest { get; set; }
         }
+
+        // THE BALANCE IS THE SUM OF THE WHOLE COLUMNS, WITHOUT FILTERING TYPES. THE DELETED LOANS ARE HIDDEN BY THE QUERY FILTER OF Loan.
+        // THE STATUS IS THE CURRENT ONE OF THE LOAN, ALSO WHEN date LOOKS AT THE PAST (D-067)
+        public async Task<ReportPendingDTO> GetPendingAsync(DateOnly? date)
+        {
+            var sums = await (from e in _dbContext.LoanEntries
+                              join l in _dbContext.Loans on e.LoanId equals l.Id
+                              where date == null || e.ValueDate <= date
+                              group e by l.Status == LoanStatus.WRITTENOFF into g
+                              select new { WrittenOff = g.Key, Principal = g.Sum(e => e.Principal), Interest = g.Sum(e => e.Interest) })
+                             .ToListAsync();
+
+            var pending = sums.FirstOrDefault(s => !s.WrittenOff);
+            var writtenOff = sums.FirstOrDefault(s => s.WrittenOff);
+
+            return new ReportPendingDTO
+            {
+                Date = date,
+                Principal = pending?.Principal ?? 0,
+                Interest = pending?.Interest ?? 0,
+                WrittenOffPrincipal = writtenOff?.Principal ?? 0,
+                WrittenOffInterest = writtenOff?.Interest ?? 0,
+            };
+        }
     }
 }
