@@ -372,5 +372,86 @@ namespace LoanSystemAPI.Controllers
                 return StatusCode(500, new { message = "ERROR COULD NOT SAVED THE LOAN FORGIVENESS" });
             }
         }
+
+        [HttpPost("entries/{entryId:guid}/reversal")]
+        public async Task<IActionResult> PostEntryReversal([FromRoute] Guid entryId)
+        {
+            try
+            {
+                var original = await _dbContext.LoanEntries.FirstOrDefaultAsync(e => e.Id == entryId);
+                if (original == null)
+                    return NotFound(new { message = $"The loan entry to reverse with id {entryId} was not found" });
+
+                // INTEREST CHARGES ARE FORGIVEN, NOT REVERSED (D-017). A DISBURSEMENT IS UNDONE BY DELETING THE LOAN (D-056)
+                if (original.EntryType != LoanEntryType.PAYMENT && original.EntryType != LoanEntryType.FORGIVENESS)
+                    return BadRequest(new { message = "Only a payment or a forgiveness can be reversed from this endpoint" });
+
+                await using var transaction = await _dbContext.Database.BeginTransactionAsync();
+                await _dbContext.Database.ExecuteSqlAsync($"SELECT id FROM loans WHERE id = {original.LoanId} FOR UPDATE");
+
+                var loan = await _dbContext.Loans.FirstOrDefaultAsync(l => l.Id == original.LoanId);
+                if (loan == null)
+                    return NotFound(new { message = $"The loan of the entry with id {entryId} was not found" });
+
+                // SAME AMOUNTS WITH THE OPPOSITE SIGN, AND THE SAME DATE AS THE ORIGINAL (D-013)
+                var reversal = new LoanEntry
+                {
+                    Id = Guid.NewGuid(),
+                    LoanId = original.LoanId,
+                    EntryType = LoanEntryType.REVERSAL,
+                    Principal = -original.Principal,
+                    Interest = -original.Interest,
+                    ReversesEntryId = original.Id,
+                    ValueDate = original.ValueDate,
+                    Note = $"REVERSAL OF THE LOAN ENTRY {original.Id}",
+                    Status = LoanEntryStatus.APPLIED,
+                    CreatedBy = _currentUserService.UserId,
+                    CreatedDate = DateTime.UtcNow,
+                };
+                original.Status = LoanEntryStatus.REVERSED;
+                await _dbContext.LoanEntries.AddAsync(reversal);
+
+                try
+                {
+                    await _dbContext.SaveChangesAsync();
+                }
+                // THE UNIQUE INDEX ON reverses_entry_id STOPS A DOUBLE REVERSAL, EVEN WITH TWO REQUESTS AT THE SAME TIME
+                catch (DbUpdateException ex) when (ex.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation, ConstraintName: "uq_loan_entries_reverses_entry_id" })
+                {
+                    return Conflict(new { message = $"The loan entry with id {entryId} was already reversed" });
+                }
+
+                // THE CASH ENTRY OF A PAYMENT IS REVERSED TOO, POINTING TO THE NEW REVERSAL ENTRY (D-018)
+                var originalCash = await _dbContext.CashEntries.FirstOrDefaultAsync(c => c.LoanEntryId == original.Id);
+                if (originalCash != null)
+                {
+                    var cashReversal = new CashEntry
+                    {
+                        Id = Guid.NewGuid(),
+                        amount = -originalCash.amount,
+                        EntryType = CashEntryType.REVERSAL,
+                        LoanEntryId = reversal.Id,
+                        ReversesEntryId = originalCash.Id,
+                        ValueDate = originalCash.ValueDate,
+                        Note = $"REVERSAL OF THE CASH ENTRY {originalCash.Id}",
+                        status = CashEntryStatus.APPLIED,
+                        CreatedBy = _currentUserService.UserId,
+                        CreatedDate = DateTime.UtcNow,
+                    };
+                    originalCash.status = CashEntryStatus.REVERSED;
+                    await _dbContext.CashEntries.AddAsync(cashReversal);
+                    await _dbContext.SaveChangesAsync();
+                }
+
+                await transaction.CommitAsync();
+
+                return StatusCode(StatusCodes.Status201Created, new { id = reversal.Id });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "LOAN ENTRY REVERSAL ERROR");
+                return StatusCode(500, new { message = "ERROR COULD NOT SAVED THE LOAN ENTRY REVERSAL" });
+            }
+        }
     }
 }

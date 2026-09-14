@@ -66,6 +66,7 @@ Un cliente paga 300 (100 de interés, 200 de capital) y el pago resulta ser un e
 - C2 hereda el `value_date` de C1.
 - P1 y C1 pasan a `REVERSED`.
 - Todo en una sola transacción.
+- Implementado en #45 (`POST api/loans/entries/{id}/reversal`).
 
 ## Tareas
 
