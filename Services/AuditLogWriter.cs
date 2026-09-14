@@ -15,15 +15,23 @@ namespace LoanSystemAPI.Services
             _logger = logger;
         }
 
+        // THE BUSINESS CHANGE WINS (D-030): IF THE AUDIT CANNOT BE SAVED, THE ERROR IS LOGGED AND NOTHING IS THROWN
         public async Task WriteAsync(IReadOnlyCollection<AuditLog> auditLogs)
         {
             if (auditLogs.Count == 0)
                 return;
 
-            using var scope = _scopeFactory.CreateScope();
-            var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            await dbContext.AuditLogs.AddRangeAsync(auditLogs);
-            await dbContext.SaveChangesAsync();
+            try
+            {
+                using var scope = _scopeFactory.CreateScope();
+                var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                await dbContext.AuditLogs.AddRangeAsync(auditLogs);
+                await dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AUDIT LOG ERROR: {Count} AUDIT LOGS WERE NOT SAVED", auditLogs.Count);
+            }
         }
     }
 }

@@ -2,19 +2,22 @@
 using LoanSystemAPI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using System.Data.Common;
 
 namespace LoanSystemAPI.Data
 {
     // AUDITS EVERY CHANGE SAVED THROUGH EF, WITHOUT CALLS FROM THE CONTROLLERS THAT SOMEONE WOULD FORGET (D-053). THE LOGS ARE BUILT
-    // BEFORE SAVING, WHILE THE ChangeTracker STILL HAS THE ORIGINAL VALUES. BULK OPERATIONS (ExecuteUpdate, ExecuteDelete)
-    // DO NOT GO THROUGH THE ChangeTracker AND ARE NOT AUDITED
-    public class AuditInterceptor : SaveChangesInterceptor
+    // BEFORE SAVING, WHILE THE ChangeTracker STILL HAS THE ORIGINAL VALUES, AND THEY ARE WRITTEN ONLY AFTER THE CHANGE IS COMMITTED (D-030).
+    // BULK OPERATIONS (ExecuteUpdate, ExecuteDelete) DO NOT GO THROUGH THE ChangeTracker AND ARE NOT AUDITED
+    public class AuditInterceptor : SaveChangesInterceptor, IDbTransactionInterceptor
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly AuditLogWriter _auditLogWriter;
 
         // BUILT IN SavingChanges, WAITING FOR SaveChanges TO SUCCEED
         private List<AuditLog> _saving = new();
+        // ALREADY SAVED INSIDE AN EXPLICIT TRANSACTION, WAITING FOR ITS COMMIT
+        private List<AuditLog> _waitingCommit = new();
 
         public AuditInterceptor(IHttpContextAccessor httpContextAccessor, AuditLogWriter auditLogWriter)
         {
@@ -36,13 +39,13 @@ namespace LoanSystemAPI.Data
 
         public override async ValueTask<int> SavedChangesAsync(SaveChangesCompletedEventData eventData, int result, CancellationToken cancellationToken = default)
         {
-            await _auditLogWriter.WriteAsync(TakeSaving());
+            await AfterSaveAsync(eventData.Context);
             return await base.SavedChangesAsync(eventData, result, cancellationToken);
         }
 
         public override int SavedChanges(SaveChangesCompletedEventData eventData, int result)
         {
-            _auditLogWriter.WriteAsync(TakeSaving()).GetAwaiter().GetResult();
+            AfterSaveAsync(eventData.Context).GetAwaiter().GetResult();
             return base.SavedChanges(eventData, result);
         }
 
@@ -58,11 +61,60 @@ namespace LoanSystemAPI.Data
             base.SaveChangesFailed(eventData);
         }
 
-        private List<AuditLog> TakeSaving()
+        // A NEW TRANSACTION FORGETS WHAT A PREVIOUS ONE LEFT WITHOUT COMMIT OR ROLLBACK (FOR EXAMPLE, DISPOSED AFTER AN EARLY RETURN)
+        public ValueTask<DbTransaction> TransactionStartedAsync(DbConnection connection, TransactionEndEventData eventData, DbTransaction result, CancellationToken cancellationToken = default)
         {
-            var saving = _saving;
+            _waitingCommit.Clear();
+            return ValueTask.FromResult(result);
+        }
+
+        public DbTransaction TransactionStarted(DbConnection connection, TransactionEndEventData eventData, DbTransaction result)
+        {
+            _waitingCommit.Clear();
+            return result;
+        }
+
+        public Task TransactionCommittedAsync(DbTransaction transaction, TransactionEndEventData eventData, CancellationToken cancellationToken = default)
+        {
+            return _auditLogWriter.WriteAsync(TakeWaitingCommit());
+        }
+
+        public void TransactionCommitted(DbTransaction transaction, TransactionEndEventData eventData)
+        {
+            _auditLogWriter.WriteAsync(TakeWaitingCommit()).GetAwaiter().GetResult();
+        }
+
+        public Task TransactionRolledBackAsync(DbTransaction transaction, TransactionEndEventData eventData, CancellationToken cancellationToken = default)
+        {
+            _waitingCommit.Clear();
+            return Task.CompletedTask;
+        }
+
+        public void TransactionRolledBack(DbTransaction transaction, TransactionEndEventData eventData)
+        {
+            _waitingCommit.Clear();
+        }
+
+        // WITHOUT AN EXPLICIT TRANSACTION THE CHANGE IS ALREADY COMMITTED. INSIDE ONE, THE LOGS WAIT FOR THE COMMIT AND A ROLLBACK DISCARDS THEM
+        private async Task AfterSaveAsync(DbContext? context)
+        {
+            var saved = _saving;
             _saving = new();
-            return saving;
+
+            if (context?.Database.CurrentTransaction != null)
+            {
+                _waitingCommit.AddRange(saved);
+                return;
+            }
+
+            await _auditLogWriter.WriteAsync(saved);
+        }
+
+        private List<AuditLog> TakeWaitingCommit()
+        {
+            var committed = _waitingCommit;
+            _waitingCommit = new();
+            return committed;
         }
 
         // THE USER AND THE IP COME FROM THE REQUEST. WITHOUT A REQUEST (A JOB, A TEST THAT WRITES DIRECTLY) THEY ARE EMPTY

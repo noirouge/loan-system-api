@@ -43,6 +43,7 @@ Se guarda `old` porque es lo único irrecuperable: el valor actual ya está en s
 - **Interceptor de `SaveChanges`** en EF Core, usando el `ChangeTracker` (`OriginalValues`, `CurrentValues`). Nada de llamadas manuales desde cada servicio: se olvidan.
 - `AuditInterceptor` (scoped, agregado en `AddDbContext`) arma los registros en `SavingChanges`, cuando el `ChangeTracker` todavía tiene los valores originales, con `AuditEntryBuilder`; `AuditLogWriter` los guarda con otro `DbContext`. Usuario e IP salen del JWT y de la conexión; sin petición (un job, una prueba que escribe directo) quedan nulos. Las operaciones masivas (`ExecuteUpdate`, `ExecuteDelete`) no pasan por el `ChangeTracker` y no se auditan: por eso cerrar un congelamiento pasó a ser un cambio normal con la fila bloqueada `FOR UPDATE` (#69).
 - **El cambio de negocio manda** (D-030). La bitácora se escribe **después** de confirmar la transacción, en una transacción aparte. Si falla, se loguea el error y el cambio queda guardado.
+- Sin transacción explícita, los registros se escriben al terminar `SaveChanges`, que ya confirmó. Dentro de una, esperan al commit (`IDbTransactionInterceptor`) y un rollback los descarta. `AuditLogWriter` atrapa cualquier error al guardarlos, lo registra en el log y no lo propaga (#71).
 - **Excepción manual:** `LOGIN`, `LOGINFAILED` y `LOGOUT` no cambian entidades, así que el interceptor no los ve. Se escriben desde un servicio (D-028). En `LOGINFAILED`, `user_id` va lleno si el usuario existe y `attempted_user` siempre lleva lo tecleado.
 
 ## Exclusiones (D-031)
