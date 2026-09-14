@@ -158,7 +158,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 69 | Interceptor de `SaveChanges` con el `ChangeTracker` | Completada | No | N/A |
 | 70 | Formato de `changes`: `CREATE` completo, `UPDATE` solo cambiados, borrado lógico como `DELETE` | Completada | No | N/A |
 | 71 | Escritura de la bitácora después del commit, en transacción aparte | Completada | No | N/A |
-| 72 | Exclusión de campos sensibles y tablas de infraestructura | Pendiente | No | N/A |
+| 72 | Exclusión de campos sensibles y tablas de infraestructura | Completada | No | N/A |
 | 73 | Registro manual de `LOGIN`, `LOGINFAILED` y `LOGOUT` | Pendiente | No | N/A |
 | 106 | Pruebas de auditoría: `CREATE` completo, `UPDATE` solo cambiados, borrado lógico como `DELETE`, campos sensibles excluidos | Pendiente | No | N/A |
 | 107 | Prueba de que un fallo al escribir la bitácora no revierte el cambio de negocio | Pendiente | No | N/A |

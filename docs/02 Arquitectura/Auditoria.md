@@ -51,6 +51,7 @@ Se guarda `old` porque es lo único irrecuperable: el valor actual ya está en s
 - **Campos:** `password_hash`, `token_hash`. Nunca se registran contraseñas, hashes ni tokens.
 - **Tablas:** `audit_logs` (se auditaría a sí misma), `refresh_tokens` (la rotación cada 15 minutos inundaría la bitácora), `job_runs`.
 - **Ledgers (`loan_entries`, `cash_entries`):** sí se auditan (D-053).
+- Implementado en `AuditEntryBuilder` (#72): las tablas excluidas no generan registro y las columnas excluidas no aparecen en `changes`. Si lo único que cambió fue una columna excluida, como la contraseña re-hasheada en un login, no queda registro.
 
 ## Retención
 

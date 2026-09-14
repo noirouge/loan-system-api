@@ -10,13 +10,18 @@ namespace LoanSystemAPI.Services
     // CREATE HAS EVERY COLUMN WITH "new", UPDATE ONLY THE COLUMNS THAT CHANGED WITH "old" AND "new", AND DELETE EVERY COLUMN WITH "old"
     public static class AuditEntryBuilder
     {
+        // audit_logs WOULD AUDIT ITSELF, refresh_tokens WOULD FLOOD THE LOG WITH EVERY REFRESH AND job_runs IS INFRASTRUCTURE (D-031)
+        private static readonly HashSet<Type> ExcludedEntities = new() { typeof(AuditLog), typeof(RefreshToken), typeof(JobRun) };
+
+        // NO PASSWORD, HASH OR TOKEN IS EVER WRITTEN IN THE AUDIT LOG (D-031)
+        private static readonly HashSet<string> ExcludedColumns = new() { "password_hash", "token_hash" };
+
         private const string StatusProperty = "status";
         private const string DeletedStatus = "DELETED";
 
         public static AuditLog? Build(EntityEntry entry, Guid? userId, string? ipAddress)
         {
-            // audit_logs WOULD AUDIT ITSELF WITHOUT END
-            if (entry.Metadata.ClrType == typeof(AuditLog))
+            if (ExcludedEntities.Contains(entry.Metadata.ClrType))
                 return null;
 
             AuditAction action;
@@ -43,7 +48,7 @@ namespace LoanSystemAPI.Services
                     return null;
             }
 
-            // AN UPDATE WHERE NOTHING REALLY CHANGED LEAVES NO LOG
+            // AN UPDATE WHERE NOTHING REALLY CHANGED, OR WHERE ONLY AN EXCLUDED COLUMN CHANGED, LEAVES NO LOG
             if (changes.Count == 0)
                 return null;
 
@@ -72,7 +77,7 @@ namespace LoanSystemAPI.Services
 
         private static IEnumerable<PropertyEntry> AuditedProperties(EntityEntry entry)
         {
-            return entry.Properties;
+            return entry.Properties.Where(p => !ExcludedColumns.Contains(p.Metadata.GetColumnName()));
         }
 
         private static bool IsLogicalDelete(EntityEntry entry)
