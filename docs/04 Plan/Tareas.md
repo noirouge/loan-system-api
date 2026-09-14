@@ -70,7 +70,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 111 | Los POST de caja responden `201` con el id creado; `Created()` sin cuerpo respondía `204` (modifica #6, #8, #9, #10) | Completada | No | N/A |
 | 90 | Pruebas de efectivo disponible: retiro y gasto rechazados sin fondos (#21, #22) | Completada | No | N/A |
 | 91 | Pruebas de fechas: `value_date` heredado en la reversión y "hoy" dominicano cerca de la medianoche UTC (#16, #17, #19) | Completada | No | N/A |
-| 92 | Prueba de dos reversiones simultáneas de la misma entrada: una gana y la otra recibe un error controlado, no un 500 (#20) | Pendiente | No | N/A |
+| 92 | Prueba de dos reversiones simultáneas de la misma entrada: una gana y la otra recibe un error controlado, no un 500 (#20) | Completada | No | N/A |
 
 ## Fase 2: Infraestructura
 
