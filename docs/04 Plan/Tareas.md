@@ -131,7 +131,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 57 | Detección de corridas huérfanas | Completada | No | N/A |
 | 58 | Recuperación de períodos perdidos al arrancar | Completada | No | N/A |
 | 59 | Endpoint para re-correr un período manualmente | Completada | No | N/A |
-| 101 | Pruebas del job de cargos: re-ejecución sin duplicar, salto de congelados, recuperación de períodos perdidos | Pendiente | No | N/A |
+| 101 | Pruebas del job de cargos: re-ejecución sin duplicar, salto de congelados, recuperación de períodos perdidos | Completada | No | N/A |
 | 102 | Pruebas de `job_runs`: `SUCCESS`, `PARTIAL` y `FAILED`, corridas huérfanas, un solo éxito por período, advisory lock | Completada | No | N/A |
 
 ## Fase 6: Autenticación

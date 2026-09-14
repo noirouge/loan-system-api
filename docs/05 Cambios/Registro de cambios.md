@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-14
 
+- **#101**: pruebas del job de cargos: reproduce el ejemplo canónico (100, 80, 84); re-correr un período no duplica; el primer cargo es el día 1 del mes siguiente; salta congelados, incobrables y cerrados, pero cobra si el congelamiento terminó antes del corte; la revisión diaria recupera los períodos perdidos una sola vez; un préstamo registrado con fecha pasada recibe sus cargos faltantes; y el endpoint corre un período iniciado y rechaza fechas que no son día 1 o futuras.
 - **#59**: `POST api/jobs/interest-charges/{period}` corre a mano el corte de un período que ya empezó y devuelve la corrida (`JobRunDTO`); `409` si otra instancia lo está corriendo y `400` si la fecha no es día 1 o es futura.
 - **#58**: `InterestChargeJob` es un `IDailyJob`: al arrancar y cada día recorre los períodos desde el primero del préstamo activo más antiguo hasta el actual, y corre los que nunca terminaron en `SUCCESS` o que tienen algún préstamo sin su cargo (por ejemplo, uno registrado con fecha pasada). Así recupera los períodos perdidos (D-054, D-074).
 - **#54**: `InterestChargeJob.RunPeriodAsync(period)` cobra el período: préstamos `ACTIVE` con fecha anterior al día 1 y sin congelamiento que cubra el corte. Por préstamo, bajo `FOR UPDATE`, calcula con los asientos anteriores al corte y crea el cargo; si ya existía, o choca con `ux_loan_entries_loan_id_and_period`, cuenta como `skipped`. Se usa EF en vez de `ON CONFLICT` para que el cargo quede auditado (D-074).
