@@ -1,6 +1,8 @@
 using LoanSystemAPI.Data;
 using LoanSystemAPI.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +28,31 @@ builder.Services.AddScoped<LoanBalanceService>();
 builder.Services.AddScoped<JobRunner>();
 builder.Services.AddHostedService<DailyJobsService>();
 
+//AUTHENTICATION
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<AuthTokenService>();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
+builder.Services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme)
+    .Configure<IConfiguration, TimeProvider>((options, configuration, timeProvider) =>
+    {
+        // THE CLAIMS KEEP THEIR JWT NAMES (sub, role) INSTEAD OF BEING RENAMED TO THE LONG .NET ONES
+        options.MapInboundClaims = false;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidIssuer = configuration["Jwt:Issuer"],
+            ValidAudience = configuration["Jwt:Audience"],
+            IssuerSigningKey = AuthTokenService.GetSigningKey(configuration),
+            NameClaimType = AuthTokenService.UsernameClaim,
+            RoleClaimType = AuthTokenService.RoleClaim,
+            // THE EXPIRATION IS CHECKED WITH THE SAME CLOCK THAT CREATES THE TOKENS, WITHOUT TOLERANCE (D-062)
+            LifetimeValidator = (notBefore, expires, _, _) =>
+            {
+                var now = timeProvider.GetUtcNow().UtcDateTime;
+                return (notBefore == null || notBefore <= now) && expires != null && expires > now;
+            },
+        };
+    });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -36,6 +63,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

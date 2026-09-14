@@ -141,7 +141,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 60 | Instalar `Microsoft.AspNetCore.Authentication.JwtBearer` 8.0.x | Completada | No | N/A |
 | 61 | Inicializar user-secrets y guardar la clave del JWT | Completada | No | N/A |
 | 62 | Reemplazar `admin123` del admin semilla por su hash (modifica #2) | Completada | No | N/A |
-| 63 | POST `api/auth/login`: access de 15 min y refresh de 7 días hasheado | Pendiente | No | N/A |
+| 63 | POST `api/auth/login`: access de 15 min y refresh de 7 días hasheado | Completada | No | N/A |
 | 64 | POST `api/auth/refresh` con rotación y detección de reúso | Pendiente | No | N/A |
 | 65 | POST `api/auth/logout` | Pendiente | No | N/A |
 | 66 | El servicio de usuario actual lee el claim del JWT (modifica #30) | Pendiente | No | N/A |

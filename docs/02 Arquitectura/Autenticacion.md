@@ -20,6 +20,7 @@ Mientras tanto, los controllers usan `_adminId` desde `appsettings` como usuario
 2. Cuando el access expira, el cliente llama a `api/auth/refresh` con el refresh y recibe un par nuevo.
 3. El usuario no vuelve a ver el login hasta que el refresh caduque o se revoque.
 4. **Logout** llena `revoked_at`.
+5. `AuthTokenService` firma el access con HS256 y los claims `sub` (id del usuario), `unique_name` y `role`, y crea el refresh con 32 bytes aleatorios en base64url. Las fechas salen del `TimeProvider` y la validación del JWT usa ese mismo reloj, sin tolerancia (D-062, #63).
 
 ## `refresh_tokens`
 

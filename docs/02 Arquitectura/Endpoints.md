@@ -59,7 +59,7 @@ Los POST responden `201` con el id de la entrada creada: `{ "id": "..." }` (#111
 
 | Método | Ruta | Qué hace | Tarea |
 |---|---|---|---|
-| POST | `api/auth/login` | Emite access y refresh | #63 |
+| POST | `api/auth/login` | Con usuario y contraseña de un usuario `ACTIVE`, responde `200` con el access (JWT de 15 minutos), el refresh (7 días) y sus vencimientos. `401` igual para usuario desconocido, contraseña mala o usuario inactivo (D-062) | Implementado (#63) |
 | POST | `api/auth/refresh` | Rota el refresh | #64 |
 | POST | `api/auth/logout` | Revoca el refresh | #65 |
 | GET, POST, PUT, DELETE | `api/users` | CRUD de usuarios, solo ADMIN | #68 |

@@ -24,6 +24,8 @@ namespace LoanSystemAPI.IntegrationTests.Infrastructure
             Environment.SetEnvironmentVariable("AdminId", AdminId.ToString());
             // THE DAILY JOBS ARE RUN BY HAND FROM THE TESTS, NEVER IN THE BACKGROUND
             Environment.SetEnvironmentVariable("Jobs__Enabled", "false");
+            // FIXED SIGNING KEY, SO THE TESTS DO NOT DEPEND ON THE USER SECRETS OF THE MACHINE
+            Environment.SetEnvironmentVariable("Jwt__SigningKey", "integration-tests-signing-key-with-more-than-32-bytes");
         }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
