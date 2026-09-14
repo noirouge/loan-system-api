@@ -129,8 +129,10 @@ namespace LoanSystemAPI.Controllers
             try
             {
                 // THE CUSTOMER IS SHOWN EVEN IF IT WAS DELETED LATER: ITS LOAN STILL EXISTS
+                // IgnoreQueryFilters TURNS OFF EVERY FILTER OF THE QUERY, SO THE DELETED LOANS ARE HIDDEN BY HAND
                 var loans = await (from l in _dbContext.Loans
                                    join c in _dbContext.Customers.IgnoreQueryFilters() on l.CustomerId equals c.Id
+                                   where l.Status != LoanStatus.DELETED
                                    orderby l.LoanDate descending, l.CreatedDate descending
                                    select new LoanDTO
                                    {

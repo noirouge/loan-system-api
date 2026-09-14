@@ -71,6 +71,7 @@ docs/          este vault
 
 - Tablas en plural y snake_case. `ToTable("nombre")` explícito en `OnModelCreating`.
 - `HasQueryFilter` para ocultar los borrados lógicos.
+- `IgnoreQueryFilters()` apaga todos los filtros de la consulta, no solo los de esa tabla: si se usa en un join, los demás borrados lógicos se filtran a mano (#113).
 - Constraints con nombre: `fk_tabla_campo`, `uq_tabla_campo`; índices únicos `ux_...`.
 - Montos `NUMERIC(11,2)`, tasas `NUMERIC(5,4)`. En C# siempre `decimal`, nunca `float` ni `double`.
 - Ids: `Guid.NewGuid()` generado en la aplicación (UUID v4, D-012).

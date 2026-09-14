@@ -93,7 +93,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 |---:|---|---|---|---:|
 | 38 | Proyección de saldo del préstamo (`SUM(principal)`, `SUM(interest)`) | Completada | No | N/A |
 | 39 | POST crear préstamo con desembolso: préstamo + asiento + caja en una transacción, validando efectivo | Completada | No | N/A |
-| 40 | GET listar préstamos con saldo | Completada | No | N/A |
+| 40 | GET listar préstamos con saldo | Completada | Sí | 113 |
 | 41 | GET préstamo por id con saldo y asientos | Completada | No | N/A |
 | 42 | POST pago con cascada (interés → capital), `SELECT ... FOR UPDATE` y entrada de caja | Completada | Sí | 43, 46 |
 | 43 | Idempotencia del pago: `idempotency_key`, captura de `23505`, `422` si cambia el cuerpo | Completada | No | N/A |
@@ -109,7 +109,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 97 | Pruebas de idempotencia del pago: misma clave y cuerpo crean un solo pago; misma clave con otro cuerpo da `422` | Completada | No | N/A |
 | 98 | Prueba de dos pagos simultáneos al mismo préstamo (`SELECT ... FOR UPDATE`) | Completada | No | N/A |
 | 99 | Pruebas de condonación y de reversión de asiento con su caja (`loan_entry_id` = asiento nuevo) | Completada | No | N/A |
-| 113 | Pruebas de cierre automático, incobrable y borrado de préstamo (#46, #47, #48) | Pendiente | No | N/A |
+| 113 | Pruebas de cierre automático, incobrable y borrado de préstamo (#46, #47, #48) | Completada | No | N/A |
 
 ## Fase 4: Congelamientos
 
