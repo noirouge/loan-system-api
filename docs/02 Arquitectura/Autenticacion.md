@@ -1,6 +1,6 @@
 # Autenticación
 
-Implementación pendiente (Fase 6 en [[Plan del proyecto]]).
+En construcción (Fase 6 en [[Plan del proyecto]]). El paquete `Microsoft.AspNetCore.Authentication.JwtBearer` 8.0.30 ya está instalado (#60): la misma versión de parche que el runtime local y que `Microsoft.AspNetCore.Mvc.Testing`.
 
 > [!note] Permiso concedido (D-052)
 > JWT usa el paquete `Microsoft.AspNetCore.Authentication.JwtBearer` 8.0.x, que no viene en el framework compartido.
