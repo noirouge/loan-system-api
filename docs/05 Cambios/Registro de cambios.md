@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-13
 
+- **#91**: pruebas de fechas: la reversión conserva el `valueDate` de la entrada original, `LocalDateService.Today()` devuelve la fecha dominicana y no la UTC alrededor de la medianoche UTC (02:30 y 03:59 UTC del 14 siguen siendo el 13), y un `valueDate` con hora se rechaza con `400`.
 - **#90**: pruebas de efectivo disponible: retiro y gasto mayores que la caja dan `400` sin tocar el saldo, retirar exactamente lo disponible deja la caja en 0, un aporte reversado ya no cuenta como efectivo, y dos retiros simultáneos de 60 con 100 en caja terminan con uno aceptado, uno rechazado y la caja en 40. Esa última confirma que el candado de caja funciona.
 - **#89**: pruebas de integración de la reversión de caja: reversar un aporte crea la entrada contraria y marca la original como reversada, reversar un retiro o un gasto devuelve el dinero, reversar dos veces la misma entrada da `409`, una reversión no se puede reversar y un id inexistente da `404`. En todos los casos el saldo se anula por signo.
 - **#88**: pruebas de integración de caja: el aporte se guarda positivo, el retiro y el gasto llegan positivos y se guardan negativos, el gasto acepta solo el texto del counterparty y se rechaza sin ninguno, los montos 0 o negativos dan `400` en las tres operaciones, el listado no expone campos de auditoría y ordena por `valueDate`. Incluye `CashApi`, atajos para llamar a los endpoints de caja desde las pruebas.
