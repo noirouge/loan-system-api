@@ -47,6 +47,7 @@ builder.Services.AddSingleton<LocalDateService>();
 builder.Services.AddScoped<CashService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<LoanBalanceService>();
+builder.Services.AddScoped<ReportService>();
 builder.Services.AddSingleton<AuditLogWriter>();
 builder.Services.AddScoped<AuditInterceptor>();
 builder.Services.AddScoped<JobRunner>();

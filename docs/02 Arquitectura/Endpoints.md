@@ -68,7 +68,7 @@ Los POST responden `201` con el id de la entrada creada: `{ "id": "..." }` (#111
 
 | Método | Ruta | Qué hace | Tarea |
 |---|---|---|---|
-| GET | `api/reports/cash-balance` | Saldo de caja | #76 |
+| GET | `api/reports/cash-balance?date=` | Saldo de caja hasta `date` inclusive (o todo), con los totales por tipo con el signo de la caja: aportes, retiros, desembolsos, pagos y gastos, cada reversión dentro del tipo que reversa (D-066) | Implementado (#76) |
 | GET | `api/reports/accrued-interest` | Interés devengado | #77 |
 | GET | `api/reports/collected-interest` | Interés cobrado | #78 |
 | GET | `api/reports/pending` | Interés y capital pendientes | #79 |

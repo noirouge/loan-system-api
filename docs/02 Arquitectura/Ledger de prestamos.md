@@ -79,6 +79,7 @@ Lo hace `MoneyRounding.Round()`. No se usa `Math.Round`, porque ninguno de sus m
 
 > [!note] Reversiones en reportes por tipo
 > Un pago reversado sigue siendo de tipo `PAYMENT` y su reversión es de tipo `REVERSAL`. En los reportes filtrados por tipo, la reversión cuenta con el tipo del asiento que reversa, así el par suma 0 (D-055).
+> `ReportService` lo hace uniendo cada asiento con el que reversa y usando el tipo del original (#76–#80, D-066).
 
 ## Tareas
 
