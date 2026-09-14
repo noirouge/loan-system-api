@@ -15,6 +15,7 @@
 
         public virtual Task InitializeAsync()
         {
+            Factory.Clock.SetUtcNow(FakeTimeProvider.DefaultUtcNow);
             return TestDatabase.ResetAsync(LoanApiFactory.AdminId);
         }
 

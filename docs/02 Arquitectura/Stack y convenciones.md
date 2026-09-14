@@ -83,6 +83,7 @@ docs/          este vault
 - Al empezar, el esquema se borra y se recrea desde `db/schema.sql`. Las pruebas se niegan a correr contra una base cuyo nombre no termine en `_test`.
 - Nunca corren en paralelo, porque comparten la base.
 - Las pruebas que llaman a la API heredan de `IntegrationTest` y llevan `[Collection(ApiCollection.Name)]`. Comparten una sola API en memoria (`ApiFixture`), y cada prueba empieza con las tablas vacías y solo el usuario admin (`LoanApiFactory.AdminId`).
+- La hora la controla `Factory.Clock` (`FakeTimeProvider`), que reemplaza al `TimeProvider` de la API. Vuelve a su valor por defecto antes de cada prueba.
 
 ## Formato de archivos
 

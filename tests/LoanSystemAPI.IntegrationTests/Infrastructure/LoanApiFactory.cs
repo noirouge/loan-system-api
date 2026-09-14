@@ -1,8 +1,10 @@
 ﻿using LoanSystemAPI.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Npgsql;
 
 namespace LoanSystemAPI.IntegrationTests.Infrastructure
@@ -11,6 +13,8 @@ namespace LoanSystemAPI.IntegrationTests.Infrastructure
     {
         // FIXED ADMIN THAT THE TESTS INSERT, SO CreatedBy POINTS TO A REAL USER
         public static readonly Guid AdminId = Guid.Parse("00000000-0000-0000-0000-00000000a001");
+
+        public FakeTimeProvider Clock { get; } = new();
 
         public LoanApiFactory()
         {
@@ -23,6 +27,11 @@ namespace LoanSystemAPI.IntegrationTests.Infrastructure
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder.UseEnvironment("Development");
+            builder.ConfigureTestServices(services =>
+            {
+                services.RemoveAll<TimeProvider>();
+                services.AddSingleton<TimeProvider>(Clock);
+            });
         }
 
         // LAST SAFETY NET: IF THE OVERRIDE FAILED, THE API WOULD WRITE INTO THE DEVELOPMENT DATABASE
