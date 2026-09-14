@@ -84,7 +84,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 35 | Completar las entidades `LoanEntry` y `Freeze` | Completada | No | N/A |
 | 36 | Registrar `Loan`, `LoanEntry` y `Freeze` en `AppDbContext` | Completada | No | N/A |
 | 37 | Helper de redondeo a 2 decimales | Completada | No | N/A |
-| 93 | Pruebas de restricciones de la base: un cargo por período, un congelamiento abierto, una reversión por asiento; `schema.sql` reejecutable | Pendiente | No | N/A |
+| 93 | Pruebas de restricciones de la base: un cargo por período, un congelamiento abierto, una reversión por asiento; `schema.sql` reejecutable | Completada | No | N/A |
 
 ## Fase 3: Préstamos
 

@@ -4,8 +4,8 @@ La lista detallada está en [[Tareas]]. Aquí va el orden de las fases, por qué
 
 ## Estado al 2026-09-13
 
-- **Hecho:** conexión a PostgreSQL, esquema inicial, CRUD de clientes, caja completa (aportes, retiros y gastos con validación de efectivo, reversión y listado) y todas las tareas desbloqueadas de las fases 1 y 2.
-- **Siguiente:** montar las pruebas de integración (#82–#89) y cubrir lo ya construido (#90–#93); redondeo (#37) y quitar `INACTIVE` (#110). El usuario corre #15 y #81 en su base local. Para crear préstamos falta confirmar el día de pago (P-15), y para el pago, P-16.
+- **Hecho:** conexión a PostgreSQL, esquema inicial, CRUD de clientes, caja completa (aportes, retiros y gastos con validación de efectivo, reversión y listado), todas las tareas desbloqueadas de las fases 1 y 2, redondeo (#37), y pruebas de integración montadas (#82–#86) que cubren clientes, caja, fechas, concurrencia y restricciones de la base (#87–#93).
+- **Siguiente:** el usuario corre #15 y #81 en su base local. Para crear préstamos falta confirmar el día de pago (P-15), y para el pago, P-16. Después, el resto de la Fase 3.
 
 ## Fases
 
