@@ -55,6 +55,7 @@ Si llega un token que **ya tiene `replaced_by`**, es reúso, señal de robo:
 ## Configuración
 
 - Clave de firma del JWT en **user-secrets** (D-022). `dotnet user-secrets init` agrega `UserSecretsId` al `.csproj`; no es un paquete.
+- `Jwt:SigningKey` son 64 bytes aleatorios en base64, guardados en los user-secrets de la máquina de desarrollo, fuera del repo. En otra máquina se crea con `dotnet user-secrets set "Jwt:SigningKey" "<clave de al menos 32 bytes>"`. Lo que no es secreto está en `appsettings.json`: `Jwt:Issuer`, `Jwt:Audience`, `Jwt:AccessTokenMinutes` = 15 y `Jwt:RefreshTokenDays` = 7 (#61).
 
 ## Usuario actual
 

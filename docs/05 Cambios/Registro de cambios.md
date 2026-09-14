@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-14
 
+- **#61**: `dotnet user-secrets init` agrega `UserSecretsId` al `.csproj` y la clave de firma del JWT (`Jwt:SigningKey`, 64 bytes aleatorios) queda en los user-secrets de esta máquina, sin pasar por el repo. `appsettings.json` recibe la sección `Jwt` con emisor, audiencia y duraciones (15 minutos el access, 7 días el refresh).
 - **#60**: se instala `Microsoft.AspNetCore.Authentication.JwtBearer` 8.0.30, con el permiso de D-052. Es la misma versión de parche que el runtime de ASP.NET Core instalado y que `Microsoft.AspNetCore.Mvc.Testing` en las pruebas.
 - **#102**: pruebas de `JobRunner`: una corrida sin fallos queda `SUCCESS` con sus contadores; el estado sale de los contadores (`SUCCESS`, `PARTIAL`, `FAILED`); una excepción deja `FAILED` con el mensaje; la fila `RUNNING` ya está guardada mientras corre el trabajo; un período exitoso no se repite y uno fallido sí; un job sin período puede tener varios éxitos; la base rechaza un segundo `SUCCESS` del período (`ux_job_runs_success`); las filas `RUNNING` huérfanas pasan a `FAILED` solo en su job; y con el lock tomado, una segunda corrida del mismo job no hace nada mientras otro job sí corre.
 - **#57**: al tomar el lock, `JobRunner` marca como `FAILED`, con `finished_at` y un `error_message` que lo explica, las filas `RUNNING` del mismo job: con el lock tomado nadie más puede estar corriéndolo, así que son de un proceso que murió a medias. Las de otros jobs no se tocan.
