@@ -2,6 +2,7 @@
 using LoanSystemAPI.Enums;
 using LoanSystemAPI.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
 
 namespace LoanSystemAPI.Controllers
 {
@@ -108,6 +109,27 @@ namespace LoanSystemAPI.Controllers
             {
                 _logger.LogError(ex, "PROFIT REPORT ERROR");
                 return StatusCode(500, new { message = "ERROR GENERATING THE PROFIT REPORT" });
+            }
+        }
+
+        // THE COLLECTION SHEET OF A MONTH (month = yyyy-MM), OPTIONALLY ONLY FOR THE CUSTOMERS THAT PAY ON ONE DAY
+        [HttpGet("monthly-collection")]
+        public async Task<ActionResult<ReportMonthlyCollectionDTO>> GetMonthlyCollection([FromQuery] string month, [FromQuery] int? paymentDay)
+        {
+            if (!DateOnly.TryParseExact($"{month}-01", "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var period))
+                return BadRequest(new { message = "The month must have the format yyyy-MM" });
+
+            if (paymentDay is < 1 or > 28)
+                return BadRequest(new { message = "The payment day must be between 1 and 28" });
+
+            try
+            {
+                return Ok(await _reportService.GetMonthlyCollectionAsync(period, paymentDay));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "MONTHLY COLLECTION REPORT ERROR");
+                return StatusCode(500, new { message = "ERROR GENERATING THE MONTHLY COLLECTION REPORT" });
             }
         }
     }

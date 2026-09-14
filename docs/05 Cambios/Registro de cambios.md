@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-14
 
+- **#117**: `GET api/reports/monthly-collection` devuelve la hoja de cobro de un mes, con filtro opcional por día de pago y totales (D-075).
 - **#15** y **#81**: aplicados en la base local `prestamos` junto con `db/schema.sql`: el admin tiene rol 2 y contraseña hasheada, existen `refresh_tokens`, `audit_logs` y `job_runs`, y el índice de cargos filtra `entry_type = 2`.
 - **#101**: pruebas del job de cargos: reproduce el ejemplo canónico (100, 80, 84); re-correr un período no duplica; el primer cargo es el día 1 del mes siguiente; salta congelados, incobrables y cerrados, pero cobra si el congelamiento terminó antes del corte; la revisión diaria recupera los períodos perdidos una sola vez; un préstamo registrado con fecha pasada recibe sus cargos faltantes; y el endpoint corre un período iniciado y rechaza fechas que no son día 1 o futuras.
 - **#59**: `POST api/jobs/interest-charges/{period}` corre a mano el corte de un período que ya empezó y devuelve la corrida (`JobRunDTO`); `409` si otra instancia lo está corriendo y `400` si la fecha no es día 1 o es futura.

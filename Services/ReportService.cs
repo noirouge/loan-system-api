@@ -1,4 +1,5 @@
 ﻿using LoanSystemAPI.Data;
+using LoanSystemAPI.Entities;
 using LoanSystemAPI.DTOs;
 using LoanSystemAPI.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -123,6 +124,81 @@ namespace LoanSystemAPI.Services
                 .SumAsync(c => c.Amount);
 
             return -expenses;
+        }
+
+        // THE COLLECTION SHEET OF A MONTH: EVERY LOAN THAT OWED SOMETHING BEFORE THE CUT OF DAY 1, SO IT APPEARS FROM THE MONTH AFTER ITS DATE
+        // AND NOT AFTER THE MONTH IT WAS PAID OFF. THE MONTHLY FEE IS ALL THE PENDING INTEREST PLUS ORIGINAL / TERM, OR ALL THE PRINCIPAL WITHOUT TERM (D-075)
+        public async Task<ReportMonthlyCollectionDTO> GetMonthlyCollectionAsync(DateOnly period, int? paymentDay)
+        {
+            var nextPeriod = period.AddMonths(1);
+
+            // IgnoreQueryFilters TURNS OFF EVERY FILTER OF THE QUERY, SO THE DELETED LOANS ARE HIDDEN BY HAND
+            var loans = await (from l in _dbContext.Loans
+                               join c in _dbContext.Customers.IgnoreQueryFilters() on l.CustomerId equals c.Id
+                               where l.Status != LoanStatus.DELETED && l.LoanDate < period && (paymentDay == null || l.PaymentDay == paymentDay)
+                               select new { Loan = l, c.Fullname, c.Code })
+                              .ToListAsync();
+            var loanIds = loans.Select(l => l.Loan.Id).ToList();
+
+            var entries = await _dbContext.LoanEntries.AsNoTracking()
+                .Where(e => loanIds.Contains(e.LoanId) && e.ValueDate < nextPeriod)
+                .ToListAsync();
+            var frozenLoanIds = await _dbContext.Freezes
+                .Where(f => loanIds.Contains(f.LoanId) && f.StartDate <= period && (f.EndDate == null || f.EndDate >= period))
+                .Select(f => f.LoanId)
+                .ToListAsync();
+
+            // A REVERSAL COUNTS WITH THE TYPE AND THE PERIOD OF THE ENTRY IT REVERSES (D-055)
+            var entriesById = entries.ToDictionary(e => e.Id);
+            LoanEntry Effective(LoanEntry e) => e.ReversesEntryId != null && entriesById.TryGetValue(e.ReversesEntryId.Value, out var original) ? original : e;
+
+            var report = new ReportMonthlyCollectionDTO { Month = period.ToString("yyyy-MM"), PaymentDay = paymentDay };
+            foreach (var item in loans.OrderBy(l => l.Loan.PaymentDay).ThenBy(l => l.Fullname))
+            {
+                var loan = item.Loan;
+                var loanEntries = entries.Where(e => e.LoanId == loan.Id).ToList();
+                var owedPrincipal = loanEntries.Where(e => e.ValueDate < period).Sum(e => e.Principal);
+                var owedInterest = loanEntries.Where(e => e.ValueDate < period).Sum(e => e.Interest);
+                if (owedPrincipal + owedInterest <= 0)
+                    continue;
+
+                var monthCharge = loanEntries.Where(e => Effective(e).EntryType == LoanEntryType.INTERESTCHARGE && Effective(e).Period == period).Sum(e => e.Interest);
+                var monthPayments = loanEntries.Where(e => Effective(e).EntryType == LoanEntryType.PAYMENT && e.ValueDate >= period).ToList();
+                var interestDue = Math.Max(owedInterest, 0) + monthCharge;
+                var principalDue = Math.Max(loan.Term == null ? owedPrincipal : Math.Min(MoneyRounding.Round(loan.Principal / loan.Term.Value), owedPrincipal), 0);
+                var chargesUntilThisMonth = loanEntries.Count(e => e.EntryType == LoanEntryType.INTERESTCHARGE && e.Period <= period && e.Status == LoanEntryStatus.APPLIED);
+
+                report.Loans.Add(new ReportMonthlyCollectionLoanDTO
+                {
+                    LoanId = loan.Id,
+                    CustomerId = loan.CustomerId,
+                    CustomerName = item.Fullname,
+                    CustomerCode = item.Code,
+                    LoanDate = loan.LoanDate,
+                    PaymentDay = loan.PaymentDay,
+                    Installment = loan.Term == null ? "0-1" : $"{chargesUntilThisMonth}-{loan.Term}",
+                    OriginalPrincipal = loan.Principal,
+                    InterestRate = loan.InterestRate,
+                    OwedAtCut = owedPrincipal + owedInterest,
+                    InterestDue = interestDue,
+                    PrincipalDue = principalDue,
+                    TotalDue = interestDue + principalDue,
+                    Paid = -monthPayments.Sum(e => e.Principal + e.Interest),
+                    PaidInterest = -monthPayments.Sum(e => e.Interest),
+                    PaidPrincipal = -monthPayments.Sum(e => e.Principal),
+                    Remaining = loanEntries.Sum(e => e.Principal + e.Interest),
+                    Status = loan.Status,
+                    Frozen = frozenLoanIds.Contains(loan.Id),
+                });
+            }
+
+            report.TotalInterestDue = report.Loans.Sum(l => l.InterestDue);
+            report.TotalPrincipalDue = report.Loans.Sum(l => l.PrincipalDue);
+            report.TotalDue = report.Loans.Sum(l => l.TotalDue);
+            report.TotalPaid = report.Loans.Sum(l => l.Paid);
+            report.TotalRemaining = report.Loans.Sum(l => l.Remaining);
+
+            return report;
         }
     }
 }
