@@ -149,7 +149,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 68 | CRUD de usuarios (solo ADMIN) | Completada | No | N/A |
 | 103 | Helper de pruebas para autenticarse y obtener un JWT | Completada | No | N/A |
 | 104 | Pruebas de sesión: login, refresh con rotación, reúso que revoca todas las sesiones, logout | Completada | No | N/A |
-| 105 | Pruebas de autorización por rol: WORKER contra ADMIN | Pendiente | No | N/A |
+| 105 | Pruebas de autorización por rol: WORKER contra ADMIN | Completada | No | N/A |
 
 ## Fase 7: Auditoría
 
