@@ -20,6 +20,7 @@ Enums/         un archivo por enum
 Data/          AppDbContext
 Services/      servicios compartidos entre controllers
 db/schema.sql  esquema de la base, escrito a mano
+tests/         pruebas de integración (proyecto aparte; la API excluye tests/**)
 docs/          este vault
 ```
 

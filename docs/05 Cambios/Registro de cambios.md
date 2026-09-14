@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-13
 
+- **#82**: nuevo proyecto `tests/LoanSystemAPI.IntegrationTests` con `xunit`, `xunit.runner.visualstudio`, `Microsoft.NET.Test.Sdk` y `Microsoft.AspNetCore.Mvc.Testing` 8.0.30 (la misma versión que el runtime instalado), con referencia a la API y agregado a `LoanSystemAPI.sln`. Como la API vive en la raíz del repo, su `.csproj` excluye `tests/**` para no compilar las pruebas dentro de la API.
 - Respuestas del usuario: redondeo (D-043), pago mayor que la deuda (D-044), validaciones al crear un préstamo (D-045), se quita `INACTIVE` de clientes (D-046, nueva tarea #110) y pruebas contra `prestamos_test` (D-047). Se desbloquean #37 y las pruebas que solo esperaban P-05 o P-13. P-15 queda solo con el rango del día de pago, y P-16 y P-17 se reescriben con el ejemplo de los asientos.
 - Respuestas del usuario: la tasa se envía como fracción (D-041, cierra P-14) y pagar de más reduce capital, con el ejemplo de Fulanito agregado a [[Modelo de negocio]] (D-042). Se reescriben con ejemplos P-01, P-05, P-10, P-13 y P-15, y se agregan P-16 (interés impago aparte del capital) y P-17 (pago sugerido del mes). La #39 queda bloqueada solo por P-15 y la #42 por P-10 y P-16.
 - Se registran P-14 y P-15 (cómo se envía la tasa y qué se valida al crear un préstamo), que bloquean la #39; la #42 y la #43 pasan a bloqueadas por P-10. Se actualiza el estado del plan tras terminar las tareas desbloqueadas de las fases 1 y 2.
