@@ -5,7 +5,7 @@ En construcción (Fase 6 en [[Plan del proyecto]]). El paquete `Microsoft.AspNet
 > [!note] Permiso concedido (D-052)
 > JWT usa el paquete `Microsoft.AspNetCore.Authentication.JwtBearer` 8.0.x, que no viene en el framework compartido.
 
-Mientras tanto, los controllers usan `_adminId` desde `appsettings` como usuario actual (D-019).
+El usuario actual sale del claim `sub` del JWT; `AdminId` de `appsettings` ya no se usa (#66).
 
 ## Dos tokens
 
@@ -61,7 +61,7 @@ Si llega un token que **ya tiene `replaced_by`**, es reúso, señal de robo:
 
 ## Usuario actual
 
-`ICurrentUserService` (#30) expone `UserId`. Hoy `CurrentUserService` lo lee del `AdminId` de configuración, y lanza un error si falta o no es un GUID válido (antes los controllers seguían con `Guid.Empty`). En #66 pasa a leer el claim del JWT. Así el cambio a login real toca un solo lugar.
+`ICurrentUserService` (#30) expone `UserId`. `CurrentUserService` lo lee del claim `sub` del JWT de la petición, con `IHttpContextAccessor`, y lanza un error si no hay usuario autenticado (#66). Los controllers no cambiaron: el paso del `AdminId` de configuración al login tocó solo esta clase. Un job en segundo plano no tiene petición ni usuario, así que no debe pedirlo.
 
 ## Limpieza
 

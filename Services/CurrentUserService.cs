@@ -1,17 +1,30 @@
-﻿namespace LoanSystemAPI.Services
+﻿using System.Security.Claims;
+
+namespace LoanSystemAPI.Services
 {
-    // THIS IS FOR TESTING UNTIL LOGIN IS AVAILABLE: THE USER COMES FROM appsettings (AdminId).
-    // WITH LOGIN, ONLY THIS CLASS CHANGES TO READ THE USER FROM THE JWT
+    // THE CURRENT USER IS THE ONE OF THE JWT OF THE REQUEST (THE sub CLAIM). WITHOUT A VALID TOKEN THERE IS NO USER,
+    // AND ASKING FOR IT IS A PROGRAMMING ERROR: THAT ENDPOINT SHOULD NOT ALLOW ANONYMOUS CALLS
     public class CurrentUserService : ICurrentUserService
     {
-        public Guid UserId { get; }
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CurrentUserService(IConfiguration configuration)
+        public CurrentUserService(IHttpContextAccessor httpContextAccessor)
         {
-            var configAdminId = configuration["AdminId"] ?? throw new InvalidOperationException("NOT FOUND AdminId");
-            if (!Guid.TryParse(configAdminId, out Guid adminId))
-                throw new InvalidOperationException("AdminId IS NOT A VALID GUID");
-            UserId = adminId;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        public Guid UserId
+        {
+            get
+            {
+                ClaimsPrincipal? user = _httpContextAccessor.HttpContext?.User;
+                var userIdClaim = user?.FindFirst(AuthTokenService.UserIdClaim)?.Value;
+
+                if (!Guid.TryParse(userIdClaim, out Guid userId))
+                    throw new InvalidOperationException("THERE IS NO AUTHENTICATED USER IN THIS REQUEST");
+
+                return userId;
+            }
         }
     }
 }

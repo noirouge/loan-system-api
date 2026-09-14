@@ -77,7 +77,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 
 | # | Tarea | Estado | ¿Modificada? | Modificada por |
 |---:|---|---|---|---:|
-| 30 | Servicio de usuario actual detrás de una interfaz; hoy devuelve `AdminId` | Completada | No | N/A |
+| 30 | Servicio de usuario actual detrás de una interfaz; hoy devuelve `AdminId` | Completada | Sí | 66 |
 | 31 | Reemplazar `_adminId` de los controllers por el servicio de usuario actual (modifica #3, #5, #6, #8, #9, #10) | Completada | No | N/A |
 | 32 | Tablas `refresh_tokens`, `audit_logs` y `job_runs` con sus índices en `schema.sql` (modifica #2) | Completada | No | N/A |
 | 33 | Enums `AuditAction` y `JobRunStatus` | Completada | No | N/A |
@@ -144,7 +144,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 63 | POST `api/auth/login`: access de 15 min y refresh de 7 días hasheado | Completada | No | N/A |
 | 64 | POST `api/auth/refresh` con rotación y detección de reúso | Completada | No | N/A |
 | 65 | POST `api/auth/logout` | Completada | No | N/A |
-| 66 | El servicio de usuario actual lee el claim del JWT (modifica #30) | Pendiente | No | N/A |
+| 66 | El servicio de usuario actual lee el claim del JWT (modifica #30) | Completada | No | N/A |
 | 67 | `[Authorize]` y roles en los controllers | Pendiente | No | N/A |
 | 68 | CRUD de usuarios (solo ADMIN) | Pendiente | No | N/A |
 | 103 | Helper de pruebas para autenticarse y obtener un JWT | Completada | No | N/A |

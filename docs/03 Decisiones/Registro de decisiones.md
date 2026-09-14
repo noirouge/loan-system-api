@@ -29,7 +29,7 @@ Cada decisión tiene un id que no se reutiliza. Si una decisión cambia, se agre
 | D-016 | Retiro, gasto y desembolso no pueden dejar la caja en negativo | Si no hay dinero, no se puede retirar ni gastar |
 | D-017 | Los cargos de interés no se reversan, se condonan (**provisional**) | Se tratará más adelante: P-11 |
 | D-018 | La caja de una reversión de préstamo apunta al asiento de reversión nuevo (`loan_entry_id = R1`) | `loan_entry_id` es único y el asiento original ya lo usa su propia caja |
-| D-019 | `_adminId` de configuración es temporal hasta que exista el login | Solo para pruebas |
+| D-019 | `_adminId` de configuración era temporal hasta que existiera el login. **Reemplazada en #66**: el usuario actual sale del claim `sub` del JWT | Solo para pruebas |
 | D-020 | Contraseñas con `PasswordHasher<T>`; el admin semilla pasa a hash | Viene en el framework, sin dependencias |
 | D-021 | `token_hash` con SHA-256 | El token ya es aleatorio; no necesita un hash lento |
 | D-022 | Refresh token de 7 días; clave del JWT en user-secrets | Decisión del usuario |
