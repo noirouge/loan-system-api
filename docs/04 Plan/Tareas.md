@@ -40,7 +40,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 84 | `WebApplicationFactory<Program>` apuntando a la base de prueba; `public partial class Program` | Completada | Sí | 86 |
 | 85 | Aislamiento entre pruebas: `TRUNCATE ... CASCADE`, admin semilla y colección de xUnit sin paralelismo | Completada | Sí | 86 |
 | 86 | Reloj controlable: `TimeProvider` registrado en la app y uno falso para las pruebas | Completada | No | N/A |
-| 87 | Pruebas de integración de clientes: CRUD y borrado lógico oculto por `HasQueryFilter` | Pendiente | No | N/A |
+| 87 | Pruebas de integración de clientes: CRUD y borrado lógico oculto por `HasQueryFilter` | Completada | No | N/A |
 | 88 | Pruebas de integración de caja: aporte, retiro y gasto con su signo, validación de counterparty, listado sin campos de auditoría | Pendiente | No | N/A |
 | 89 | Pruebas de integración de la reversión de caja: tipos permitidos, reversión repetida rechazada, saldo que se anula por signo | Pendiente | No | N/A |
 

@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-13
 
+- **#87**: pruebas de integración de clientes: crear y consultar por id, listado con los más recientes primero, actualizar, borrado lógico que oculta al cliente, `404` para ids inexistentes y respuestas sin campos de auditoría.
 - **#86**: reloj controlable. `FakeTimeProvider` reemplaza al `TimeProvider` de la API desde `LoanApiFactory` y vuelve a su valor por defecto antes de cada prueba (modifica #84, #85). Verificado: al fijar el reloj, `LocalDateService.Today()` devuelve la fecha fijada.
 - **#85**: aislamiento entre pruebas. `ApiFixture` recrea el esquema y levanta la API una sola vez por corrida; `IntegrationTest` vacía todas las tablas antes de cada prueba e inserta el admin con un id fijo. Verificado con dos pruebas que insertan un aporte cada una y ven solo el suyo.
 - **#84**: `LoanApiFactory` levanta la API en memoria con `WebApplicationFactory<Program>` y le pasa la base de pruebas y un `AdminId` fijo por variables de entorno, que `Program.cs` ya encuentra al construir la app. `EnsureUsesTestDatabase()` comprueba que la API no quedó apuntando a la base de desarrollo. `Program.cs` declara `public partial class Program` para que las pruebas puedan usarlo. Verificado: la API arranca contra `prestamos_test` y `GET api/cash-entries` responde 200.

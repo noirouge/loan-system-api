@@ -97,7 +97,8 @@ docs/          este vault
 - `feat: ...` para funcionalidad nueva. Ejemplo: `feat: Cash-Entry Withdrawal Post Endpoint`
 - `Update: ...` para ajustes a algo existente. Ejemplo: `Update: endpoint post contribution don't need the field counterparty`
 - `docs: ...` para cambios solo de documentación.
-- En inglés, con Title Case en los `feat:` y `docs:`.
+- `test: ...` para pruebas. Ejemplo: `test: Customers Integration Tests (Task 87)`
+- En inglés, con Title Case en los `feat:`, `docs:` y `test:`.
 - **Terminan con `(Task N)`**, por ejemplo `(Task 13)`. No se usa `#13` porque GitHub lo convierte en un enlace al issue o PR 13.
 - Si el cambio mezcla dos cosas distintas, se separa en dos commits.
 - Rama de trabajo: `dev`. Rama principal: `main`.
