@@ -115,7 +115,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 
 | # | Tarea | Estado | ¿Modificada? | Modificada por |
 |---:|---|---|---|---:|
-| 50 | POST abrir congelamiento (`23505` → `409` si ya hay uno abierto) | Pendiente | No | N/A |
+| 50 | POST abrir congelamiento (`23505` → `409` si ya hay uno abierto) | Completada | No | N/A |
 | 51 | POST cerrar congelamiento (escribe `end_date`) | Pendiente | No | N/A |
 | 52 | GET congelamientos de un préstamo | Pendiente | No | N/A |
 | 100 | Pruebas de congelamientos: segundo abierto rechazado con `409` y cierre con `end_date` | Pendiente | No | N/A |

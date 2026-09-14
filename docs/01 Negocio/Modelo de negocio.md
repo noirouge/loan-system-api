@@ -84,6 +84,7 @@ Pausan el devengo de interés de un préstamo.
 - Solo miran hacia adelante: no borran cargos ya generados. Perdonar el mes en curso es una condonación aparte.
 - Se cierran escribiendo `end_date`, no cambiando `status`.
 - Un préstamo nunca tiene dos congelamientos abiertos.
+- Solo se congela un préstamo activo, desde una fecha que no sea futura ni anterior al préstamo (D-060).
 
 ## Caja
 
