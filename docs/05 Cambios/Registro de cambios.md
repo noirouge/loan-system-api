@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-13
 
+- **#89**: pruebas de integración de la reversión de caja: reversar un aporte crea la entrada contraria y marca la original como reversada, reversar un retiro o un gasto devuelve el dinero, reversar dos veces la misma entrada da `409`, una reversión no se puede reversar y un id inexistente da `404`. En todos los casos el saldo se anula por signo.
 - **#88**: pruebas de integración de caja: el aporte se guarda positivo, el retiro y el gasto llegan positivos y se guardan negativos, el gasto acepta solo el texto del counterparty y se rechaza sin ninguno, los montos 0 o negativos dan `400` en las tres operaciones, el listado no expone campos de auditoría y ordena por `valueDate`. Incluye `CashApi`, atajos para llamar a los endpoints de caja desde las pruebas.
 - **#111**: los cuatro POST de caja respondían `204 No Content` en vez de `201 Created`, porque `Created()` sin cuerpo termina en 204 en ASP.NET Core. Ahora responden `201` con el id de la entrada creada, `{ "id": "..." }`, que el frontend necesita para reversarla sin volver a consultar la lista (modifica #6, #8, #9, #10). Lo encontraron las pruebas de la #88.
 - **#87**: pruebas de integración de clientes: crear y consultar por id, listado con los más recientes primero, actualizar, borrado lógico que oculta al cliente, `404` para ids inexistentes y respuestas sin campos de auditoría.
