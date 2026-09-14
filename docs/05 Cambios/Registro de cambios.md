@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-14
 
+- Respuestas del usuario: reversar un aporte valida efectivo (D-070, P-09, #115), un cargo de interés se reversa solo si fue error del sistema (D-071, P-11, #116) y un pago retroactivo no recalcula cargos (D-072, N-02).
 - **#114**: `POST api/loans/{id}/write-off` ya no exige rol ADMIN; solo `api/users` sigue siendo exclusivo (D-069). La prueba de autorización ahora verifica que un WORKER puede marcar incobrable.
 - Respuestas del usuario: primer cargo el día 1 del mes siguiente (D-068, N-04), que desbloquea #54, #58, #59 y #101; y solo administrar usuarios es exclusivo de ADMIN (D-069, P-18), que abre al WORKER marcar incobrable (#114).
 - Se actualiza el estado de [[Plan del proyecto]]: todas las fases hechas salvo el job de cargos de interés (#54, #58, #59, #101), que espera N-04, y lo que depende del usuario (#15, #81, volver a correr `db/schema.sql` y las preguntas abiertas).

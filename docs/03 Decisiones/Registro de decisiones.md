@@ -27,7 +27,7 @@ Cada decisión tiene un id que no se reutiliza. Si una decisión cambia, se agre
 | D-014 | `LoanStatus.CLOSED` se queda (no `SETTLED`). `loans.payment_day` se queda. `cash_entries` pierde `updated_by` y `updated_date` | Quién hizo una reversión queda en el `created_by` de la reversión (#18) |
 | D-015 | Los montos calculados se redondean a 2 decimales | Caso de empate pendiente: P-01 |
 | D-016 | Retiro, gasto y desembolso no pueden dejar la caja en negativo | Si no hay dinero, no se puede retirar ni gastar |
-| D-017 | Los cargos de interés no se reversan, se condonan (**provisional**) | Se tratará más adelante: P-11 |
+| D-017 | Los cargos de interés no se reversan, se condonan. **Cambiada por D-071** | P-11 |
 | D-018 | La caja de una reversión de préstamo apunta al asiento de reversión nuevo (`loan_entry_id = R1`) | `loan_entry_id` es único y el asiento original ya lo usa su propia caja |
 | D-019 | `_adminId` de configuración era temporal hasta que existiera el login. **Reemplazada en #66**: el usuario actual sale del claim `sub` del JWT | Solo para pruebas |
 | D-020 | Contraseñas con `PasswordHasher<T>`; el admin semilla pasa a hash | Viene en el framework, sin dependencias |
@@ -80,3 +80,6 @@ Cada decisión tiene un id que no se reutiliza. Si una decisión cambia, se agre
 | D-067 | El reporte de pendiente separa lo incobrable: `principal` e `interest` son de los préstamos que no están `WRITTENOFF`, y `writtenOffPrincipal` y `writtenOffInterest` de los incobrables. Los borrados no aparecen. Se usa el estado actual del préstamo, también con `date` en el pasado | Recomendación del agente. Sumar deuda que ya no se espera cobrar inflaría lo pendiente; el historial de estados no se guarda |
 | D-068 | El primer cargo de interés de un préstamo es el día 1 del mes siguiente a su fecha, por el mes completo (N-04) | Decisión del usuario |
 | D-069 | Lo único exclusivo de ADMIN es administrar usuarios; todo lo demás, incluido marcar incobrable, lo puede hacer un WORKER (P-18). Cambia D-057 y D-063 | Decisión del usuario |
+| D-070 | Reversar un aporte exige efectivo disponible suficiente, con el mismo candado de caja que un retiro (P-09) | Decisión del usuario |
+| D-071 | Un cargo de interés se puede reversar solo si fue un error del sistema; cualquier otro caso se condona. La API lo permite si el interés del cargo sigue pendiente completo (P-11) | Recomendación del agente aceptada por el usuario. Cambia D-017 |
+| D-072 | Un pago con fecha anterior a un cargo ya generado no recalcula ese cargo (N-02) | Decisión del usuario |
