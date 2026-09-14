@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-14
 
+- **#116**: `POST api/loans/entries/{id}/reversal` acepta también un `INTERESTCHARGE`, siempre que el interés pendiente del préstamo cubra el cargo completo; si ya se pagó o condonó en parte, `400` (D-071, modifica #45, #99). Pruebas en `InterestChargeReversalTests`.
 - **#115**: la reversión de caja toma el candado de caja y, si la entrada es un aporte, rechaza con `400` cuando el efectivo disponible no alcanza (D-070, modifica #10). Pruebas en `ContributionReversalCashTests`.
 - Respuestas del usuario: reversar un aporte valida efectivo (D-070, P-09, #115), un cargo de interés se reversa solo si fue error del sistema (D-071, P-11, #116) y un pago retroactivo no recalcula cargos (D-072, N-02).
 - **#114**: `POST api/loans/{id}/write-off` ya no exige rol ADMIN; solo `api/users` sigue siendo exclusivo (D-069). La prueba de autorización ahora verifica que un WORKER puede marcar incobrable.

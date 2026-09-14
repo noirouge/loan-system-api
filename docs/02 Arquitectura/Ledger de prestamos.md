@@ -41,7 +41,7 @@ Esta separación es la única forma de calcular ganancias: el capital que vuelve
 - **Las dos filas siguen sumando en el saldo.** Se anulan por los signos, no por filtrar el status. Excluir las reversadas del `SUM` descuenta dos veces.
 - La reversión **hereda el `value_date` del original**, no la fecha de hoy (D-013).
 - Si el asiento reversado tenía movimiento de caja, se crea también la reversión de caja. Su `loan_entry_id` apunta al **asiento de reversión nuevo**, no al original (D-018). Ejemplo completo en [[Caja]].
-- Por ahora los cargos de interés no se reversan, se condonan (D-017; P-11).
+- Un cargo de interés se reversa solo si fue error del sistema, y la API lo acepta mientras su interés siga pendiente completo; lo demás se condona (D-071, #116).
 - Si un pago o una condonación deja la deuda en 0, el préstamo pasa solo a `CLOSED`; si una reversión le devuelve saldo, vuelve a `ACTIVE` (D-058, #46).
 
 ## Pagos: idempotencia

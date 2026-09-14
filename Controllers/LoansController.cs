@@ -386,9 +386,9 @@ namespace LoanSystemAPI.Controllers
                 if (original == null)
                     return NotFound(new { message = $"The loan entry to reverse with id {entryId} was not found" });
 
-                // INTEREST CHARGES ARE FORGIVEN, NOT REVERSED (D-017). A DISBURSEMENT IS UNDONE BY DELETING THE LOAN (D-056)
-                if (original.EntryType != LoanEntryType.PAYMENT && original.EntryType != LoanEntryType.FORGIVENESS)
-                    return BadRequest(new { message = "Only a payment or a forgiveness can be reversed from this endpoint" });
+                // AN INTEREST CHARGE IS REVERSED ONLY IF THE SYSTEM MADE A MISTAKE; OTHERWISE IT IS FORGIVEN (D-071). A DISBURSEMENT IS UNDONE BY DELETING THE LOAN (D-056)
+                if (original.EntryType != LoanEntryType.PAYMENT && original.EntryType != LoanEntryType.FORGIVENESS && original.EntryType != LoanEntryType.INTERESTCHARGE)
+                    return BadRequest(new { message = "Only a payment, a forgiveness or an interest charge can be reversed from this endpoint" });
 
                 await using var transaction = await _dbContext.Database.BeginTransactionAsync();
                 await _dbContext.Database.ExecuteSqlAsync($"SELECT id FROM loans WHERE id = {original.LoanId} FOR UPDATE");
@@ -396,6 +396,10 @@ namespace LoanSystemAPI.Controllers
                 var loan = await _dbContext.Loans.FirstOrDefaultAsync(l => l.Id == original.LoanId);
                 if (loan == null)
                     return NotFound(new { message = $"The loan of the entry with id {entryId} was not found" });
+
+                // ITS INTEREST MUST STILL BE PENDING: IF A PAYMENT OR A FORGIVENESS ALREADY TOOK PART OF IT, THOSE ARE REVERSED FIRST
+                if (original.EntryType == LoanEntryType.INTERESTCHARGE && (await _loanBalanceService.GetBalanceAsync(loan.Id)).Interest < original.Interest)
+                    return BadRequest(new { message = "Part of this interest charge was already paid or forgiven. Reverse those entries first" });
 
                 // SAME AMOUNTS WITH THE OPPOSITE SIGN, AND THE SAME DATE AS THE ORIGINAL (D-013)
                 var reversal = new LoanEntry

@@ -98,7 +98,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 42 | POST pago con cascada (interés → capital), `SELECT ... FOR UPDATE` y entrada de caja | Completada | Sí | 43, 46 |
 | 43 | Idempotencia del pago: `idempotency_key`, captura de `23505`, `422` si cambia el cuerpo | Completada | No | N/A |
 | 44 | POST condonación de interés | Completada | Sí | 46 |
-| 45 | POST reversión de asiento de préstamo y de su caja (`loan_entry_id` = asiento nuevo) | Completada | Sí | 46 |
+| 45 | POST reversión de asiento de préstamo y de su caja (`loan_entry_id` = asiento nuevo) | Completada | Sí | 46, 116 |
 | 46 | Cierre de préstamo (`CLOSED`) | Completada | No | N/A |
 | 47 | Préstamo incobrable (`WRITTENOFF`) | Completada | Sí | 67, 114 |
 | 48 | Borrado lógico de préstamo (`DELETED`) | Completada | No | N/A |
@@ -108,7 +108,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 96 | Pruebas del desembolso: préstamo, asiento y caja en una transacción; rechazo sin efectivo | Completada | No | N/A |
 | 97 | Pruebas de idempotencia del pago: misma clave y cuerpo crean un solo pago; misma clave con otro cuerpo da `422` | Completada | No | N/A |
 | 98 | Prueba de dos pagos simultáneos al mismo préstamo (`SELECT ... FOR UPDATE`) | Completada | No | N/A |
-| 99 | Pruebas de condonación y de reversión de asiento con su caja (`loan_entry_id` = asiento nuevo) | Completada | No | N/A |
+| 99 | Pruebas de condonación y de reversión de asiento con su caja (`loan_entry_id` = asiento nuevo) | Completada | Sí | 116 |
 | 113 | Pruebas de cierre automático, incobrable y borrado de préstamo (#46, #47, #48) | Completada | No | N/A |
 
 ## Fase 4: Congelamientos
@@ -152,6 +152,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 105 | Pruebas de autorización por rol: WORKER contra ADMIN | Completada | No | N/A |
 | 114 | Marcar incobrable deja de ser solo de ADMIN (D-069; modifica #47, #67) | Completada | No | N/A |
 | 115 | Reversar un aporte valida efectivo disponible con el candado de caja (D-070; modifica #10) | Completada | No | N/A |
+| 116 | La reversión de asiento acepta cargos de interés con su interés aún pendiente (D-071; modifica #45, #99) | Completada | No | N/A |
 
 ## Fase 7: Auditoría
 

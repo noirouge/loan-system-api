@@ -129,13 +129,13 @@ namespace LoanSystemAPI.IntegrationTests.Loans
         }
 
         [Fact]
-        public async Task InterestChargesAndDisbursements_CannotBeReversedHere()
+        public async Task APendingInterestCharge_CanBeReversed_ButADisbursementCannot()
         {
             var loanId = await CreateLoanWithInterestAsync();
             var charge = Assert.Single(await Client.GetEntriesAsync(loanId, LoanEntryType.INTERESTCHARGE));
             var disbursement = Assert.Single(await Client.GetEntriesAsync(loanId, LoanEntryType.DISBURSEMENT));
 
-            Assert.Equal(HttpStatusCode.BadRequest, (await PostEntryReversalAsync(charge.GetProperty("id").GetGuid())).StatusCode);
+            Assert.Equal(HttpStatusCode.Created, (await PostEntryReversalAsync(charge.GetProperty("id").GetGuid())).StatusCode);
             Assert.Equal(HttpStatusCode.BadRequest, (await PostEntryReversalAsync(disbursement.GetProperty("id").GetGuid())).StatusCode);
         }
 
