@@ -108,7 +108,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 96 | Pruebas del desembolso: préstamo, asiento y caja en una transacción; rechazo sin efectivo | Completada | No | N/A |
 | 97 | Pruebas de idempotencia del pago: misma clave y cuerpo crean un solo pago; misma clave con otro cuerpo da `422` | Completada | No | N/A |
 | 98 | Prueba de dos pagos simultáneos al mismo préstamo (`SELECT ... FOR UPDATE`) | Completada | No | N/A |
-| 99 | Pruebas de condonación y de reversión de asiento con su caja (`loan_entry_id` = asiento nuevo) | Pendiente | No | N/A |
+| 99 | Pruebas de condonación y de reversión de asiento con su caja (`loan_entry_id` = asiento nuevo) | Completada | No | N/A |
 | 113 | Pruebas de cierre automático, incobrable y borrado de préstamo (#46, #47, #48) | Pendiente | No | N/A |
 
 ## Fase 4: Congelamientos
