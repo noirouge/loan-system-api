@@ -9,6 +9,7 @@ Tabla `loan_entries`. Implementación pendiente (Fase 3 en [[Plan del proyecto]]
 - Capital pendiente = `SUM(principal)`
 - Interés pendiente = `SUM(interest)`
 - Deuda total = capital pendiente + interés pendiente (D-050)
+- Lo calcula `LoanBalanceService`, en una sola consulta para uno o varios préstamos (#38)
 
 Nada se edita ni se borra. Un error se corrige con un asiento de reversión que lleva los montos invertidos y apunta al original.
 

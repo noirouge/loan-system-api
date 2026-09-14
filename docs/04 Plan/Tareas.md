@@ -64,7 +64,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 26 | Corregir `ILogger<CustomersController>` en `LoansController` | Completada | No | N/A |
 | 27 | `Loan.CreatedBy` de `Guid?` a `Guid` | Completada | No | N/A |
 | 28 | `User.CreatedBy` de `Guid` a `Guid?` | Completada | No | N/A |
-| 29 | Borrar `Enums/EntryStatus.cs`, que está vacío | Pendiente | No | N/A |
+| 29 | Borrar `Enums/EntryStatus.cs`, que está vacío | Completada | No | N/A |
 | 81 | Recrear en la base local el índice `ux_loan_entries_loan_id_and_period` con `entry_type = 2` | Pendiente | No | N/A |
 | 110 | Quitar `INACTIVE` de `CustomerStatus` y del comentario de `customers.status` (D-046) | Completada | No | N/A |
 | 111 | Los POST de caja responden `201` con el id creado; `Created()` sin cuerpo respondía `204` (modifica #6, #8, #9, #10) | Completada | No | N/A |
@@ -91,7 +91,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 
 | # | Tarea | Estado | ¿Modificada? | Modificada por |
 |---:|---|---|---|---:|
-| 38 | Proyección de saldo del préstamo (`SUM(principal)`, `SUM(interest)`) | Pendiente | No | N/A |
+| 38 | Proyección de saldo del préstamo (`SUM(principal)`, `SUM(interest)`) | Completada | No | N/A |
 | 39 | POST crear préstamo con desembolso: préstamo + asiento + caja en una transacción, validando efectivo | Pendiente | No | N/A |
 | 40 | GET listar préstamos con saldo | Pendiente | No | N/A |
 | 41 | GET préstamo por id con saldo y asientos | Pendiente | No | N/A |

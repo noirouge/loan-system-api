@@ -12,6 +12,8 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-13
 
+- **#38**: nuevo `LoanBalanceService`, que calcula el saldo de uno o varios préstamos en una sola consulta: capital (`SUM(principal)`), interés (`SUM(interest)`) y total, sin filtrar por status. Nuevo `LoanBalanceDTO`.
+- **#29**: se borra `Enums/EntryStatus.cs`, que estaba vacío y nada usaba (D-059).
 - Respuestas del usuario: permiso para JWT (D-052), la bitácora audita también los asientos (D-053), corte global el día 1 con revisión diaria (D-054), reversiones contadas con el tipo que reversan en los reportes (D-055), borrado de préstamo solo con el desembolso (D-056), significado de incobrable (D-057) y borrar `EntryStatus.cs` (D-059). Cierre automático (D-058) y los detalles de incobrable quedan provisionales. Nueva pregunta de negocio N-04 (primer cargo), que bloquea #54, #58, #59 y #101. Nuevas tareas #112 y #113.
 - Respuestas del usuario: día de pago de 1 a 28 (D-048), pago sugerido cuando hay plazo (D-049), interés impago en su propia columna y deuda total como capital + interés (D-050), y commits sin `Co-Authored-By` (D-051). Se desbloquean #39, #42 y #43.
 - **#93**: pruebas de las restricciones de la base, directo contra PostgreSQL: dos cargos de interés del mismo período se rechazan con `ux_loan_entries_loan_id_and_period`, otros tipos de asiento sí pueden compartir período (esta fallaba con el índice viejo de antes de la #13), no se pueden abrir dos congelamientos a la vez pero sí uno nuevo tras cerrar el anterior, un asiento no se reversa dos veces, y `db/schema.sql` se puede volver a correr sobre una base con datos.

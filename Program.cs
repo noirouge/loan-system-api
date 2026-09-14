@@ -22,6 +22,7 @@ builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddSingleton<LocalDateService>();
 builder.Services.AddScoped<CashService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddScoped<LoanBalanceService>();
 
 var app = builder.Build();
 

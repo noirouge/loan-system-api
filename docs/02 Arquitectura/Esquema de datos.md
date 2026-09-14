@@ -67,7 +67,6 @@ Valores tal como están en el código (D-009, D-010). **El código manda sobre l
 | `UserRole` | `WORKER=1`, `ADMIN=2` |
 | `UserStatus` | `ACTIVE=1`, `INACTIVE=2`, `DELETED=3` |
 | `FreezeStatus` | `ACTIVE=1`, `DELETED=2` |
-| `EntryStatus` | Vacío, sin uso (P-03, #29) |
 
 Infraestructura (#33):
 
