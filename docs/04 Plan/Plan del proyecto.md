@@ -5,8 +5,8 @@ La lista detallada está en [[Tareas]]. Aquí va el orden de las fases, por qué
 ## Estado al 2026-09-14
 
 - **Hecho:** todas las fases, salvo lo bloqueado. Préstamos completos (desembolso, consultas, pago con cascada e idempotencia, condonación, reversión, cierre automático, incobrable y borrado), congelamientos, cálculo del cargo de interés con el ejemplo canónico verificado (#94), mecanismo de jobs con `job_runs`, login con JWT y refresh rotativo, roles y CRUD de usuarios, auditoría automática y de sesiones, limpieza de tokens y purga de la bitácora, y los cinco reportes. 213 pruebas de integración.
-- **Bloqueado:** el job de cargos de interés en sí (#54, #58, #59 y la prueba #101) quedó desbloqueado por D-068. El cálculo (#53) y el mecanismo (#55–#57) ya existen, así que falta poco una vez respondida.
-- **Pendiente del usuario:** #15 y #81 en su base local, volver a correr `db/schema.sql` (tablas nuevas y hash del admin, #62), y responder N-04, P-18 (qué más es solo de ADMIN), P-09, P-11, N-02 y N-03.
+- **Siguiente:** el job de cargos de interés (#54, #58, #59 y la prueba #101), desbloqueado por D-068.
+- **Pendiente del usuario:** #15 y #81 en su base local, volver a correr `db/schema.sql` (tablas nuevas y hash del admin, #62), y responder P-09, P-11, N-02 y N-03.
 
 ## Fases
 
@@ -71,7 +71,7 @@ La #49 se canceló: la reemplazan #82 (proyecto de pruebas) y #94 (ejemplo canó
 
 **Objetivo:** cargos de interés automáticos, reejecutables y con recuperación de períodos perdidos.
 
-**Bloqueos:** #54, #58, #59 y la prueba #101 esperan N-04 (cuándo le toca el primer cargo a un préstamo nuevo). El corte es global el día 1 y el job revisa una vez al día si falta algún período (D-054). El cálculo (#53) y el mecanismo genérico (#55–#57, prueba #102) no dependen de eso.
+**Bloqueos:** ninguno. El primer cargo es el día 1 del mes siguiente al préstamo (D-068). El corte es global el día 1 y el job revisa una vez al día si falta algún período (D-054). El cálculo (#53) y el mecanismo genérico (#55–#57, prueba #102) no dependen de eso.
 
 ### Fase 6: Autenticación (#60–#68 · pruebas #103–#105)
 
