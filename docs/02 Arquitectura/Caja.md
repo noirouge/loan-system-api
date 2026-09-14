@@ -38,7 +38,7 @@ Lo calcula `CashService.GetAvailableCashAsync()`. Toda operación que saca diner
 | Aporte | Monto > 0 |
 | Retiro | Monto > 0 · **efectivo disponible suficiente** |
 | Gasto | Monto > 0 · al menos un counterparty (`Guid.Empty` y texto en blanco cuentan como vacío) · **efectivo disponible suficiente** |
-| Desembolso | **Efectivo disponible suficiente** (#39) |
+| Desembolso | **Efectivo disponible suficiente**, con el mismo candado de caja que el retiro y el gasto |
 | Reversión manual | Solo `CONTRIBUTION`, `WITHDRAWAL` o `EXPENSE` · que no esté reversada (`409`). ¿Reversar un aporte valida efectivo? P-09 |
 
 ## Reversión manual
