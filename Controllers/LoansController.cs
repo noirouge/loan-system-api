@@ -473,5 +473,32 @@ namespace LoanSystemAPI.Controllers
             loan.UpdatedDate = DateTime.UtcNow;
             await _dbContext.SaveChangesAsync();
         }
+
+        // THE CUSTOMER IS NOT GOING TO PAY: THE LOAN STOPS GENERATING INTEREST, BUT A PAYMENT IS STILL ACCEPTED IF IT COMES (D-057)
+        [HttpPost("{id:guid}/write-off")]
+        public async Task<IActionResult> PostWriteOff([FromRoute] Guid id)
+        {
+            try
+            {
+                var loan = await _dbContext.Loans.FirstOrDefaultAsync(l => l.Id == id);
+                if (loan == null)
+                    return NotFound(new { message = $"The loan with id {id} was not found" });
+
+                if (loan.Status != LoanStatus.ACTIVE)
+                    return BadRequest(new { message = "Only an active loan can be written off" });
+
+                loan.Status = LoanStatus.WRITTENOFF;
+                loan.UpdatedBy = _currentUserService.UserId;
+                loan.UpdatedDate = DateTime.UtcNow;
+                await _dbContext.SaveChangesAsync();
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "LOAN WRITE OFF ERROR");
+                return StatusCode(500, new { message = "ERROR COULD NOT WRITE OFF THE LOAN" });
+            }
+        }
     }
 }

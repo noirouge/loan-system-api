@@ -100,7 +100,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 44 | POST condonación de interés | Completada | Sí | 46 |
 | 45 | POST reversión de asiento de préstamo y de su caja (`loan_entry_id` = asiento nuevo) | Completada | Sí | 46 |
 | 46 | Cierre de préstamo (`CLOSED`) | Completada | No | N/A |
-| 47 | Préstamo incobrable (`WRITTENOFF`) | Pendiente | No | N/A |
+| 47 | Préstamo incobrable (`WRITTENOFF`) | Completada | No | N/A |
 | 48 | Borrado lógico de préstamo (`DELETED`) | Pendiente | No | N/A |
 | 49 | Proyecto de pruebas y prueba del ejemplo canónico (mes 3 = 84) | Cancelada | Sí | 82, 94 |
 | 94 | Prueba del ejemplo canónico de punta a punta: mes 3 = 84, cierre con capital 600 e interés 0 | Pendiente | No | N/A |
