@@ -108,14 +108,13 @@ namespace LoanSystemAPI.IntegrationTests.Auth
         }
 
         [Fact]
-        public async Task OnlyAnAdmin_CanWriteOffALoan()
+        public async Task AWorker_CanWriteOffALoan()
         {
             var loanId = await Client.CreateLoanAsync();
             var workerId = await Factory.AddUserAsync("worker", UserRole.WORKER);
             using var worker = Factory.CreateClientAs(workerId, UserRole.WORKER);
 
-            Assert.Equal(HttpStatusCode.Forbidden, (await worker.PostAsync($"/api/loans/{loanId}/write-off", null)).StatusCode);
-            Assert.Equal(HttpStatusCode.NoContent, (await Client.PostAsync($"/api/loans/{loanId}/write-off", null)).StatusCode);
+            Assert.Equal(HttpStatusCode.NoContent, (await worker.PostAsync($"/api/loans/{loanId}/write-off", null)).StatusCode);
         }
 
         [Fact]
