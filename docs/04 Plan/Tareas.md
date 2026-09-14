@@ -141,9 +141,9 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 60 | Instalar `Microsoft.AspNetCore.Authentication.JwtBearer` 8.0.x | Completada | No | N/A |
 | 61 | Inicializar user-secrets y guardar la clave del JWT | Completada | No | N/A |
 | 62 | Reemplazar `admin123` del admin semilla por su hash (modifica #2) | Completada | No | N/A |
-| 63 | POST `api/auth/login`: access de 15 min y refresh de 7 días hasheado | Completada | No | N/A |
+| 63 | POST `api/auth/login`: access de 15 min y refresh de 7 días hasheado | Completada | Sí | 73 |
 | 64 | POST `api/auth/refresh` con rotación y detección de reúso | Completada | No | N/A |
-| 65 | POST `api/auth/logout` | Completada | No | N/A |
+| 65 | POST `api/auth/logout` | Completada | Sí | 73 |
 | 66 | El servicio de usuario actual lee el claim del JWT (modifica #30) | Completada | No | N/A |
 | 67 | `[Authorize]` y roles en los controllers | Completada | No | N/A |
 | 68 | CRUD de usuarios (solo ADMIN) | Completada | No | N/A |
@@ -159,7 +159,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 70 | Formato de `changes`: `CREATE` completo, `UPDATE` solo cambiados, borrado lógico como `DELETE` | Completada | No | N/A |
 | 71 | Escritura de la bitácora después del commit, en transacción aparte | Completada | No | N/A |
 | 72 | Exclusión de campos sensibles y tablas de infraestructura | Completada | No | N/A |
-| 73 | Registro manual de `LOGIN`, `LOGINFAILED` y `LOGOUT` | Pendiente | No | N/A |
+| 73 | Registro manual de `LOGIN`, `LOGINFAILED` y `LOGOUT` | Completada | No | N/A |
 | 106 | Pruebas de auditoría: `CREATE` completo, `UPDATE` solo cambiados, borrado lógico como `DELETE`, campos sensibles excluidos | Pendiente | No | N/A |
 | 107 | Prueba de que un fallo al escribir la bitácora no revierte el cambio de negocio | Pendiente | No | N/A |
 

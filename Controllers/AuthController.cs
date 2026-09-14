@@ -19,18 +19,21 @@ namespace LoanSystemAPI.Controllers
     {
         // HASH OF A RANDOM PASSWORD: AN UNKNOWN USERNAME ALSO PAYS ONE VERIFICATION, SO THE RESPONSE TIME DOES NOT REVEAL WHICH USERNAMES EXIST
         private static readonly string UnknownUserPasswordHash = new PasswordHasher<User>().HashPassword(null!, Guid.NewGuid().ToString());
+        private const int AttemptedUserMaxLength = 100;
 
         private readonly ILogger<AuthController> _logger;
         private readonly AppDbContext _dbContext;
         private readonly AuthTokenService _authTokenService;
+        private readonly AuditLogWriter _auditLogWriter;
         private readonly TimeProvider _timeProvider;
         private readonly PasswordHasher<User> _passwordHasher = new();
 
-        public AuthController(ILogger<AuthController> logger, AppDbContext dbContext, AuthTokenService authTokenService, TimeProvider timeProvider)
+        public AuthController(ILogger<AuthController> logger, AppDbContext dbContext, AuthTokenService authTokenService, AuditLogWriter auditLogWriter, TimeProvider timeProvider)
         {
             _logger = logger;
             _dbContext = dbContext;
             _authTokenService = authTokenService;
+            _auditLogWriter = auditLogWriter;
             _timeProvider = timeProvider;
         }
 
@@ -39,12 +42,15 @@ namespace LoanSystemAPI.Controllers
         {
             try
             {
-                var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == loginDTO.Username && u.Status == UserStatus.ACTIVE);
+                var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == loginDTO.Username);
                 var passwordResult = _passwordHasher.VerifyHashedPassword(user!, user?.PasswordHash ?? UnknownUserPasswordHash, loginDTO.Password);
 
-                // THE SAME ANSWER FOR AN UNKNOWN USERNAME AND FOR A WRONG PASSWORD
-                if (user == null || passwordResult == PasswordVerificationResult.Failed)
+                // THE SAME ANSWER FOR AN UNKNOWN USERNAME, A WRONG PASSWORD AND A USER THAT IS NOT ACTIVE
+                if (user == null || user.Status != UserStatus.ACTIVE || passwordResult == PasswordVerificationResult.Failed)
+                {
+                    await WriteSessionAuditAsync(AuditAction.LOGINFAILED, user?.Id, loginDTO.Username);
                     return Unauthorized(new { message = "Invalid username or password" });
+                }
 
                 // THE HASH WAS MADE WITH WEAKER SETTINGS THAN THE CURRENT ONES: IT IS REPLACED NOW THAT THE PASSWORD IS KNOWN
                 if (passwordResult == PasswordVerificationResult.SuccessRehashNeeded)
@@ -54,6 +60,8 @@ namespace LoanSystemAPI.Controllers
                 await _dbContext.RefreshTokens.AddAsync(refreshTokenEntity);
                 await _dbContext.SaveChangesAsync();
 
+                await WriteSessionAuditAsync(AuditAction.LOGIN, user.Id, loginDTO.Username);
+
                 return Ok(CreateTokensDTO(user, refreshToken, refreshTokenEntity));
             }
             catch (Exception ex)
@@ -61,25 +69,6 @@ namespace LoanSystemAPI.Controllers
                 _logger.LogError(ex, "LOGIN ERROR");
                 return StatusCode(500, new { message = "ERROR COULD NOT LOG IN" });
             }
-        }
-
-        private AuthTokensDTO CreateTokensDTO(User user, string refreshToken, RefreshToken refreshTokenEntity)
-        {
-            var (accessToken, accessTokenExpiresAt) = _authTokenService.CreateAccessToken(user);
-
-            return new AuthTokensDTO
-            {
-                AccessToken = accessToken,
-                AccessTokenExpiresAt = accessTokenExpiresAt,
-                RefreshToken = refreshToken,
-                RefreshTokenExpiresAt = refreshTokenEntity.ExpiresAt,
-            };
-        }
-
-        // WITHOUT X-Forwarded-For FOR NOW (D-026)
-        private string? GetIpAddress()
-        {
-            return HttpContext.Connection.RemoteIpAddress?.ToString();
         }
 
         // EVERY USE OF A REFRESH TOKEN RETIRES IT AND ISSUES A NEW PAIR. A TOKEN ALREADY REPLACED THAT ARRIVES AGAIN WAS COPIED
@@ -141,13 +130,6 @@ namespace LoanSystemAPI.Controllers
             }
         }
 
-        private async Task RevokeUserSessionsAsync(Guid userId, DateTime now)
-        {
-            await _dbContext.RefreshTokens
-                .Where(t => t.UserId == userId && t.RevokedAt == null)
-                .ExecuteUpdateAsync(s => s.SetProperty(t => t.RevokedAt, (DateTime?)now));
-        }
-
         // CLOSES THE SESSION OF THIS REFRESH TOKEN. THE ACCESS TOKEN STILL WORKS UNTIL IT EXPIRES: THAT IS WHY IT IS SHORT
         [HttpPost("logout")]
         public async Task<IActionResult> Logout([FromBody] AuthRefreshTokenDTO logoutDTO)
@@ -157,9 +139,16 @@ namespace LoanSystemAPI.Controllers
                 var now = _timeProvider.GetUtcNow().UtcDateTime;
                 var tokenHash = AuthTokenService.HashRefreshToken(logoutDTO.RefreshToken);
 
-                await _dbContext.RefreshTokens
-                    .Where(t => t.TokenHash == tokenHash && t.RevokedAt == null)
-                    .ExecuteUpdateAsync(s => s.SetProperty(t => t.RevokedAt, (DateTime?)now));
+                var token = await _dbContext.RefreshTokens.AsNoTracking().FirstOrDefaultAsync(t => t.TokenHash == tokenHash && t.RevokedAt == null);
+                if (token != null)
+                {
+                    var revokedRows = await _dbContext.RefreshTokens
+                        .Where(t => t.Id == token.Id && t.RevokedAt == null)
+                        .ExecuteUpdateAsync(s => s.SetProperty(t => t.RevokedAt, (DateTime?)now));
+
+                    if (revokedRows > 0)
+                        await WriteSessionAuditAsync(AuditAction.LOGOUT, token.UserId, null);
+                }
 
                 // THE SAME ANSWER WHETHER THE TOKEN EXISTED OR NOT
                 return NoContent();
@@ -169,6 +158,50 @@ namespace LoanSystemAPI.Controllers
                 _logger.LogError(ex, "LOGOUT ERROR");
                 return StatusCode(500, new { message = "ERROR COULD NOT LOG OUT" });
             }
+        }
+
+        private async Task RevokeUserSessionsAsync(Guid userId, DateTime now)
+        {
+            await _dbContext.RefreshTokens
+                .Where(t => t.UserId == userId && t.RevokedAt == null)
+                .ExecuteUpdateAsync(s => s.SetProperty(t => t.RevokedAt, (DateTime?)now));
+        }
+
+        // LOGIN, LOGINFAILED AND LOGOUT DO NOT CHANGE ANY AUDITED ENTITY, SO THE INTERCEPTOR DOES NOT SEE THEM (D-028).
+        // attempted_user KEEPS WHAT WAS TYPED, ALSO WHEN THE USER DOES NOT EXIST
+        private Task WriteSessionAuditAsync(AuditAction action, Guid? userId, string? attemptedUser)
+        {
+            return _auditLogWriter.WriteAsync(new[]
+            {
+                new AuditLog
+                {
+                    Id = Guid.NewGuid(),
+                    Action = action,
+                    UserId = userId,
+                    AttemptedUser = attemptedUser?.Length > AttemptedUserMaxLength ? attemptedUser[..AttemptedUserMaxLength] : attemptedUser,
+                    IpAddress = GetIpAddress(),
+                    CreatedDate = DateTime.UtcNow,
+                },
+            });
+        }
+
+        private AuthTokensDTO CreateTokensDTO(User user, string refreshToken, RefreshToken refreshTokenEntity)
+        {
+            var (accessToken, accessTokenExpiresAt) = _authTokenService.CreateAccessToken(user);
+
+            return new AuthTokensDTO
+            {
+                AccessToken = accessToken,
+                AccessTokenExpiresAt = accessTokenExpiresAt,
+                RefreshToken = refreshToken,
+                RefreshTokenExpiresAt = refreshTokenEntity.ExpiresAt,
+            };
+        }
+
+        // WITHOUT X-Forwarded-For FOR NOW (D-026)
+        private string? GetIpAddress()
+        {
+            return HttpContext.Connection.RemoteIpAddress?.ToString();
         }
     }
 }

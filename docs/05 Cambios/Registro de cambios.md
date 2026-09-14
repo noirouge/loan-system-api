@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-14
 
+- **#73**: `AuthController` escribe a mano `LOGIN`, `LOGINFAILED` y `LOGOUT` con `AuditLogWriter` (D-028). El login busca al usuario por nombre sin filtrar el estado, para que el `LOGINFAILED` de un usuario existente (contraseña mala o inactivo) lleve su `user_id`; `attempted_user` guarda lo tecleado, hasta 100 caracteres. El logout registra `LOGOUT` solo si revocó un token vigente (modifica #63, #65).
 - **#72**: exclusiones de la auditoría (D-031). `AuditEntryBuilder` no genera registros para `audit_logs`, `refresh_tokens` ni `job_runs`, y nunca escribe `password_hash` ni `token_hash` en `changes`. Un `UPDATE` cuyo único cambio es una columna excluida no deja registro.
 - **#71**: la bitácora se escribe después del commit. `AuditInterceptor` implementa también `IDbTransactionInterceptor`: sin transacción explícita escribe al terminar `SaveChanges`; dentro de una, guarda los registros hasta el commit y los descarta en un rollback. `AuditLogWriter` usa su propio `DbContext` (otra transacción) y, si falla, registra el error sin propagarlo, así el cambio de negocio queda guardado (D-030).
 - **#70**: formato de `changes` (D-065). `CREATE` guarda todas las columnas con `new`; `UPDATE` solo las que cambiaron, con `old` y `new`; `DELETE` todas con `old`. Un cambio de `status` a `DELETED` se audita como `DELETE` aunque para EF sea un update (D-029), y un `UPDATE` sin cambios reales no deja registro.

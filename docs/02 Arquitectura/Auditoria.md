@@ -45,6 +45,7 @@ Se guarda `old` porque es lo único irrecuperable: el valor actual ya está en s
 - **El cambio de negocio manda** (D-030). La bitácora se escribe **después** de confirmar la transacción, en una transacción aparte. Si falla, se loguea el error y el cambio queda guardado.
 - Sin transacción explícita, los registros se escriben al terminar `SaveChanges`, que ya confirmó. Dentro de una, esperan al commit (`IDbTransactionInterceptor`) y un rollback los descarta. `AuditLogWriter` atrapa cualquier error al guardarlos, lo registra en el log y no lo propaga (#71).
 - **Excepción manual:** `LOGIN`, `LOGINFAILED` y `LOGOUT` no cambian entidades, así que el interceptor no los ve. Se escriben desde un servicio (D-028). En `LOGINFAILED`, `user_id` va lleno si el usuario existe y `attempted_user` siempre lleva lo tecleado.
+- `AuthController` los escribe con `AuditLogWriter`: `LOGIN` y `LOGINFAILED` en cada login, con lo tecleado en `attempted_user` y la IP, y `LOGOUT` cuando el logout revoca un token vigente, con el dueño del token. Un login de un usuario inactivo cuenta como `LOGINFAILED` con su `user_id` (#73).
 
 ## Exclusiones (D-031)
 
