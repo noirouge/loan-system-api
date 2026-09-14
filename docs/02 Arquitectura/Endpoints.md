@@ -18,7 +18,7 @@ Todas las respuestas devuelven `CustomerDTO`, sin campos de auditoría.
 
 ## Caja: `api/cash-entries`
 
-Los POST responden `201` con el id de la entrada creada: `{ "id": "..." }` (#111).
+Los POST responden `201` con el id de la entrada creada: `{ "id": "..." }` (#111). Los montos deben ser mayores que cero y tener como máximo 2 decimales; si no, `400` (#112).
 
 | Método | Ruta | Cuerpo | Qué hace | Estado |
 |---|---|---|---|---|

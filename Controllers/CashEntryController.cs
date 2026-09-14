@@ -29,8 +29,8 @@ namespace LoanSystemAPI.Controllers
         [HttpPost("contribution")]
         public async Task<ActionResult<CashEntryContributionDTO>> PostContribution([FromBody] CashEntryContributionDTO cashEntryDTO)
         {
-            if (cashEntryDTO.Amount <= 0)
-                return BadRequest(new { message = "The contribution amount must be greater than zero" });
+            if (cashEntryDTO.Amount <= 0 || cashEntryDTO.Amount != Math.Round(cashEntryDTO.Amount, 2))
+                return BadRequest(new { message = "The contribution amount must be greater than zero and have at most 2 decimals" });
 
                 try
                 {
@@ -64,8 +64,8 @@ namespace LoanSystemAPI.Controllers
         [HttpPost("withdrawal")]
         public async Task<ActionResult<CashEntryWithdrawalDTO>> PostWithdrawal([FromBody] CashEntryWithdrawalDTO cashEntryDTO)
         {
-            if (cashEntryDTO.Amount <= 0)
-                return BadRequest(new { message = "The amount to withdraw must be greater than zero" });
+            if (cashEntryDTO.Amount <= 0 || cashEntryDTO.Amount != Math.Round(cashEntryDTO.Amount, 2))
+                return BadRequest(new { message = "The amount to withdraw must be greater than zero and have at most 2 decimals" });
 
                 try
                 {
@@ -106,8 +106,8 @@ namespace LoanSystemAPI.Controllers
         [HttpPost("expense")]
         public async Task<ActionResult<CashEntryExpenseDTO>> PostExpense([FromBody] CashEntryExpenseDTO cashEntryDTO)
         {
-            if (cashEntryDTO.Amount <= 0)
-                return BadRequest(new { message = "The expense amount must be greater than zero" });
+            if (cashEntryDTO.Amount <= 0 || cashEntryDTO.Amount != Math.Round(cashEntryDTO.Amount, 2))
+                return BadRequest(new { message = "The expense amount must be greater than zero and have at most 2 decimals" });
 
             var counterpartyUserId = cashEntryDTO.CounterpartyUserId == Guid.Empty ? null : cashEntryDTO.CounterpartyUserId;
 

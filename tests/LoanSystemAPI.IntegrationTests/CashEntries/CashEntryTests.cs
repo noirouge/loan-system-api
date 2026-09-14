@@ -110,5 +110,26 @@ namespace LoanSystemAPI.IntegrationTests.CashEntries
             Assert.Equal("2026-09-01", entries[0].GetProperty("valueDate").GetString());
             Assert.Equal("2026-08-01", entries[1].GetProperty("valueDate").GetString());
         }
+
+        // NUMERIC(11,2) WOULD ROUND A THIRD DECIMAL BY ITSELF, WITH ANOTHER RULE THAN D-043
+        [Theory]
+        [InlineData("contribution")]
+        [InlineData("withdrawal")]
+        [InlineData("expense")]
+        public async Task AmountsWithMoreThanTwoDecimals_AreRejected(string operation)
+        {
+            await Client.PostContributionAsync(1000m);
+
+            var response = await Client.PostAsJsonAsync($"/api/cash-entries/{operation}", new
+            {
+                amount = 10.555m,
+                valueDate = CashApi.DefaultValueDate,
+                counterpartyUserId = LoanApiFactory.AdminId,
+                counterparty = "Test",
+            });
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Single(await Client.GetCashEntriesAsync());
+        }
     }
 }

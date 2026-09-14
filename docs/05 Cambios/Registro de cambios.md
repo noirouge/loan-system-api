@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-14
 
+- **#112**: el aporte, el retiro y el gasto rechazan con `400` los montos con más de 2 decimales, igual que los préstamos y los pagos. Antes Postgres los redondeaba solo al guardar en `NUMERIC(11,2)`, con una regla distinta a D-043 (modifica #6, #8, #9). Prueba nueva en `CashEntryTests`.
 - **#100**: pruebas de congelamientos: abrir uno lo lista abierto y sin `createdBy`; un segundo abierto da `409`, también con cinco peticiones a la vez (una sola gana); cerrarlo escribe `endDate` y permite abrir otro; cerrarlo dos veces da `409`; fechas de cierre anteriores al inicio o futuras y de inicio anteriores al préstamo o futuras dan `400`; no se congela un préstamo saldado; préstamo o congelamiento desconocido da `404`.
 - **#52**: `GET api/loans/{loanId}/freezes` lista los congelamientos del préstamo con `FreezeDTO`, ordenados por fecha de inicio descendente. No devuelve `created_by` ni `updated_*`; `endDate` nulo significa abierto. `404` si el préstamo no existe o está borrado.
 - **#51**: `POST api/freezes/{id}/close` cierra un congelamiento escribiendo `end_date` (no toca `status`). La fecha no puede ser futura ni anterior al inicio. El `UPDATE` lleva la condición `end_date IS NULL`, así que si dos cierres llegan a la vez solo uno escribe y el otro recibe `409`, igual que cerrar uno ya cerrado (D-060).
