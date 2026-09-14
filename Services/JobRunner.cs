@@ -38,6 +38,8 @@ namespace LoanSystemAPI.Services
 
                 try
                 {
+                    await MarkOrphanRunsAsFailedAsync(jobName, cancellationToken);
+
                     // A PERIOD THAT ALREADY ENDED IN SUCCESS IS NOT RUN AGAIN: ux_job_runs_success ALLOWS ONLY ONE SUCCESS PER PERIOD
                     if (period != null && await _dbContext.JobRuns.AnyAsync(j => j.JobName == jobName && j.Period == period && j.Status == JobRunStatus.SUCCESS, cancellationToken))
                         return null;
@@ -116,6 +118,20 @@ namespace LoanSystemAPI.Services
             command.Parameters.AddWithValue("jobName", jobName);
 
             return (bool)(await command.ExecuteScalarAsync(cancellationToken))!;
+        }
+
+        // WITH THE LOCK TAKEN NO OTHER INSTANCE CAN BE RUNNING THIS JOB, SO A RUNNING ROW WAS LEFT BY A PROCESS THAT DIED HALFWAY
+        private async Task MarkOrphanRunsAsFailedAsync(string jobName, CancellationToken cancellationToken)
+        {
+            var orphanRuns = await _dbContext.JobRuns
+                .Where(j => j.JobName == jobName && j.Status == JobRunStatus.RUNNING)
+                .ExecuteUpdateAsync(s => s
+                    .SetProperty(j => j.Status, JobRunStatus.FAILED)
+                    .SetProperty(j => j.FinishedAt, (DateTime?)DateTime.UtcNow)
+                    .SetProperty(j => j.ErrorMessage, "THE RUN WAS INTERRUPTED: THE PROCESS STOPPED BEFORE IT FINISHED"), cancellationToken);
+
+            if (orphanRuns > 0)
+                _logger.LogWarning("JOB {JobName}: {OrphanRuns} ORPHAN RUNS MARKED AS FAILED", jobName, orphanRuns);
         }
     }
 }

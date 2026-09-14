@@ -55,7 +55,7 @@ job_runs(id, job_name, period, status, started_at, finished_at,
 
 ### Corridas huérfanas
 
-Si el proceso muere a media ejecución, la fila queda en `RUNNING` para siempre. Como el advisory lock garantiza que solo corre una instancia, **cualquier fila en `RUNNING` encontrada mientras se tiene el lock es huérfana**: pasa a `FAILED` con un `error_message` que lo indique.
+Si el proceso muere a media ejecución, la fila queda en `RUNNING` para siempre. Como el advisory lock garantiza que solo corre una instancia, **cualquier fila en `RUNNING` encontrada mientras se tiene el lock es huérfana**: pasa a `FAILED` con un `error_message` que lo indique. `JobRunner` lo hace apenas toma el lock, antes de revisar el período, y solo con las filas del mismo `job_name` (#57).
 
 ## Otros jobs
 

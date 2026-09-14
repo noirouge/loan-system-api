@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-14
 
+- **#57**: al tomar el lock, `JobRunner` marca como `FAILED`, con `finished_at` y un `error_message` que lo explica, las filas `RUNNING` del mismo job: con el lock tomado nadie más puede estar corriéndolo, así que son de un proceso que murió a medias. Las de otros jobs no se tocan.
 - **#56**: `JobRunner.RunAsync` registra cada corrida en `job_runs`: inserta la fila `RUNNING` en su propia transacción antes del trabajo y al final escribe contadores, `finished_at` y el estado (`SUCCESS`, `PARTIAL` o `FAILED` según `JobRunner.StatusFor`). Una excepción del trabajo deja la corrida `FAILED` con su mensaje. Un período que ya tiene `SUCCESS` no se vuelve a correr (D-061). Nuevo `JobRunCounters`.
 - **#55**: mecanismo de jobs. `DailyJobsService` es un `BackgroundService` que al arrancar y cada 24 horas (con el `TimeProvider`) corre los `IDailyJob` registrados, que por ahora son ninguno. `JobRunner` ejecuta el trabajo con un advisory lock de Postgres por job (`2001` + `hashtext` del nombre), en una conexión abierta hasta liberarlo; si otra instancia lo tiene, no hace nada. Registrados en `Program.cs`; `LoanApiFactory` apaga el servicio con `Jobs__Enabled=false`.
 - **#112**: el aporte, el retiro y el gasto rechazan con `400` los montos con más de 2 decimales, igual que los préstamos y los pagos. Antes Postgres los redondeaba solo al guardar en `NUMERIC(11,2)`, con una regla distinta a D-043 (modifica #6, #8, #9). Prueba nueva en `CashEntryTests`.
