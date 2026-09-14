@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-13
 
+- **#41**: `GET api/loans/{id}` devuelve el préstamo con su saldo, sus asientos ordenados por `valueDate` y, si tiene plazo y algo pendiente, el pago sugerido del mes: capital original ÷ plazo (o lo que quede, si es menos) más el interés pendiente, calculado sin guardarse (D-049). Nuevos `LoanDetailDTO`, `LoanEntryDTO`, `LoanSuggestedPaymentDTO` y `SuggestedPayment`.
 - **#40**: `GET api/loans` lista los préstamos, más recientes primero, con el nombre del cliente (aunque se haya borrado después) y su saldo: capital, interés y total. Los saldos salen de una sola consulta para toda la lista. Nuevo `LoanDTO`.
 - **#39**: `POST api/loans` crea el préstamo, su asiento `DISBURSEMENT` y la salida de caja en una sola transacción, con el candado de caja. Valida capital mayor que 0 con 2 decimales como máximo, tasa en fracción entre 0 y 1 (D-041), plazo opcional mayor que 0, día de pago de 1 a 28 (D-048), fecha no futura, que el cliente exista y que haya efectivo suficiente (D-045). Responde `201` con el id del préstamo.
 - **#38**: nuevo `LoanBalanceService`, que calcula el saldo de uno o varios préstamos en una sola consulta: capital (`SUM(principal)`), interés (`SUM(interest)`) y total, sin filtrar por status. Nuevo `LoanBalanceDTO`.

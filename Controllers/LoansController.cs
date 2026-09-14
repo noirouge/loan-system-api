@@ -157,5 +157,59 @@ namespace LoanSystemAPI.Controllers
                 return StatusCode(500, new { message = "Error Consulting Loans" });
             }
         }
+
+        [HttpGet("{id:guid}")]
+        public async Task<ActionResult<LoanDetailDTO>> GetLoan([FromRoute] Guid id)
+        {
+            try
+            {
+                var loan = await _dbContext.Loans.FirstOrDefaultAsync(l => l.Id == id);
+                if (loan == null)
+                    return NotFound(new { message = $"The loan with id {id} was not found" });
+
+                var customer = await _dbContext.Customers.IgnoreQueryFilters().FirstOrDefaultAsync(c => c.Id == loan.CustomerId);
+                var balance = await _loanBalanceService.GetBalanceAsync(loan.Id);
+
+                var entries = await _dbContext.LoanEntries
+                    .Where(e => e.LoanId == id)
+                    .OrderBy(e => e.ValueDate)
+                    .ThenBy(e => e.CreatedDate)
+                    .Select(e => new LoanEntryDTO
+                    {
+                        Id = e.Id,
+                        EntryType = e.EntryType,
+                        Principal = e.Principal,
+                        Interest = e.Interest,
+                        Period = e.Period,
+                        ValueDate = e.ValueDate,
+                        Status = e.Status,
+                        ReversesEntryId = e.ReversesEntryId,
+                        Note = e.Note,
+                        CreatedDate = e.CreatedDate,
+                    })
+                    .ToListAsync();
+
+                return Ok(new LoanDetailDTO
+                {
+                    Id = loan.Id,
+                    CustomerId = loan.CustomerId,
+                    CustomerFullname = customer?.Fullname ?? "",
+                    Principal = loan.Principal,
+                    Term = loan.Term,
+                    InterestRate = loan.InterestRate,
+                    LoanDate = loan.LoanDate,
+                    PaymentDay = loan.PaymentDay,
+                    Status = loan.Status,
+                    Balance = balance,
+                    SuggestedPayment = SuggestedPayment.Calculate(loan, balance),
+                    Entries = entries,
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "ERROR FINDING LOAN");
+                return StatusCode(500, new { message = "ERROR FINDING LOAN" });
+            }
+        }
     }
 }
