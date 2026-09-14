@@ -63,7 +63,7 @@ Valores tal como están en el código (D-009, D-010). **El código manda sobre l
 | `LoanStatus` | `ACTIVE=1`, `CLOSED=2`, `WRITTENOFF=3` (incobrable), `DELETED=4` |
 | `CashEntryType` | `CONTRIBUTION=1`, `WITHDRAWAL=2`, `DISBURSEMENT=3`, `PAYMENT=4`, `EXPENSE=5`, `REVERSAL=6` |
 | `CashEntryStatus` | `APPLIED=1`, `REVERSED=2` |
-| `CustomerStatus` | `ACTIVE=1`, `INACTIVE=2`, `DELETED=3` |
+| `CustomerStatus` | `ACTIVE=1`, `DELETED=3`. El 2 era `INACTIVE`, eliminado por D-046 |
 | `UserRole` | `WORKER=1`, `ADMIN=2` |
 | `UserStatus` | `ACTIVE=1`, `INACTIVE=2`, `DELETED=3` |
 | `FreezeStatus` | `ACTIVE=1`, `DELETED=2` |

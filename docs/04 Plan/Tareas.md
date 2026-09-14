@@ -17,10 +17,10 @@
 | # | Tarea | Estado | ¿Modificada? | Modificada por |
 |---:|---|---|---|---:|
 | 1 | Configurar conexión a PostgreSQL | Completada | No | N/A |
-| 2 | Crear esquema inicial de la base (`db/schema.sql`) | Completada | Sí | 13, 14, 18, 32 |
+| 2 | Crear esquema inicial de la base (`db/schema.sql`) | Completada | Sí | 13, 14, 18, 32, 110 |
 | 3 | POST crear cliente | Completada | Sí | 25, 31 |
 | 4 | GET listar clientes | Completada | Sí | 24, 25 |
-| 5 | CRUD de clientes (GET por id, PUT, DELETE lógico) y enums | Completada | Sí | 25, 31 |
+| 5 | CRUD de clientes (GET por id, PUT, DELETE lógico) y enums | Completada | Sí | 25, 31, 110 |
 | 6 | POST aporte de caja | Completada | Sí | 7, 8, 16, 23, 31 |
 | 7 | Quitar la validación de counterparty del aporte (modifica #6) | Completada | No | N/A |
 | 8 | POST retiro de caja; ruta del controller a `api/cash-entries` (modifica #6) | Completada | Sí | 16, 22, 31 |
@@ -66,7 +66,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 28 | `User.CreatedBy` de `Guid` a `Guid?` | Completada | No | N/A |
 | 29 | Borrar `Enums/EntryStatus.cs`, que está vacío | Bloqueada (P-03) | No | N/A |
 | 81 | Recrear en la base local el índice `ux_loan_entries_loan_id_and_period` con `entry_type = 2` | Pendiente | No | N/A |
-| 110 | Quitar `INACTIVE` de `CustomerStatus` y del comentario de `customers.status` (D-046) | Pendiente | No | N/A |
+| 110 | Quitar `INACTIVE` de `CustomerStatus` y del comentario de `customers.status` (D-046) | Completada | No | N/A |
 | 90 | Pruebas de efectivo disponible: retiro y gasto rechazados sin fondos (#21, #22) | Pendiente | No | N/A |
 | 91 | Pruebas de fechas: `value_date` heredado en la reversión y "hoy" dominicano cerca de la medianoche UTC (#16, #17, #19) | Pendiente | No | N/A |
 | 92 | Prueba de dos reversiones simultáneas de la misma entrada: una gana y la otra recibe un error controlado, no un 500 (#20) | Pendiente | No | N/A |

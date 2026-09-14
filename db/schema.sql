@@ -41,7 +41,7 @@ fullname 			VARCHAR(100) NOT NULL,
 code				VARCHAR(100),
 note				TEXT,
 phone				VARCHAR(30),
-status         SMALLINT NOT NULL DEFAULT 1, -- ACTIVE = 1, INACTIVE = 2, DELETED = 3
+status         SMALLINT NOT NULL DEFAULT 1, -- ACTIVE = 1, DELETED = 3
 created_by     UUID NOT NULL,
 created_date   TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 updated_by     UUID,
