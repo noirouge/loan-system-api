@@ -61,7 +61,7 @@ Los POST responden `201` con el id de la entrada creada: `{ "id": "..." }` (#111
 |---|---|---|---|
 | POST | `api/auth/login` | Con usuario y contraseña de un usuario `ACTIVE`, responde `200` con el access (JWT de 15 minutos), el refresh (7 días) y sus vencimientos. `401` igual para usuario desconocido, contraseña mala o usuario inactivo (D-062) | Implementado (#63) |
 | POST | `api/auth/refresh` | Con un refresh vigente responde `200` con un par nuevo y retira el usado (`replaced_by` y `revoked_at`). Si llega uno ya reemplazado, revoca todas las sesiones del usuario y responde `401` (D-024, D-025). Vencido, revocado o desconocido: `401` | Implementado (#64) |
-| POST | `api/auth/logout` | Revoca el refresh | #65 |
+| POST | `api/auth/logout` | Revoca el refresh enviado. Responde `204` exista o no (D-062). El access sigue sirviendo hasta que vence | Implementado (#65) |
 | GET, POST, PUT, DELETE | `api/users` | CRUD de usuarios, solo ADMIN | #68 |
 
 ## Reportes *(propuesta)*

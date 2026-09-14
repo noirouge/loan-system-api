@@ -144,5 +144,28 @@ namespace LoanSystemAPI.Controllers
                 .Where(t => t.UserId == userId && t.RevokedAt == null)
                 .ExecuteUpdateAsync(s => s.SetProperty(t => t.RevokedAt, (DateTime?)now));
         }
+
+        // CLOSES THE SESSION OF THIS REFRESH TOKEN. THE ACCESS TOKEN STILL WORKS UNTIL IT EXPIRES: THAT IS WHY IT IS SHORT
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout([FromBody] AuthRefreshTokenDTO logoutDTO)
+        {
+            try
+            {
+                var now = _timeProvider.GetUtcNow().UtcDateTime;
+                var tokenHash = AuthTokenService.HashRefreshToken(logoutDTO.RefreshToken);
+
+                await _dbContext.RefreshTokens
+                    .Where(t => t.TokenHash == tokenHash && t.RevokedAt == null)
+                    .ExecuteUpdateAsync(s => s.SetProperty(t => t.RevokedAt, (DateTime?)now));
+
+                // THE SAME ANSWER WHETHER THE TOKEN EXISTED OR NOT
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "LOGOUT ERROR");
+                return StatusCode(500, new { message = "ERROR COULD NOT LOG OUT" });
+            }
+        }
     }
 }
