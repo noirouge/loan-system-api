@@ -22,7 +22,7 @@ No es un préstamo con cuotas: es una línea de crédito con interés mensual so
 | Carpeta | Contenido |
 |---|---|
 | `01 Negocio` | [[Modelo de negocio]] |
-| `02 Arquitectura` | [[Stack y convenciones]], [[Esquema de datos]], [[Ledger de prestamos]], [[Caja]], [[Job del corte mensual]], [[Autenticacion]], [[Auditoria]], [[Endpoints]] |
+| `02 Arquitectura` | [[Guia de la API]], [[Stack y convenciones]], [[Esquema de datos]], [[Ledger de prestamos]], [[Caja]], [[Job del corte mensual]], [[Autenticacion]], [[Auditoria]], [[Endpoints]] |
 | `03 Decisiones` | [[Registro de decisiones]] |
 | `04 Plan` | [[Plan del proyecto]], [[Tareas]] |
 | `05 Cambios` | [[Registro de cambios]] |

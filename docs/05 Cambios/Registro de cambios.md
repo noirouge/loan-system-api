@@ -12,6 +12,7 @@ Las entradas anteriores a la #12 sí llevan hash, porque se reconstruyeron desde
 
 ## 2026-09-14
 
+- Nueva nota [[Guia de la API]]: referencia para consumir la API (autenticación, cuerpos, respuestas, códigos y enums).
 - **#118**: pruebas de la hoja de cobro: cuota, abono y restante de febrero con totales; en marzo sale quien pagó todo y entra el préstamo de febrero; filtro por día de pago; congelado e incobrable lo indican; parámetros inválidos dan `400`.
 - **#117**: `GET api/reports/monthly-collection` devuelve la hoja de cobro de un mes, con filtro opcional por día de pago y totales (D-075).
 - **#15** y **#81**: aplicados en la base local `prestamos` junto con `db/schema.sql`: el admin tiene rol 2 y contraseña hasheada, existen `refresh_tokens`, `audit_logs` y `job_runs`, y el índice de cargos filtra `entry_type = 2`.
