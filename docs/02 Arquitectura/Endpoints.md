@@ -63,6 +63,7 @@ Los POST responden `201` con el id de la entrada creada: `{ "id": "..." }` (#111
 | POST | `api/auth/refresh` | Con un refresh vigente responde `200` con un par nuevo y retira el usado (`replaced_by` y `revoked_at`). Si llega uno ya reemplazado, revoca todas las sesiones del usuario y responde `401` (D-024, D-025). Vencido, revocado o desconocido: `401` | Implementado (#64) |
 | POST | `api/auth/logout` | Revoca el refresh enviado. Responde `204` exista o no (D-062). El access sigue sirviendo hasta que vence | Implementado (#65) |
 | GET, POST, PUT, DELETE | `api/users` | Solo ADMIN. Lista (sin borrados) y consulta con `UserDTO`, sin hash ni auditoría. `POST` crea con `UserCreateDTO` y responde `201` (`409` si el usuario ya existe). `PUT` actualiza con el id en el cuerpo y contraseña opcional. `DELETE` borra lógicamente y responde `204`. Nadie cambia su propio rol o estado ni se borra; cambiar rol, estado o contraseña, o borrar, cierra las sesiones del usuario (D-064) | Implementado (#68) |
+| GET | `api/users/options` | Cualquier usuario autenticado. Usuarios activos `{ id, name, lastname, username }`, ordenados por nombre, para elegir `counterpartyUserId` (D-076) | Implementado (#119) |
 
 ## Reportes
 

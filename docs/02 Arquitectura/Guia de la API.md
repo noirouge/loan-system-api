@@ -43,7 +43,9 @@ El access dura 15 minutos; el refresh, 7 días. Cuando el access vence (`401`), 
 
 El JWT trae `sub` (id del usuario), `unique_name` y `role` (`ADMIN` o `WORKER`).
 
-## Usuarios: `api/users` (solo ADMIN)
+## Usuarios: `api/users`
+
+`GET /users/options` lo puede usar cualquier usuario: devuelve los usuarios activos `[{ id, name, lastname, username }]` para elegir `counterpartyUserId` en caja. Todo lo demás es solo ADMIN.
 
 | Método | Ruta | Cuerpo | Respuesta |
 |---|---|---|---|

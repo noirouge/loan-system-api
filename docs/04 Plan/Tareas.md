@@ -146,7 +146,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 65 | POST `api/auth/logout` | Completada | Sí | 73 |
 | 66 | El servicio de usuario actual lee el claim del JWT (modifica #30) | Completada | No | N/A |
 | 67 | `[Authorize]` y roles en los controllers | Completada | Sí | 114 |
-| 68 | CRUD de usuarios (solo ADMIN) | Completada | No | N/A |
+| 68 | CRUD de usuarios (solo ADMIN) | Completada | Sí | 119 |
 | 103 | Helper de pruebas para autenticarse y obtener un JWT | Completada | No | N/A |
 | 104 | Pruebas de sesión: login, refresh con rotación, reúso que revoca todas las sesiones, logout | Completada | No | N/A |
 | 105 | Pruebas de autorización por rol: WORKER contra ADMIN | Completada | No | N/A |
@@ -155,6 +155,7 @@ Recomendado antes de las correcciones de la Fase 1 que cambian comportamiento. D
 | 116 | La reversión de asiento acepta cargos de interés con su interés aún pendiente (D-071; modifica #45, #99) | Completada | No | N/A |
 | 117 | Reporte `GET api/reports/monthly-collection`: hoja de cobro por mes (D-075) | Completada | No | N/A |
 | 118 | Pruebas de la hoja de cobro mensual | Completada | No | N/A |
+| 119 | `GET api/users/options` para cualquier usuario, con los usuarios activos (D-076; modifica #68) | Completada | No | N/A |
 
 ## Fase 7: Auditoría
 

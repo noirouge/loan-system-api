@@ -14,7 +14,6 @@ namespace LoanSystemAPI.Controllers
 
     [ApiController]
     [Route("api/users")]
-    [Authorize(Roles = nameof(UserRole.ADMIN))]
     public class UsersController : Controller
     {
         public const int MinimumPasswordLength = 8;
@@ -34,6 +33,28 @@ namespace LoanSystemAPI.Controllers
             _timeProvider = timeProvider;
         }
 
+        [HttpGet("options")]
+        public async Task<ActionResult<IEnumerable<UserOptionDTO>>> GetUserOptions()
+        {
+            try
+            {
+                // ANY LOGGED USER CAN LIST THEM: THE WORKER NEEDS THEM TO REGISTER WHO PUT IN OR TOOK OUT THE MONEY (D-076)
+                var users = await _dbContext.Users
+                    .Where(u => u.Status == UserStatus.ACTIVE)
+                    .OrderBy(u => u.Name).ThenBy(u => u.Lastname)
+                    .Select(u => new UserOptionDTO { Id = u.Id, Name = u.Name, Lastname = u.Lastname, Username = u.Username })
+                    .ToListAsync();
+
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "ERROR CONSULTING USER OPTIONS");
+                return StatusCode(500, new { message = "ERROR CONSULTING USER OPTIONS" });
+            }
+        }
+
+        [Authorize(Roles = nameof(UserRole.ADMIN))]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
         {
@@ -62,6 +83,7 @@ namespace LoanSystemAPI.Controllers
             }
         }
 
+        [Authorize(Roles = nameof(UserRole.ADMIN))]
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<UserDTO>> GetUser([FromRoute] Guid id)
         {
@@ -80,6 +102,7 @@ namespace LoanSystemAPI.Controllers
             }
         }
 
+        [Authorize(Roles = nameof(UserRole.ADMIN))]
         [HttpPost]
         public async Task<IActionResult> PostUser([FromBody] UserCreateDTO userDTO)
         {
@@ -126,6 +149,7 @@ namespace LoanSystemAPI.Controllers
             }
         }
 
+        [Authorize(Roles = nameof(UserRole.ADMIN))]
         [HttpPut]
         public async Task<ActionResult<UserDTO>> PutUser([FromBody] UserUpdateDTO userDTO)
         {
@@ -173,6 +197,7 @@ namespace LoanSystemAPI.Controllers
             }
         }
 
+        [Authorize(Roles = nameof(UserRole.ADMIN))]
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteUser([FromRoute] Guid id)
         {
